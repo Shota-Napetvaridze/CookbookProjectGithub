@@ -1,8 +1,7 @@
 - 👋 Hi, I’m @Shota-Napetvaridze
 - 👀 I’m interested in Cyber Security
 - 🌱 I’m currently learning Java and Databases
-- 💞️ I’m looking to collaborate on ...
-- 📫 How to reach me ...
+- 📫 How to reach me napetvaridze.shota@gmail.com
 
 <!---
 Shota-Napetvaridze/Shota-Napetvaridze is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
