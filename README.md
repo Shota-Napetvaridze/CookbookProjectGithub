@@ -1,9 +1,3 @@
-- 👋 Hi, I’m @Shota-Napetvaridze
-- 👀 I’m interested in Cyber Security
-- 🌱 I’m currently learning Java and Databases
-- 📫 How to reach me napetvaridze.shota@gmail.com
+# Cookbook
 
-<!---
-Shota-Napetvaridze/Shota-Napetvaridze is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+This is your Cookbook template. When you get this repo, it will contain the predefined gradle template files as well as a number of milestones and issues. You modify the gradle project to suit your project. The milestones are your sprints and the issues your user stories, and we will work with these each week we meet.
