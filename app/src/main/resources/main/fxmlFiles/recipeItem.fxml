@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane onMousePressed="#click" prefHeight="190.0" prefWidth="200.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RecipeController">
+   <children>
+      <VBox alignment="CENTER" layoutX="63.0" layoutY="8.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="image" fitHeight="126.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
+               <image>
+                  <Image url="@../recipeImages/Lasagna.jpeg" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="5.0" />
+               </VBox.margin>
+            </ImageView>
+            <HBox alignment="CENTER" prefHeight="48.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="nameItem" prefHeight="49.0" prefWidth="144.0" text="recipeName">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" onMousePressed="#favoritesClick" prefHeight="27.0" prefWidth="34.0" text="&lt;3" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
