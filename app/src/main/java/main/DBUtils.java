@@ -28,10 +28,8 @@ public class DBUtils {
         this.USER = USER;
         this.PASS = PASS;
     }
+
     public void createDatabase(){
-        //----------------------------------------------------------------------
-
-
         File usersFile = new File("app/src/main/resources/main/data/users.csv");
         File recipesFile = new File("app/src/main/resources/main/data/recipes.csv");
         File tagsFile = new File("app/src/main/resources/main/data/tags.csv");
@@ -53,7 +51,7 @@ public class DBUtils {
         ArrayList<String[]> comments = FileIo.readFromFileSaveToArrayList(commentsPath);
         ArrayList<String[]> ingredientUnits = FileIo.readFromFileSaveToArrayList(ingredientUnitsPath);
 
-
+        //----------------------------------------------------------------------
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement stmt = conn.createStatement();
@@ -279,8 +277,6 @@ public class DBUtils {
                             e1.printStackTrace();
                         }
                         //----------------------------------------------------------------------------------------------------
-
-
                     }catch (SQLException ex){
                         ex.printStackTrace();
                     }
@@ -295,7 +291,6 @@ public class DBUtils {
         }
 
     }
-
 
     public static void changeScene(ActionEvent event, String fxmlFIle, String username, String email){
         Parent root = null;
@@ -357,7 +352,7 @@ public class DBUtils {
                 psInsert.setString(4, email);
                 psInsert.setString(5, password);
                 psInsert.executeUpdate();
-                changeScene(event, "fxmlFiles/home2.fxml", username, email);
+                changeScene(event, "fxmlFiles/home.fxml", username, email);
             }
 
         }catch (SQLException e){
@@ -417,7 +412,7 @@ public class DBUtils {
                 while (resultSet.next()){
                     String retrievedPassword = resultSet.getString("Password");
                     if (retrievedPassword.equals(password)){
-                        changeScene(event, "fxmlFiles/home2.fxml", username, null);
+                        changeScene(event, "fxmlFiles/home.fxml", username, null);
                     }else {
                         System.out.println("Passwords did not match!");
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -475,7 +470,7 @@ public class DBUtils {
                 alert.show();
             }else {
                 psInsert = connection.prepareStatement("INSERT INTO UsersFavorites (UserId, RecipeId) VALUES (?, ?)");
-                psInsert.setString(1, "retrievedUserId");
+                psInsert.setString(1, "retrievedUserId"); //TODO: We need to set The UserId here
                 psInsert.setString(2, recipeId);
                 psInsert.executeUpdate();
             }
@@ -515,4 +510,91 @@ public class DBUtils {
         }
     }
 
+    public static void removeMessage(String msgId){
+        Connection connection = null;
+        PreparedStatement deleteMessage = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
+            deleteMessage = connection.prepareStatement("DELETE FROM Messages WHERE Messages.Id = ?");
+            deleteMessage.setString(1, msgId); //TODO: We need to set The Messages.Id here
+            resultSet = deleteMessage.executeQuery();
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            if (resultSet != null){
+                try {
+                    resultSet.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (deleteMessage != null){
+                try {
+                    deleteMessage.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null){
+                try {
+                    connection.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void searchRecipe(ActionEvent event, String recipe){
+        Connection connection = null;
+        PreparedStatement psCheckRecipeExists = null;
+        ResultSet resultSet = null;
+
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
+            psCheckRecipeExists = connection.prepareStatement("SELECT * FROM Recipes WHERE RecipeName = ?");
+            psCheckRecipeExists.setString(1, recipe);
+            resultSet = psCheckRecipeExists.executeQuery();
+
+            if (resultSet.isBeforeFirst()) {
+                System.out.println("You already have this recipe in Favorites");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("The recipe has already been added!");
+                alert.show();
+            }else {
+                // retrievedData------------------------------------------
+                String retrievedData = resultSet.getString("*");
+            }
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            if (resultSet != null){
+                try {
+                    resultSet.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (psCheckRecipeExists != null){
+                try {
+                    psCheckRecipeExists.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null){
+                try {
+                    connection.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

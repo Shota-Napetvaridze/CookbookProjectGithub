@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import main.DBUtils;
 import main.MyListener;
+import model.Message;
 import model.Recipe;
 
 import java.io.IOException;
@@ -90,6 +91,8 @@ public class HomeController implements Initializable {
 
 
     private List<Recipe> recipeList = new ArrayList<>();
+    private List<Message> msgList = new ArrayList<>();
+
     private Image image;
     private MyListener myListener;
 
@@ -129,6 +132,19 @@ public class HomeController implements Initializable {
         return recipes;
     }
 
+    private List<Message> getMsgList(){
+        List<Message> messages = new ArrayList<>();
+        Message message;
+
+        message = new Message();
+        message.setUserName("Shota");
+        message.setUserMessage("Hellooooooo, how you doiiing?"); //TODO: get messages form database
+        messages.add(message);
+
+
+        return messages;
+    }
+
 
     private void chosenRecipe(Recipe recipe){
         image = new Image(getClass().getResourceAsStream(recipe.getImgSrc()));
@@ -137,22 +153,20 @@ public class HomeController implements Initializable {
     }
 
 
-
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Initial Home Button colour
         home.setStyle("-fx-color: rgb(239, 242, 255)"+
                 "-fx-background-color: rgb(15, 125, 242)");
 
+        // ComboBox User
         ObservableList<String> list = FXCollections.observableArrayList("Settings", "Profile");
         comboBox.setItems(list);
 
-
-
+        // Adds all the recipes
         recipeList.addAll(getRecipeList());
 
+        // When User clicks on a specific recipe.
         if (recipeList.size() > 0){
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
@@ -168,10 +182,12 @@ public class HomeController implements Initializable {
             };
         }
 
+        // Initialize grid-----------------------------------------
+
         int column = 0;
         int row = 0;
         try {
-            for(int i = 0; i<recipeList.size(); i++){
+            for(int i = 0; i < recipeList.size(); i++){
                 FXMLLoader fxmlLoader = new FXMLLoader();
 
                 fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/recipeItem.fxml"));
@@ -195,12 +211,23 @@ public class HomeController implements Initializable {
                 grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                 grid.setMaxHeight(Region.USE_PREF_SIZE);
 
-
+                grid.setVgap(2.0);
                 GridPane.setMargin(anchorPane, new Insets(10));
             }
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        //  Search Button-----------------------------------------
+
+        search.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                DBUtils.searchRecipe(event, searchField.getText());
+            }
+        });
+
+        // Home Button-----------------------------------------
 
         home.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -213,6 +240,7 @@ public class HomeController implements Initializable {
             }
         });
 
+        // Favourites Button-----------------------------------------
 
         favorites.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -225,6 +253,8 @@ public class HomeController implements Initializable {
             }
         });
 
+        // Plan Button-----------------------------------------
+
         plan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -236,13 +266,51 @@ public class HomeController implements Initializable {
             }
         });
 
+        // Message Button-----------------------------------------
         msg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) { DBUtils.changeScene(event, "/main/fxmlFiles/login.fxml", null, null);}
+            public void handle(ActionEvent event) {
+                msgList.addAll(getMsgList());
+
+
+                int column = 0;
+                int row = 0;
+                try {
+                    for(int i = 0; i<msgList.size(); i++){
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+
+                        fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/messageItem.fxml"));
+                        AnchorPane anchorPane = fxmlLoader.load();
+                        MsgController msgController = fxmlLoader.getController();
+                        msgController.setData(msgList.get(i));
+
+                        if (column == 1) {
+                            column = 0;
+                            row++;
+                        }
+                        grid.add(anchorPane, column++, row);
+                        //Set grid width
+                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //Set grid height
+                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+
+                        GridPane.setMargin(anchorPane, new Insets(10));
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         });
 
 
 
+        // Logout Button-----------------------------------------
 
         logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -250,7 +318,6 @@ public class HomeController implements Initializable {
                 DBUtils.changeScene(event, "/main/fxmlFiles/login.fxml", null, null);
             }
         });
-
 
 
     }

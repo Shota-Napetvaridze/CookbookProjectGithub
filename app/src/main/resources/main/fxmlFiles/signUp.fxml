@@ -16,7 +16,7 @@
          <children>
             <ImageView fitHeight="400.0" fitWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
-                  <Image url="@../Background_New.png" />
+                  <Image url="@../BackgroundSmall.png" />
                </image>
             </ImageView>
             <TextField fx:id="email" layoutX="202.0" layoutY="127.0" prefHeight="30.0" prefWidth="195.0" promptText="email">
@@ -24,17 +24,17 @@
                   <Font size="16.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="passwordnew" layoutX="202.0" layoutY="170.0" prefHeight="30.0" prefWidth="195.0" promptText="password">
+            <PasswordField fx:id="passwordNew" layoutX="202.0" layoutY="170.0" prefHeight="30.0" prefWidth="195.0" promptText="password">
                <font>
                   <Font size="16.0" />
                </font>
             </PasswordField>
-            <Button fx:id="signupnew" layoutX="230.0" layoutY="224.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700;" text="Sign Up">
+            <Button fx:id="signupNew" layoutX="230.0" layoutY="224.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700;" text="Sign Up">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <TextField fx:id="usernamenew" layoutX="202.0" layoutY="84.0" prefHeight="30.0" prefWidth="195.0" promptText="username">
+            <TextField fx:id="usernameNew" layoutX="202.0" layoutY="84.0" prefHeight="30.0" prefWidth="195.0" promptText="username">
                <font>
                   <Font size="16.0" />
                </font>

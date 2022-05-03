@@ -16,7 +16,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="67.0" layoutY="18.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@../Background_New.png" />
+            <Image url="@../Background_Big.png" />
          </image>
       </ImageView>
       <AnchorPane prefHeight="26.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

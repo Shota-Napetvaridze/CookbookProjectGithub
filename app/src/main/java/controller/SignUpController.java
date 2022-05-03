@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 public class SignUpController implements Initializable {
 
     @FXML
-    private Button signupnew;
+    private Button signupNew;
 
 
     @FXML
@@ -23,14 +23,14 @@ public class SignUpController implements Initializable {
 
 
     @FXML
-    private TextField usernamenew;
+    private TextField usernameNew;
 
 
     @FXML
     private TextField email;
 
     @FXML
-    private TextField passwordnew;
+    private TextField passwordNew;
 
 
 
@@ -38,11 +38,11 @@ public class SignUpController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        signupnew.setOnAction(new EventHandler<ActionEvent>() {
+        signupNew.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (!usernamenew.getText().trim().isEmpty() && !passwordnew.getText().trim().isEmpty()){
-                    DBUtils.signUpUser(event, usernamenew.getText(), email.getText(), passwordnew.getText());
+                if (!usernameNew.getText().trim().isEmpty() && !passwordNew.getText().trim().isEmpty()){
+                    DBUtils.signUpUser(event, usernameNew.getText(), email.getText(), passwordNew.getText());
                 }else {
                     System.out.println("Please fill in all information!");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
