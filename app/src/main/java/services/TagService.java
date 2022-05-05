@@ -1,6 +1,6 @@
-package cookbook.services;
+package services;
 
-import cookbook.models.entities.Tag;
+import models.entities.Tag;
 
 public interface TagService {
     public String addTag(String name);

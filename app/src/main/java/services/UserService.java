@@ -1,12 +1,12 @@
-package cookbook.services;
+package services;
 
 import java.util.Date;
 import java.util.Set;
 
-import cookbook.models.entities.Comment;
-import cookbook.models.entities.Ingredient;
-import cookbook.models.entities.Recipe;
-import cookbook.models.entities.User;
+import models.entities.Comment;
+import models.entities.Ingredient;
+import models.entities.Recipe;
+import models.entities.User;
 
 public interface UserService {
     public Set<User> getUsers();

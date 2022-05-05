@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
@@ -59,7 +60,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                      <children>
-                        <HBox alignment="TOP_CENTER" prefHeight="88.0" prefWidth="316.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="57.0" prefWidth="316.0">
                            <children>
                               <Label fx:id="recipeLbl" text="Recipe">
                                  <font>
@@ -80,11 +81,12 @@
                            <children>
                               <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700;" text="Open for detailed view" />
                            </children></HBox>
-                        <Button fx:id="addToCart" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700;" text="Add to cart">
+                        <Button fx:id="addToPlan" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700;" text="Add to Plan">
                            <VBox.margin>
                               <Insets bottom="20.0" top="30.0" />
                            </VBox.margin>
                         </Button>
+                        <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703;" text="Add a new recipe" />
                      </children>
                   </VBox>
                </children>
@@ -106,6 +108,8 @@
                                                 <Image url="@../msg.png" />
                                              </image>
                                           </ImageView>
+                                          <Circle fill="#d0dce8" layoutY="2.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
+                                          <Label fx:id="msgCountLbl" alignment="CENTER" layoutX="-21.0" layoutY="-12.0" prefHeight="29.0" prefWidth="41.0" text="2" />
                                        </children>
                                     </AnchorPane>
                                  </graphic>

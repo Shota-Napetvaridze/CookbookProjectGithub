@@ -1,11 +1,11 @@
-package cookbook.util.common;
+package util.common;
 
 import java.util.UUID;
 
-import cookbook.models.entities.BaseEntity;
-import cookbook.util.exceptions.common.InvalidCountException;
-import cookbook.util.exceptions.common.InvalidInstanceException;
-import cookbook.util.exceptions.common.InvalidLengthException;
+import models.entities.BaseEntity;
+import util.exceptions.common.InvalidCountException;
+import util.exceptions.common.InvalidInstanceException;
+import util.exceptions.common.InvalidLengthException;
 
 public class Validator {
 

@@ -1,6 +1,6 @@
-package cookbook.util.exceptions.tag;
+package util.exceptions.tag;
 
-import cookbook.util.constants.FailMessages;
+import util.constants.FailMessages;
 
 /**
  * Exception for invalid member email.

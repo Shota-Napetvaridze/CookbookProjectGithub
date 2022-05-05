@@ -1,4 +1,4 @@
-package cookbook.util.constants;
+package util.constants;
 
 public class Variables {
     public static final int MIN_USER_NAME_LENGTH = 3; // User

@@ -7,7 +7,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
 
 
 import java.io.File;
@@ -294,7 +297,6 @@ public class DBUtils {
 
     public static void changeScene(ActionEvent event, String fxmlFIle, String username, String email){
         Parent root = null;
-
         if (username != null && email != null){
             try {
                 FXMLLoader loader = new FXMLLoader(DBUtils.class.getResource(fxmlFIle));
@@ -315,7 +317,12 @@ public class DBUtils {
             String s = String.format("Welcome to Cookbook");
             stage.setTitle(s);
             stage.show();
-        } else {
+        } else if (fxmlFIle.equals("/main/fxmlFiles/addNewRecipe.fxml")){
+            stage.setScene(new Scene(root, 898,810.0));
+            String s = String.format("Welcome to Cookbook");
+            stage.setTitle(s);
+            stage.show();
+        }else {
             stage.setScene(new Scene(root, 1315.0,810.0 ));
             String s = String.format("Welcome to Cookbook %s", username.toUpperCase());
             stage.setTitle(s);
@@ -450,12 +457,13 @@ public class DBUtils {
     }
 
 
-    public static void addToFavorites(String recipeId, String userId){
+    public static void addToFavorites(String recipeId, String userId, ImageView heartImage){
         Connection connection = null;
         PreparedStatement psInsert = null;
         PreparedStatement psCheckRecipeExists = null;
-        ResultSet resultSet = null;
+        PreparedStatement deleteRecipe = null;
 
+        ResultSet resultSet = null;
 
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
@@ -464,15 +472,28 @@ public class DBUtils {
             resultSet = psCheckRecipeExists.executeQuery();
 
             if (resultSet.isBeforeFirst()) {
-                System.out.println("You already have this recipe in Favorites");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("The recipe has already been added!");
+                System.out.println("Removed From UsersFavorites");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Would you like to remove from Favorites ?");
                 alert.show();
+                Image image2 = new Image("/main/heart.png");
+                heartImage.setImage(image2);
+                deleteRecipe = connection.prepareStatement("DELETE FROM UsersFavorites WHERE RecipeId = ?");
+                deleteRecipe.setString(1, recipeId);
+                deleteRecipe.executeUpdate();
+
             }else {
+                System.out.println("Added to UsersFavorites");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Would you like to add to Favorites ?");
+                alert.show();
+                Image image = new Image("/main/filledWithLove.png");
+                heartImage.setImage(image);
                 psInsert = connection.prepareStatement("INSERT INTO UsersFavorites (UserId, RecipeId) VALUES (?, ?)");
                 psInsert.setString(1, "retrievedUserId"); //TODO: We need to set The UserId here
                 psInsert.setString(2, recipeId);
                 psInsert.executeUpdate();
+
             }
 
 
@@ -510,15 +531,63 @@ public class DBUtils {
         }
     }
 
-    public static void removeMessage(String msgId){
+    public static boolean checkIfInFavourites(String recipeId){
         Connection connection = null;
-        PreparedStatement deleteMessage = null;
+        PreparedStatement psCheckRecipeExists = null;
         ResultSet resultSet = null;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
-            deleteMessage = connection.prepareStatement("DELETE FROM Messages WHERE Messages.Id = ?");
-            deleteMessage.setString(1, msgId); //TODO: We need to set The Messages.Id here
-            resultSet = deleteMessage.executeQuery();
+            psCheckRecipeExists = connection.prepareStatement("SELECT * FROM UsersFavorites WHERE RecipeId = ?");
+            psCheckRecipeExists.setString(1, recipeId);
+            resultSet = psCheckRecipeExists.executeQuery();
+
+            if (resultSet.isBeforeFirst()) {
+                return true;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            if (resultSet != null){
+                try {
+                    resultSet.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (psCheckRecipeExists != null){
+                try {
+                    psCheckRecipeExists.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null){
+                try {
+                    connection.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    public static String getMessage(){
+        Connection connection = null;
+        PreparedStatement getMessage = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
+            getMessage = connection.prepareStatement("SELECT * FROM Messages");
+            resultSet = getMessage.executeQuery();
+            String s = "";
+
+            while (resultSet.next()){
+                String retrievedMessages = resultSet.getString("MessageText");
+                s += retrievedMessages;
+            }
+            return s;
+
 
 
         }catch (SQLException e){
@@ -531,6 +600,37 @@ public class DBUtils {
                     e.printStackTrace();
                 }
             }
+            if (getMessage != null){
+                try {
+                    getMessage.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null){
+                try {
+                    connection.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return "";
+    }
+
+
+    public static void removeMessage(String msgId){
+        Connection connection = null;
+        PreparedStatement deleteMessage = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
+            deleteMessage = connection.prepareStatement("DELETE FROM Messages WHERE Messages.Id = ?");
+            deleteMessage.setString(1, msgId); //TODO: We need to set The Messages.Id here
+            deleteMessage.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
             if (deleteMessage != null){
                 try {
                     deleteMessage.close();
@@ -548,7 +648,7 @@ public class DBUtils {
         }
     }
 
-    public static void searchRecipe(ActionEvent event, String recipe){
+    public static void searchRecipe(ActionEvent event, String recipeName){
         Connection connection = null;
         PreparedStatement psCheckRecipeExists = null;
         ResultSet resultSet = null;
@@ -557,7 +657,7 @@ public class DBUtils {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
             psCheckRecipeExists = connection.prepareStatement("SELECT * FROM Recipes WHERE RecipeName = ?");
-            psCheckRecipeExists.setString(1, recipe);
+            psCheckRecipeExists.setString(1, recipeName);
             resultSet = psCheckRecipeExists.executeQuery();
 
             if (resultSet.isBeforeFirst()) {

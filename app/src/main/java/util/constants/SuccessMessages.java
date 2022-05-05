@@ -1,4 +1,4 @@
-package cookbook.util.constants;
+package util.constants;
 
 public class SuccessMessages {
 

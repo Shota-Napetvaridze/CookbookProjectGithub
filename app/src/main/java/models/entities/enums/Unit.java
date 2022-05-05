@@ -1,4 +1,4 @@
-package cookbook.models.entities.enums;
+package models.entities.enums;
 
 public enum Unit {
     ml,

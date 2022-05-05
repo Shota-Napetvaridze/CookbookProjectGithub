@@ -39,6 +39,7 @@ public class MsgController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        removeMsg.setStyle("-fx-background-color: rgb(254, 215, 0)");
         removeMsg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

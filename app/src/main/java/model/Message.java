@@ -5,6 +5,7 @@ public class Message {
     private String message;
 
 
+
     public String getUserName() {
         return userName;
     }

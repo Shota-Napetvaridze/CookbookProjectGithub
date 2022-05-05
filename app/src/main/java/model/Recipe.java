@@ -1,10 +1,13 @@
 package model;
 
+import java.util.PrimitiveIterator;
+
 public class Recipe {
     private String name;
     private String imgSrc;
     private String recipeId;
     private String userId;
+
 
     public String getName() {
         return name;
@@ -37,4 +40,5 @@ public class Recipe {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 }

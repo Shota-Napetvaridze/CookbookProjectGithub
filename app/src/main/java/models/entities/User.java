@@ -1,4 +1,4 @@
-package cookbook.models.entities;
+package models.entities;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -10,17 +10,17 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cookbook.util.common.Validator;
-import cookbook.util.constants.FailMessages;
-import cookbook.util.constants.SuccessMessages;
-import cookbook.util.constants.Variables;
-import cookbook.util.exceptions.common.InvalidInstanceException;
-import cookbook.util.exceptions.common.InvalidLengthException;
-import cookbook.util.exceptions.user.InvalidEmailException;
-import cookbook.util.exceptions.user.InvalidPasswordComplexityException;
-import cookbook.util.exceptions.user.TakenEmailException;
-import cookbook.util.exceptions.user.TakenNicknameException;
-import cookbook.util.exceptions.user.TakenUsernameException;
+import util.common.Validator;
+import util.constants.FailMessages;
+import util.constants.SuccessMessages;
+import util.constants.Variables;
+import util.exceptions.common.InvalidInstanceException;
+import util.exceptions.common.InvalidLengthException;
+import util.exceptions.user.InvalidEmailException;
+import util.exceptions.user.InvalidPasswordComplexityException;
+import util.exceptions.user.TakenEmailException;
+import util.exceptions.user.TakenNicknameException;
+import util.exceptions.user.TakenUsernameException;
 
 public class User extends BaseEntity {
 

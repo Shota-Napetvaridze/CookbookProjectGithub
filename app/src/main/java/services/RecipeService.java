@@ -1,11 +1,11 @@
-package cookbook.services;
+package services;
 
 import java.util.Set;
 
-import cookbook.models.entities.Ingredient;
-import cookbook.models.entities.Recipe;
-import cookbook.models.entities.Tag;
-import cookbook.models.entities.User;
+import models.entities.Ingredient;
+import models.entities.Recipe;
+import models.entities.Tag;
+import models.entities.User;
 
 public interface RecipeService {
     public Set<Recipe> getRecipes();

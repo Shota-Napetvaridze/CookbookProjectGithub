@@ -1,4 +1,4 @@
-package cookbook.util.constants;
+package util.constants;
 
 public class SqlQueries {
         public static final String dropDatabase = "DROP DATABASE ?";

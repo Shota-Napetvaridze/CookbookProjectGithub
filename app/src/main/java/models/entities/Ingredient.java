@@ -1,15 +1,15 @@
-package cookbook.models.entities;
+package models.entities;
 
 import java.util.UUID;
 
-import cookbook.models.entities.enums.Unit;
-import cookbook.util.common.Validator;
-import cookbook.util.constants.FailMessages;
-import cookbook.util.constants.SuccessMessages;
-import cookbook.util.constants.Variables;
-import cookbook.util.exceptions.common.InvalidLengthException;
-import cookbook.util.exceptions.ingredient.InvalidUnitException;
-import cookbook.util.exceptions.ingredient.TakenIngredientName;
+import models.entities.enums.Unit;
+import util.common.Validator;
+import util.constants.FailMessages;
+import util.constants.SuccessMessages;
+import util.constants.Variables;
+import util.exceptions.common.InvalidLengthException;
+import util.exceptions.ingredient.InvalidUnitException;
+import util.exceptions.ingredient.TakenIngredientName;
 
 public class Ingredient extends BaseEntity {
 

@@ -37,6 +37,9 @@ public class HomeController implements Initializable {
     private Button msg;
 
     @FXML
+    private Label msgCountLbl;
+
+    @FXML
     private Button home;
 
     @FXML
@@ -53,6 +56,9 @@ public class HomeController implements Initializable {
 
     @FXML
     private TextField searchField;
+
+    @FXML
+    private Button addNewRecipe;
 
     @FXML
     private ScrollPane scroll;
@@ -92,10 +98,11 @@ public class HomeController implements Initializable {
 
     private List<Recipe> recipeList = new ArrayList<>();
     private List<Message> msgList = new ArrayList<>();
+    private List<Recipe> favouriteRecipeList = new ArrayList<>();
+
 
     private Image image;
     private MyListener myListener;
-
 
 
 
@@ -141,6 +148,57 @@ public class HomeController implements Initializable {
         message.setUserMessage("Hellooooooo, how you doiiing?"); //TODO: get messages form database
         messages.add(message);
 
+        message = new Message();
+        message.setUserName("Ned");
+        message.setUserMessage("how aree youuuu?");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Norman");
+        message.setUserMessage("I'm Fineee");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Ned");
+        message.setUserMessage("how aree youuuu?");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Norman");
+        message.setUserMessage("I'm Fineee");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Ned");
+        message.setUserMessage("how aree youuuu?");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Norman");
+        message.setUserMessage("I'm Fineee");
+        messages.add(message);
+
+
+        message = new Message();
+        message.setUserName("Ned");
+        message.setUserMessage("how aree youuuu?");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Norman");
+        message.setUserMessage("I'm Fineee");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Ned");
+        message.setUserMessage("how aree youuuu?");
+        messages.add(message);
+
+        message = new Message();
+        message.setUserName("Norman");
+        message.setUserMessage("I'm Fineee");
+        messages.add(message);
+
 
         return messages;
     }
@@ -152,38 +210,7 @@ public class HomeController implements Initializable {
         recipeLbl.setText(recipe.getName());
     }
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Initial Home Button colour
-        home.setStyle("-fx-color: rgb(239, 242, 255)"+
-                "-fx-background-color: rgb(15, 125, 242)");
-
-        // ComboBox User
-        ObservableList<String> list = FXCollections.observableArrayList("Settings", "Profile");
-        comboBox.setItems(list);
-
-        // Adds all the recipes
-        recipeList.addAll(getRecipeList());
-
-        // When User clicks on a specific recipe.
-        if (recipeList.size() > 0){
-            chosenRecipe(recipeList.get(0));
-            myListener = new MyListener() {
-                @Override
-                public void onClickListener(Recipe recipe) {
-                    chosenRecipe(recipe);
-                }
-
-                @Override
-                public void favClickListener(Recipe recipe) {
-                    DBUtils.addToFavorites(recipe.getRecipeId(), recipe.getUserId());
-                }
-            };
-        }
-
-        // Initialize grid-----------------------------------------
-
+    private void initializeGrid(){
         int column = 0;
         int row = 0;
         try {
@@ -217,6 +244,54 @@ public class HomeController implements Initializable {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Initial Home Button colour
+        home.setStyle("-fx-color: rgb(239, 242, 255)"+
+                "-fx-background-color: rgb(15, 125, 242)");
+
+
+        // ComboBox User
+        ObservableList<String> list = FXCollections.observableArrayList("Settings", "Profile");
+        comboBox.setItems(list);
+
+        // Adds all the recipes and messages
+        recipeList.addAll(getRecipeList());
+        msgList.addAll(getMsgList());
+
+        // Set message count
+        String s = String.valueOf(msgList.size());
+        msgCountLbl.setText(s);
+
+        // When User clicks on a specific recipe.
+        if (recipeList.size() > 0){
+            chosenRecipe(recipeList.get(0));
+            myListener = new MyListener() {
+                @Override
+                public void onClickListener(Recipe recipe) {
+                    chosenRecipe(recipe);
+                }
+
+                @Override
+                public void favClickListener(Recipe recipe, ImageView heartImage) {
+                    DBUtils.addToFavorites(recipe.getRecipeId(), recipe.getUserId(), heartImage);
+                    for (Recipe r: favouriteRecipeList){
+                        if (recipe == r){
+                            favouriteRecipeList.remove(recipe);
+                        }
+                    }
+                    favouriteRecipeList.add(recipe);
+                }
+            };
+        }
+
+        // Initialize grid-----------------------------------------
+        initializeGrid();
+
+
 
         //  Search Button-----------------------------------------
 
@@ -224,6 +299,16 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 DBUtils.searchRecipe(event, searchField.getText());
+                grid.getChildren().clear();
+            }
+        });
+
+        // AddNewRecipe Button-----------------------------------------
+
+        addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                DBUtils.changeScene(event, "/main/fxmlFiles/addNewRecipe.fxml", null, null);
             }
         });
 
@@ -232,11 +317,12 @@ public class HomeController implements Initializable {
         home.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                home.setStyle("-fx-color: rgb(239, 242, 255)"+
+                home.setStyle("-fx-color: rgb(239, 242, 255)" +
                         "-fx-background-color: rgb(15, 125, 242)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
-
+                grid.getChildren().clear();
+                initializeGrid();
             }
         });
 
@@ -249,6 +335,39 @@ public class HomeController implements Initializable {
                         "-fx-background-color: rgb(15, 125, 242)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                grid.getChildren().clear();
+
+                int column = 0;
+                int row = 0;
+                try {
+                    for(int i = 0; i<favouriteRecipeList.size(); i++){
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/recipeItem.fxml"));
+                        AnchorPane anchorPane = fxmlLoader.load();
+                        RecipeController recipeController = fxmlLoader.getController();
+                        recipeController.setData(favouriteRecipeList.get(i), myListener);
+
+                        if (column == 1) {
+                            column = 0;
+                            row++;
+                        }
+                        grid.add(anchorPane, column++, row);
+                        //Set grid width
+                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //Set grid height
+                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+
+                        GridPane.setMargin(anchorPane, new Insets(10));
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -262,6 +381,7 @@ public class HomeController implements Initializable {
                         "-fx-background-color: rgb(15, 125, 242)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                grid.getChildren().clear();
 
             }
         });
@@ -270,15 +390,19 @@ public class HomeController implements Initializable {
         msg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                msgList.addAll(getMsgList());
-
+                home.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                System.out.println(DBUtils.getMessage());
+                recipeList.removeAll(getRecipeList());
+                grid.getChildren().clear();
+                msgCountLbl.setText("...");
 
                 int column = 0;
                 int row = 0;
                 try {
                     for(int i = 0; i<msgList.size(); i++){
                         FXMLLoader fxmlLoader = new FXMLLoader();
-
                         fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/messageItem.fxml"));
                         AnchorPane anchorPane = fxmlLoader.load();
                         MsgController msgController = fxmlLoader.getController();
