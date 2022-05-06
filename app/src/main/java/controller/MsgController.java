@@ -15,7 +15,6 @@ import java.util.ResourceBundle;
 
 public class MsgController implements Initializable {
 
-
     @FXML
     private Label MsgUserLbl;
 
@@ -23,7 +22,13 @@ public class MsgController implements Initializable {
     private Label messageLbl;
 
     @FXML
+    private Label msgOtherUserLbl;
+
+    @FXML
     private Button removeMsg;
+
+    @FXML
+    private Button reply;
 
 
     private Message message;

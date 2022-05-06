@@ -1,6 +1,5 @@
 package model;
 
-import java.util.PrimitiveIterator;
 
 public class Recipe {
     private String name;

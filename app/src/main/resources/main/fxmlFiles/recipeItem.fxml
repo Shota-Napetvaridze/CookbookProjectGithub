@@ -35,7 +35,7 @@
                            <children>
                               <ImageView fx:id="heartImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../heart.png" />
+                                    <Image url="@../img/heart.png" />
                                  </image>
                               </ImageView>
                            </children></AnchorPane>

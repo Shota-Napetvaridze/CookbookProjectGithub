@@ -22,12 +22,12 @@
    <children>
       <ImageView fitHeight="904.0" fitWidth="1135.0" layoutX="412.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="412.0" AnchorPane.rightAnchor="-232.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@../Background_Big.png" />
+            <Image url="@../img/Background_Big.png" />
          </image>
       </ImageView>
       <BorderPane layoutX="26.0" layoutY="26.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <VBox prefHeight="810.0" prefWidth="416.0" style="-fx-background-color: #e4e1c8#e4e1c8;" BorderPane.alignment="CENTER">
+            <VBox fx:id="Vbox" prefHeight="810.0" prefWidth="416.0" style="-fx-background-color: #e4e1c8#e4e1c8;" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                      <children>
@@ -55,12 +55,96 @@
                         <Button fx:id="filter" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: FED700 FED700;" text="Filter" />
                      </children>
                   </HBox>
-                  <VBox alignment="CENTER" prefHeight="560.0" prefWidth="368.0" style="-fx-background-color: #ffe0e0#ffe0e0;">
+                  <VBox alignment="CENTER" prefHeight="700.0" prefWidth="316.0" style="-fx-background-color: #ffe0e0#ffe0e0;">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                      <children>
-                        <HBox alignment="TOP_CENTER" prefHeight="57.0" prefWidth="316.0">
+                        <AnchorPane fx:id="filterPane" prefHeight="237.0" prefWidth="316.0">
+                           <children>
+                              <VBox prefHeight="296.0" prefWidth="313.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="73.0" prefWidth="316.0" spacing="130.0">
+                                       <children>
+                                          <Label fx:id="tagsLbl" text="Tags:">
+                                             <font>
+                                                <Font size="19.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label text="Ingredients:">
+                                             <font>
+                                                <Font size="19.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="12.0" prefWidth="316.0" spacing="20.0">
+                                       <children>
+                                          <TextField promptText="search">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </TextField>
+                                          <TextField promptText="search">
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="187.0" prefWidth="316.0">
+                                       <children>
+                                          <ScrollPane fx:id="scrollTag" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                                             <content>
+                                                <GridPane fx:id="gridTag" prefHeight="0.0" prefWidth="31.0">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                             </content>
+                                             <padding>
+                                                <Insets top="5.0" />
+                                             </padding>
+                                          </ScrollPane>
+                                          <ScrollPane fx:id="scrollIngredient" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                                             <content>
+                                                <GridPane fx:id="gridIngredient" prefHeight="1.0" prefWidth="24.0">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                             </content>
+                                             <padding>
+                                                <Insets top="5.0" />
+                                             </padding>
+                                          </ScrollPane>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="71.0" style="-fx-background-color: FED700;" text="Search">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children></AnchorPane>
+                        <HBox alignment="TOP_CENTER" prefHeight="46.0" prefWidth="316.0" style="-fx-background-color: #f8d6d6#f8d6d6;">
                            <children>
                               <Label fx:id="recipeLbl" text="Recipe">
                                  <font>
@@ -69,24 +153,32 @@
                               </Label>
                            </children>
                            <VBox.margin>
-                              <Insets top="30.0" />
+                              <Insets />
                            </VBox.margin>
                         </HBox>
-                        <ImageView fx:id="recipeImg" fitHeight="170.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../Background_Big.png" />
-                           </image>
-                        </ImageView>
-                        <HBox alignment="CENTER" prefHeight="79.0" prefWidth="316.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700;" text="Open for detailed view" />
+                              <ImageView fx:id="recipeImg" fitHeight="170.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/Background_Big.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
+                           <children>
+                              <Button fx:id="openDetailed" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700;" text="Open for detailed view" />
                            </children></HBox>
-                        <Button fx:id="addToPlan" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700;" text="Add to Plan">
-                           <VBox.margin>
-                              <Insets bottom="20.0" top="30.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703;" text="Add a new recipe" />
+                        <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
+                           <children>
+                              <Button fx:id="addToPlan" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700;" text="Add to Plan" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
+                           <children>
+                              <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703;" text="Add a new recipe" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -105,7 +197,7 @@
                                        <children>
                                           <ImageView accessibleRole="BUTTON" fitHeight="39.0" fitWidth="49.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <image>
-                                                <Image url="@../msg.png" />
+                                                <Image url="@../img/msg.png" />
                                              </image>
                                           </ImageView>
                                           <Circle fill="#d0dce8" layoutY="2.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
@@ -166,7 +258,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane fx:id="scroll" prefHeight="819.0" prefWidth="752.0">
+                        <ScrollPane fx:id="scroll" prefHeight="819.0" prefWidth="752.0" style="-fx-background-color: transparent;">
                            <content>
                               <GridPane fx:id="grid" prefHeight="10.0" prefWidth="31.0">
                                  <rowConstraints>

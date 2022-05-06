@@ -14,10 +14,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import main.DBUtils;
 import main.MyListener;
+import model.Ingredient;
 import model.Message;
 import model.Recipe;
+import model.Tag;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +33,13 @@ public class HomeController implements Initializable {
 
     @FXML
     private ComboBox<String> comboBox;
+
+    @FXML
+    private VBox Vbox;
+
+    @FXML
+    private AnchorPane filterPane;
+
     @FXML
     private Button logout;
 
@@ -58,6 +68,12 @@ public class HomeController implements Initializable {
     private TextField searchField;
 
     @FXML
+    private Button openDetailed;
+
+    @FXML
+    private Button addToPlan;
+
+    @FXML
     private Button addNewRecipe;
 
     @FXML
@@ -72,6 +88,16 @@ public class HomeController implements Initializable {
     @FXML
     private GridPane grid;
 
+    @FXML
+    private GridPane gridTag;
+
+    @FXML
+    private GridPane gridIngredient;
+
+    private Image image;
+    private MyListener myListener;
+
+    //ComboBox --------------------------
     @FXML
     void select(ActionEvent event) {
         String s = comboBox.getSelectionModel().getSelectedItem().toString();
@@ -96,16 +122,16 @@ public class HomeController implements Initializable {
     }
 
 
+    // Lists ----------------------------
     private List<Recipe> recipeList = new ArrayList<>();
     private List<Message> msgList = new ArrayList<>();
     private List<Recipe> favouriteRecipeList = new ArrayList<>();
-
-
-    private Image image;
-    private MyListener myListener;
+    private List<Tag> tagList = new ArrayList<>();
+    private List<Ingredient> ingredientsList = new ArrayList<>();
 
 
 
+    // Get Items ----------------------------
     private List<Recipe> getRecipeList(){
         List<Recipe> recipes = new ArrayList<>();
         Recipe recipe;
@@ -203,13 +229,65 @@ public class HomeController implements Initializable {
         return messages;
     }
 
+    private List<Tag> getTagList(){
+        List<Tag> tags = new ArrayList<>();
+        Tag tag;
 
+
+        tag = new Tag();
+        tag.setTagName("Vegetarian");
+        tags.add(tag);
+
+        tag = new Tag();
+        tag.setTagName("Gluten-free");
+        tags.add(tag);
+
+        tag = new Tag();
+        tag.setTagName("Pesto");
+        tags.add(tag);
+
+        tag = new Tag();
+        tag.setTagName("Lactose-free");
+        tags.add(tag);
+
+
+
+        return tags;
+    }
+
+    private List<Ingredient> getIngredientList(){
+        List<Ingredient> ingredients = new ArrayList<>();
+        Ingredient ingredient;
+
+        ingredient = new Ingredient();
+        ingredient.setIngredientName("Beef");
+        ingredients.add(ingredient);
+
+        ingredient = new Ingredient();
+        ingredient.setIngredientName("pork");
+        ingredients.add(ingredient);
+
+        ingredient = new Ingredient();
+        ingredient.setIngredientName("Milk");
+        ingredients.add(ingredient);
+
+        ingredient = new Ingredient();
+        ingredient.setIngredientName("Carrot");
+        ingredients.add(ingredient);
+
+        return ingredients;
+    }
+
+
+
+    // Sets the image and the recipe name on the left side of the home page.
     private void chosenRecipe(Recipe recipe){
         image = new Image(getClass().getResourceAsStream(recipe.getImgSrc()));
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
     }
 
+    // Initial grid of the Home page.
     private void initializeGrid(){
         int column = 0;
         int row = 0;
@@ -247,11 +325,50 @@ public class HomeController implements Initializable {
     }
 
 
+    // TODO: ---------------------------------------------
+    private void createGrid(ArrayList list, GridPane grid, String fxml){
+        int column = 0;
+        int row = 0;
+        try {
+            for(int i = 0; i<list.size(); i++){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/recipeItem.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                RecipeController recipeController = fxmlLoader.getController();
+                recipeController.setData(favouriteRecipeList.get(i), myListener);
+
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                grid.add(anchorPane, column++, row);
+                //Set grid width
+                grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                //Set grid height
+                grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+
+                GridPane.setMargin(anchorPane, new Insets(10));
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initial Home Button colour
         home.setStyle("-fx-color: rgb(239, 242, 255)"+
                 "-fx-background-color: rgb(15, 125, 242)");
+
+//        filterPane.setVisible(false);
 
 
         // ComboBox User
@@ -261,12 +378,15 @@ public class HomeController implements Initializable {
         // Adds all the recipes and messages
         recipeList.addAll(getRecipeList());
         msgList.addAll(getMsgList());
+        tagList.addAll(getTagList());
+        ingredientsList.addAll(getIngredientList());
+
 
         // Set message count
         String s = String.valueOf(msgList.size());
         msgCountLbl.setText(s);
 
-        // When User clicks on a specific recipe.
+        // When User clicks on a specific recipe, tag or ingredient
         if (recipeList.size() > 0){
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
@@ -284,6 +404,16 @@ public class HomeController implements Initializable {
                         }
                     }
                     favouriteRecipeList.add(recipe);
+                }
+
+                @Override
+                public void ingredientClickListener(Ingredient ingredient) {
+
+                }
+
+                @Override
+                public void tagClickListener(Tag tag) {
+
                 }
             };
         }
@@ -303,12 +433,110 @@ public class HomeController implements Initializable {
             }
         });
 
+        //  Filter Button-----------------------------------------
+
+        filter.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int column = 0;
+                int row = 0;
+                try {
+                    for(int i = 0; i<tagList.size(); i++){
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/tag.fxml"));
+                        AnchorPane anchorPane = fxmlLoader.load();
+                        TagController tagController = fxmlLoader.getController();
+                        tagController.setData(tagList.get(i), myListener);
+
+                        if (column == 1) {
+                            column = 0;
+                            row++;
+                        }
+                        gridTag.add(anchorPane, column++, row);
+                        //Set grid width
+                        gridTag.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        gridTag.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        gridTag.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //Set grid height
+                        gridTag.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        gridTag.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        gridTag.setMaxHeight(Region.USE_PREF_SIZE);
+                        GridPane.setMargin(anchorPane, new Insets(3));
+                    }
+
+                    for(int i = 0; i<ingredientsList.size(); i++){
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/ingredient.fxml"));
+                        AnchorPane anchorPane = fxmlLoader.load();
+                        IngredientController ingredientController = fxmlLoader.getController();
+                        ingredientController.setData(ingredientsList.get(i), myListener);
+
+                        if (column == 1) {
+                            column = 0;
+                            row++;
+                        }
+                        gridIngredient.add(anchorPane, column++, row);
+                        //Set grid width
+                        gridIngredient.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        gridIngredient.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        gridIngredient.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //Set grid height
+                        gridIngredient.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        gridIngredient.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        gridIngredient.setMaxHeight(Region.USE_PREF_SIZE);
+
+
+                        GridPane.setMargin(anchorPane, new Insets(3));
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+//                filterPane.setVisible(true);
+//                filterPane.setMaxHeight(300.0);
+//                recipeLbl.setVisible(false);
+//                recipeImg.setVisible(false);
+//                openDetailed.setVisible(false);
+//                addToPlan.setVisible(false);
+//                addNewRecipe.setVisible(false);
+
+            }
+        });
+
+        //  Open for a detailed view Button-----------------------------------------
+
+        openDetailed.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        //  Add to a plan Button-----------------------------------------
+
+        addToPlan.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
         // AddNewRecipe Button-----------------------------------------
 
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DBUtils.changeScene(event, "/main/fxmlFiles/addNewRecipe.fxml", null, null);
+                scroll.setVisible(false);
+                recipeImg.setVisible(false);
+                recipeLbl.setVisible(false);
+//                Vbox.setVisible(false);
+//                Parent root = null;
+//                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//                stage.setWidth(1135.0);
+//                stage.show();
+//                DBUtils.changeScene(event, "/main/fxmlFiles/addNewRecipe.fxml", null, null);
             }
         });
 
@@ -393,8 +621,6 @@ public class HomeController implements Initializable {
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                System.out.println(DBUtils.getMessage());
-                recipeList.removeAll(getRecipeList());
                 grid.getChildren().clear();
                 msgCountLbl.setText("...");
 

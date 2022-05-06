@@ -359,7 +359,7 @@ public class DBUtils {
                 psInsert.setString(4, email);
                 psInsert.setString(5, password);
                 psInsert.executeUpdate();
-                changeScene(event, "fxmlFiles/home.fxml", username, email);
+                changeScene(event, "fxmlFiles/login.fxml", username, email);
             }
 
         }catch (SQLException e){
@@ -476,7 +476,7 @@ public class DBUtils {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setContentText("Would you like to remove from Favorites ?");
                 alert.show();
-                Image image2 = new Image("/main/heart.png");
+                Image image2 = new Image("/main/img/heart.png");
                 heartImage.setImage(image2);
                 deleteRecipe = connection.prepareStatement("DELETE FROM UsersFavorites WHERE RecipeId = ?");
                 deleteRecipe.setString(1, recipeId);
@@ -487,7 +487,7 @@ public class DBUtils {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setContentText("Would you like to add to Favorites ?");
                 alert.show();
-                Image image = new Image("/main/filledWithLove.png");
+                Image image = new Image("/main/img/filledWithLove.png");
                 heartImage.setImage(image);
                 psInsert = connection.prepareStatement("INSERT INTO UsersFavorites (UserId, RecipeId) VALUES (?, ?)");
                 psInsert.setString(1, "retrievedUserId"); //TODO: We need to set The UserId here
@@ -617,7 +617,6 @@ public class DBUtils {
         }
         return "";
     }
-
 
     public static void removeMessage(String msgId){
         Connection connection = null;

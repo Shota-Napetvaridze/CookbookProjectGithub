@@ -16,7 +16,7 @@
          <children>
             <ImageView fitHeight="400.0" fitWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
-                  <Image url="@../BackgroundSmall.png" />
+                  <Image url="@../img/BackgroundSmall.png" />
                </image>
             </ImageView>
             <TextField fx:id="email" layoutX="202.0" layoutY="127.0" prefHeight="30.0" prefWidth="195.0" promptText="email">

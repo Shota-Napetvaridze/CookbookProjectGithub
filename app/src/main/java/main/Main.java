@@ -11,8 +11,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/main/fxmlFiles/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/main/fxmlFiles/home.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1315.0 , 810.0 ); // TODO: 600 400 (Replace)
         stage.setTitle("CookBook!");
         stage.setScene(scene);
         stage.show();
