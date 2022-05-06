@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,13 +16,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import main.DBUtils;
+import main.FileIo;
 import main.MyListener;
 import model.Ingredient;
 import model.Message;
 import model.Recipe;
 import model.Tag;
 
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -93,6 +99,17 @@ public class HomeController implements Initializable {
 
     @FXML
     private GridPane gridIngredient;
+
+    @FXML
+    private Button sovietMode;
+
+    @FXML
+    private Label CookBookLbl;
+    @FXML
+    private ImageView sovietLogo;
+
+    private Media media;
+
 
     private Image image;
     private MyListener myListener;
@@ -325,6 +342,7 @@ public class HomeController implements Initializable {
     }
 
 
+
     // TODO: ---------------------------------------------
     private void createGrid(ArrayList list, GridPane grid, String fxml){
         int column = 0;
@@ -523,20 +541,36 @@ public class HomeController implements Initializable {
             }
         });
 
-        // AddNewRecipe Button-----------------------------------------
+        // Add New Recipe Button-----------------------------------------
 
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                scroll.setVisible(false);
+                grid.getChildren().clear();
                 recipeImg.setVisible(false);
                 recipeLbl.setVisible(false);
-//                Vbox.setVisible(false);
-//                Parent root = null;
-//                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//                stage.setWidth(1135.0);
-//                stage.show();
-//                DBUtils.changeScene(event, "/main/fxmlFiles/addNewRecipe.fxml", null, null);
+
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/addNewRecipe.fxml"));
+                try {
+                    AnchorPane anchorPane = fxmlLoader.load();
+                    grid.add(anchorPane, 1, 1);
+                    grid.setAlignment(Pos.CENTER);
+                    grid.setStyle("-fx-background-color: #ffa9a9");
+
+                    //Set grid width
+                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                    grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                    //Set grid height
+                    grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                    grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    grid.setMaxHeight(Region.USE_PREF_SIZE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -545,11 +579,14 @@ public class HomeController implements Initializable {
         home.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                recipeImg.setVisible(true);
+                recipeLbl.setVisible(true);
                 home.setStyle("-fx-color: rgb(239, 242, 255)" +
                         "-fx-background-color: rgb(15, 125, 242)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
+                grid.setStyle("-fx-background-color: #ffffff");
                 initializeGrid();
             }
         });
@@ -623,6 +660,7 @@ public class HomeController implements Initializable {
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
                 msgCountLbl.setText("...");
+                grid.setStyle("-fx-background-color: #ffffff");
 
                 int column = 0;
                 int row = 0;
@@ -666,6 +704,47 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 DBUtils.changeScene(event, "/main/fxmlFiles/login.fxml", null, null);
+            }
+        });
+
+        sovietMode.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                CookBookLbl.setText("Our Cookbook");
+                Image image = new Image("/main/img/borch.jpeg");
+                Image image2 = new Image("/main/img/sovietLogo.png");
+                recipeImg.setImage(image);
+                sovietLogo.setImage(image2);
+                recipeLbl.setText("We only serve Borsch here!!!!!!");
+
+                String musicFile = "app/src/main/resources/main/soviet.mp3";
+                Media sound = new Media(new File(musicFile).toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.play();
+
+                grid.getChildren().clear();
+
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/main/fxmlFiles/soviet.fxml"));
+                try {
+                    AnchorPane anchorPane = fxmlLoader.load();
+                    grid.add(anchorPane, 1, 1);
+                    grid.setAlignment(Pos.CENTER);
+                    grid.setStyle("-fx-background-color: #ffa9a9");
+
+                    //Set grid width
+                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                    grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                    //Set grid height
+                    grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                    grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    grid.setMaxHeight(Region.USE_PREF_SIZE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
