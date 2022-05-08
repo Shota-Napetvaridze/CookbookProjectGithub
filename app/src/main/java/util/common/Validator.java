@@ -2,7 +2,7 @@ package util.common;
 
 import java.util.UUID;
 
-import models.entities.BaseEntity;
+import model.BaseEntity;
 import util.exceptions.common.InvalidCountException;
 import util.exceptions.common.InvalidInstanceException;
 import util.exceptions.common.InvalidLengthException;

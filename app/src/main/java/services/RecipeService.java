@@ -2,10 +2,10 @@ package services;
 
 import java.util.Set;
 
-import models.entities.Ingredient;
-import models.entities.Recipe;
-import models.entities.Tag;
-import models.entities.User;
+import model.Ingredient;
+import model.Recipe;
+import model.Tag;
+import model.User;
 
 public interface RecipeService {
     public Set<Recipe> getRecipes();

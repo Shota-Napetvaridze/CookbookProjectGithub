@@ -3,10 +3,10 @@ package services;
 import java.util.Date;
 import java.util.Set;
 
-import models.entities.Comment;
-import models.entities.Ingredient;
-import models.entities.Recipe;
-import models.entities.User;
+import model.Comment;
+import model.Ingredient;
+import model.Recipe;
+import model.User;
 
 public interface UserService {
     public Set<User> getUsers();

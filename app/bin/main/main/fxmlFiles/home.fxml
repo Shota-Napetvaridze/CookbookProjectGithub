@@ -31,11 +31,15 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
                      <children>
-                        <Label text="Cookbook">
+                        <Label fx:id="CookBookLbl" text="Cookbook">
                            <font>
                               <Font name="System Bold" size="40.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
                         </Label>
+                        <ImageView fx:id="sovietLogo" fitHeight="47.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="65.0" prefWidth="200.0">
@@ -232,6 +236,11 @@
                                  <effect>
                                     <Blend />
                                  </effect>
+                              </Button>
+                              <Button fx:id="sovietMode" layoutX="496.0" layoutY="19.0" mnemonicParsing="false" style="-fx-background-color: #c23a3a#c23a3a;" text="Soviet Mode">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
                               </Button>
                            </children>
                            <opaqueInsets>
