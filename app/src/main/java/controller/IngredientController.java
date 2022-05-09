@@ -7,14 +7,16 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import main.MyListener;
+import model.BaseEntity;
 import model.Ingredient;
-import model.Tag;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class IngredientController implements Initializable {
+public class IngredientController implements Initializable{
+    private Ingredient ingredient;
+    private MyListener myListener;
 
     @FXML
     private Label ingredientLbl;
@@ -25,17 +27,14 @@ public class IngredientController implements Initializable {
 
 
     @FXML
-    void ingredientClick(MouseEvent event) {
-        myListener.ingredientClickListener(ingredient);
+    private void ingredientClick(MouseEvent event) {
+        myListener.ingredientClickListener(ingredient, ingredientButton);
     }
-
-    private Ingredient ingredient;
-    private MyListener myListener;
 
     public void setData(Ingredient ingredient, MyListener myListener){
         this.ingredient = ingredient;
         this.myListener = myListener;
-        ingredientLbl.setText(ingredient.getIngredientName());
+        ingredientLbl.setText(ingredient.getName());
     }
 
 

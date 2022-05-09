@@ -12,7 +12,10 @@ import model.Tag;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TagController implements Initializable {
+public class TagController implements Initializable{
+
+    private Tag tag;
+    private MyListener myListener;
 
     @FXML
     private Label tagLbl;
@@ -20,21 +23,19 @@ public class TagController implements Initializable {
     @FXML
     private Button tagButton;
 
+
     @FXML
-    void tagClick(MouseEvent event) {
-        myListener.tagClickListener(tag);
+    private void tagClick(MouseEvent event) {
+        myListener.tagClickListener(tag, tagButton);
     }
 
 
-
-    private Tag tag;
-    private MyListener myListener;
 
 
     public void setData(Tag tag, MyListener myListener){
         this.tag = tag;
         this.myListener = myListener;
-        tagLbl.setText(tag.getTagName());
+        tagLbl.setText(tag.getName());
     }
 
     @Override

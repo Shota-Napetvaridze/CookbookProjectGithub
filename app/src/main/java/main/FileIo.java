@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class FileIo {
 
+    // READS DATA FROM .CSV FILES transforms into an ArrayList of Strings
     public static ArrayList<String[]> readFromFileSaveToArrayList(String file) {
         ArrayList<String[]> strArr = new ArrayList<String[]>();
         try {

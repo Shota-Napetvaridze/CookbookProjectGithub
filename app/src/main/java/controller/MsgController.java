@@ -1,3 +1,4 @@
+
 package controller;
 
 import javafx.event.ActionEvent;
@@ -13,7 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class MsgController implements Initializable {
+public class MsgController implements Initializable{
 
     @FXML
     private Label MsgUserLbl;
@@ -32,6 +33,8 @@ public class MsgController implements Initializable {
 
 
     private Message message;
+
+
 
 
     public void setData(Message message){

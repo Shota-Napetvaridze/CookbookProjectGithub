@@ -1,8 +1,9 @@
 module main.cookbookproject {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.media;
     requires java.sql;
+    requires java.desktop;
+    requires transitive javafx.graphics;
 
 
 

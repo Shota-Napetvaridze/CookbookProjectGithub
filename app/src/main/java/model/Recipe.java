@@ -28,7 +28,7 @@ public class Recipe {
     private String imgSrc;
 
     //NEW ATTRIBUTE
-    private ImageView recipeImage;
+    private Image recipeImage;
 
 
 
@@ -79,7 +79,7 @@ public class Recipe {
         return name;
     }
 
-    public ImageView getRecipeImage() { //method for home controller (to retrieve images from DB)
+    public Image getRecipeImage() { //method for home controller (to retrieve images from DB)
         return recipeImage;
     }
 
@@ -157,7 +157,7 @@ public class Recipe {
         this.imgSrc = imgSrc;
     }
 
-    public void setRecipeImage(ImageView recipeImage) {  //method for home controller (to retrieve images from DB)
+    public void setRecipeImage(Image recipeImage) {  //method for home controller (to retrieve images from DB)
         this.recipeImage = recipeImage;
     }
 

@@ -22,11 +22,8 @@ public class LogInController implements Initializable {
     @FXML
     private TextField username;
 
-
     @FXML
     private TextField password;
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,7 +38,7 @@ public class LogInController implements Initializable {
         signup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DBUtils.changeScene(event, "/main/fxmlFiles/signUp.fxml",  null, null);
+                DBUtils.changeScene(event, "/fxmlFiles/signUp.fxml",  null, null);
             }
         });
 
