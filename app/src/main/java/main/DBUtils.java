@@ -46,36 +46,8 @@ public class DBUtils {
         this.PASS = PASS;
     }
 
-    public File[] parseRecipeImagesDirectory(File dir){
-        File[] files = dir.listFiles();
-        return files;
-    }
 
-    public void createDatabase(){
-        File usersFile = new File("src/main/resources/data/users.csv");
-        File recipesFile = new File("src/main/resources/data/recipes.csv");
-        File tagsFile = new File("src/main/resources/data/tags.csv");
-        File messagesFile = new File("src/main/resources/data/messages.csv");
-        File commentsFile = new File("src/main/resources/data/comments.csv");
-        File ingredientUnitsFile = new File("src/main/resources/data/ingredientUnits.csv");
-
-        //File imageDirectory = new File("src/main/resources/main/recipeImages.csv");
-
-        String usersPath = usersFile.getAbsolutePath();
-        String recipesPath = recipesFile.getAbsolutePath();
-        String tagsPath = tagsFile.getAbsolutePath();
-        String messagesPath = messagesFile.getAbsolutePath();
-        String commentsPath = commentsFile.getAbsolutePath();
-        String ingredientUnitsPath = ingredientUnitsFile.getAbsolutePath();
-
-        ArrayList<String[]> users = FileIo.readFromFileSaveToArrayList(usersPath);
-        ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
-        ArrayList<String[]> tags = FileIo.readFromFileSaveToArrayList(tagsPath);
-        ArrayList<String[]> messages = FileIo.readFromFileSaveToArrayList(messagesPath);
-        ArrayList<String[]> comments = FileIo.readFromFileSaveToArrayList(commentsPath);
-        ArrayList<String[]> ingredientUnits = FileIo.readFromFileSaveToArrayList(ingredientUnitsPath);
-
-        //----------------------------------------------------------------------
+    public void createTablesInDatabase() {
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             Statement stmt = conn.createStatement();
@@ -128,7 +100,7 @@ public class DBUtils {
                         String createTableRecipes = "CREATE TABLE Recipes (\n" +
                                 "Id CHAR(36) NOT NULL PRIMARY KEY,\n" +
                                 "RecipeName VARCHAR(100) NOT NULL,\n" +
-                                "Picture LONGBLOB NOT NULL,\n" + // --------------------- changed from BLOB TO LONGBLOB
+                                "Picture LONGBLOB NOT NULL,\n" +
                                 "RecipeDescription VARCHAR(1500) NOT NULL, \n" +
                                 "Instructions VARCHAR(4000) NOT NULL,\n" +
                                 "AuthorId CHAR(36) NOT NULL REFERENCES Users(Id)\n" +
@@ -178,211 +150,6 @@ public class DBUtils {
                         stmt2.execute(createTableWeeklyPlans);
 
                         System.out.println("Tables created successfully...");
-//-------------------------------------------------- IMPORT SAMPLE DATA -----------------------------------------------------
-                        try {
-                            String useDb = "USE Cookbook";
-                            stmt.execute(useDb);
-                            //ADD SAMPLE USERS
-                            for (String[] u : users) {
-                                try {
-                                    String importUsers = "INSERT INTO Users (\n" +
-                                            "Id, Username, DisplayName, Email, Password) \n" +
-                                            "VALUES (?, ?, ?, ?, ?)";
-                                    PreparedStatement ps = conn.prepareStatement(importUsers);
-                                    ps.setString(1, u[0]);
-                                    ps.setString(2, u[1]);
-                                    ps.setString(3, u[2]);
-                                    ps.setString(4, u[3]);
-                                    ps.setString(5, u[4]);
-
-                                    ps.execute();
-                                } catch (SQLException e7) {
-                                    e7.printStackTrace();
-                                }
-                            }
-
-                            
-                            try {
-                                String importRecipe1 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps1 = conn.prepareStatement(importRecipe1);
-                                InputStream fis1 = getClass().getResourceAsStream("/recipeImages/Lasagna.png");
-                                ps1.setString(1, "1");
-                                ps1.setString(2, "Lasagna");
-                                ps1.setBlob(3, fis1);
-                                ps1.setString(4, "Lasagna is a wide, flat sheet of pasta. Lasagna can refer to either the type of noodle or to the typical lasagna dish which is a dish made with several layers of lasagna sheets with sauce and other ingredients, such as meats and cheese, in between the lasagna noodles.");
-                                ps1.setString(5, "STEP 1: Preheat oven to 375 degrees F (190 degrees C). Bring a large pot of lightly salted water to a boil. Add noodles and cook for 8 to 10 minutes or until al dente. drain and set aside. STEP 2:Place pork and beef in a large, deep skillet. Cook over medium high heat until evenly brown. Stir in tomato sauce, crushed tomatoes, parsley, garlic, oregano, onion, sugar, basil and salt. Simmer over medium-low heat for 30 minutes, stirring occasionally. STEP 3: In a large bowl, combine cottage cheese, eggs, Parmesan cheese, parsley, salt and pepper. Step 4: In a 9x13 inch baking dish, place 2 layers of noodles on the bottom of dish. layer 1/2 of the cheese mixture, 1/2 of the mozzarella cheese and 1/2 of the sauce. Repeat layers. STEP 5: Cover with aluminum foil and bake in preheated oven for 30 to 40 minutes. Remove foil and bake for another 5 to 10 minutes. let stand for 10 minutes before cutting. serve.");
-                                ps1.setString(6, "Sample Author");
-                                ps1.execute();
-                                System.out.println("Sample Recipe 1 successfully imported");
-
-                                String importRecipe2 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps2 = conn.prepareStatement(importRecipe2);
-                                InputStream fis2 = getClass().getResourceAsStream("/recipeImages/banana-pancakes.png");
-                                ps2.setString(1, "2");
-                                ps2.setString(2, "Banana Pancakes");
-                                ps2.setBlob(3, fis2);
-                                ps2.setString(4, "Turn overripe, blackened bananas into sweet and fluffy American-style pancakes. Serve with syrup and crunchy, toasted pecan nuts as a delicious brunch treat");
-                                ps2.setString(5, "STEP 1:Sieve the flour, baking powder and a generous pinch of salt into a large bowl. In a separate mixing bowl, mash the very ripe bananas with a fork until smooth, then whisk in the eggs, vanilla extract and milk. Make a well in the centre of the dry ingredients, tip in the wet ingredients and swiftly whisk together to create a smooth, silky batter.STEP 2:Heat a little knob of butter in a large non-stick pan over a medium heat. Add 2-3 tbsp of the batter to the pan and cook for several minutes, or until small bubbles start appearing on the surface. Flip the pancake over and cook for 1-2 mins on the other side. Repeat with the remaining batter, keeping the pancakes warm in a low oven.STEP 3:Stack the pancakes on plates and top with the banana slices, a glug of sticky maple syrup and a handful of pecan nuts, if you like.");
-                                ps2.setString(6, "Sample Author");
-                                ps2.execute();
-                                System.out.println("Sample Recipe 2 successfully imported");
-
-                                String importRecipe3 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps3 = conn.prepareStatement(importRecipe3);
-                                InputStream fis3 = getClass().getResourceAsStream("/recipeImages/beef-curry.png");
-                                ps3.setString(1, "3");
-                                ps3.setString(2, "Beef Curry");
-                                ps3.setBlob(3, fis3);
-                                ps3.setString(4, "Make our easy beef curry and serve with a hunk of naan bread to mop up the delicious juices. If you prefer it less spicy, simply add less chilli powder");
-                                ps3.setString(5, "STEP 1:Heat one tbsp of the oil in a casserole pot over a medium-high heat. Season the beef and fry in the pot for 5-8 mins, turning with a pair of tongs half way until evenly browned. Set aside on a plate.STEP 2:Heat the remaining oil and butter in the pan and add the onions. Fry gently for 15 mins or until golden brown and caramelised. Add the garlic, ginger, chilli, turmeric, ground coriander and cardamom and fry for two mins. Tip in the tomatoes, stock and sugar and bring to the simmer.STEP 3:Add the beef, put a lid on top of the curry and cook over a low heat for 1 ½ – 2 hrs or until the meat is tender and falling apart. Remove the lid for the last 20 minutes of cooking.STEP 4:Stir through the garam masala and cream (if using) and season to taste. Scatter over the coriander and serve with naan breads or rice.");
-                                ps3.setString(6, "Sample Author");
-                                ps3.execute();
-                                System.out.println("Sample Recipe 3 successfully imported");
-
-                                String importRecipe4 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps4 = conn.prepareStatement(importRecipe4);
-                                InputStream fis4 = getClass().getResourceAsStream("/recipeImages/Tiramisu.png");
-                                ps4.setString(1, "4");
-                                ps4.setString(2, "Tiramisu");
-                                ps4.setBlob(3, fis4);
-                                ps4.setString(4, "Tiramisu is an elegant and rich layered Italian dessert made with delicate ladyfinger cookies, espresso or instant espresso, mascarpone cheese, eggs, sugar, Marsala wine, rum and cocoa powder. Through the grouping of these diverse ingredients, an intense yet refined dish emerges.");
-                                ps4.setString(5, "STEP 1: Put the double cream, mascarpone, marsala and golden caster sugar in a large bowl. STEP 2: Whisk until the cream and mascarpone have completely combined and have the consistency of thickly whipped cream. STEP 3: Pour the coffee into a shallow dish. Dip in a few of the sponge fingers at a time, turning for a few seconds until they are nicely soaked, but not soggy. Layer these in a dish until you’ve used half the sponge fingers, then spread over half of the creamy mixture. STEP 4: Using the coarse side of the grater, grate over most of the dark chocolate. Then repeat the layers (you should use up all the coffee), finishing with the creamy layer. STEP 5: Cover and chill for a few hours or overnight. Will keep in the fridge for up to two days. STEP 6: To serve, dust with the cocoa powder and grate over the remainder of the chocolate.");
-                                ps4.setString(6, "Sample Author");
-                                ps4.execute();
-                                System.out.println("Sample Recipe 4 successfully imported");
-
-                                String importRecipe5 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps5 = conn.prepareStatement(importRecipe5);
-                                InputStream fis5 = getClass().getResourceAsStream("/recipeImages/Beef-Stroganoff.png");
-                                ps5.setString(1, "5");
-                                ps5.setString(2, "Beef Stroganoff");
-                                ps5.setBlob(3, fis5);
-                                ps5.setString(4, "Beef Stroganoff is a popular Russian dish of small pieces of beef fillet sautéed in sour cream sauce together with onions and mushrooms. The dish was named after Count Alexander Grigorievich Stroganoff, who lived in the late 19th century in Odessa.");
-                                ps5.setString(5, "STEP 1: Heat 1 tbsp olive oil in a non-stick frying pan then add 1 sliced onion and cook on a medium heat until completely softened, around 15 mins, adding a little splash of water if it starts to stick. STEP 2: Crush in 1 garlic clove and cook for 2-3 mins more, then add 1 tbsp butter. STEP 3: Once the butter is foaming a little, add 250g sliced mushrooms and cook for around 5 mins until completely softened. STEP 4: Season everything well, then tip onto a plate. STEP 5: Tip 1 tbsp plain flour into a bowl with a big pinch of salt and pepper, then toss 500g sliced fillet steak in the seasoned flour. STEP 6: Add the steak pieces to the pan, splashing in a little oil if the pan looks dry, and fry for 3-4 mins, until well coloured. STEP 7: Tip the onions and mushrooms back into the pan. Whisk 150g crème fraîche, 1 tsp English mustard and 100ml beef stock together, then stir into the pan. STEP 8: Cook over a medium heat for around 5 mins. STEP 9: Scatter with some chopped parsley, and serve with pappardelle or rice.");
-                                ps5.setString(6, "Sample Author");
-                                ps5.execute();
-                                System.out.println("Sample Recipe 5 successfully imported");
-
-                                String importRecipe6 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps6 = conn.prepareStatement(importRecipe6);
-                                InputStream fis6 = getClass().getResourceAsStream("/recipeImages/greek-roast-lamb.png");
-                                ps6.setString(1, "6");
-                                ps6.setString(2, "Greek Roast Lamb");
-                                ps6.setBlob(3, fis6);
-                                ps6.setString(4, "If spring is in the air you don't want to be slaving over a hot oven, so make the most of seasonal lamb the easy way with this lazy roast.");
-                                ps6.setString(5, "STEP 1:Heat oven to 240C/fan 220C/gas 9. Pound the garlic, half the oregano, lemon zest and a pinch of salt in a pestle and mortar, then add the lemon juice and a drizzle of olive oil. Stab the lamb all over with a sharp knife, then push as much of the herb paste as you can into the holes.STEP 2:Tip the potatoes into a large roasting tin, then toss in the remaining olive oil and any remaining herb paste. Nestle the lamb amongst the potatoes, roast for 20 mins, then reduce the temperature to 180C/fan 160C/gas 4. Roast for 1 hr 15 mins for medium-rare, adding another 15 mins if you prefer your lamb medium. Baste the lamb once or twice with the juices and toss the potatoes. When the lamb is done to your liking, remove from the tin and let it rest. Throw the rest of the oregano in with the potatoes, scoop from the tin and keep warm.STEP 3:Place the roasting tin over a medium flame, add the canned tomatoes and olives to the pan juices, then simmer for a few mins. Serve the lamb with the potatoes and sauce and a simple salad.");
-                                ps6.setString(6, "Sample Author");
-                                ps6.execute();
-                                System.out.println("Sample Recipe 6 successfully imported");
-
-                                /*String importRecipe7 = "INSERT INTO Recipes (\n" +
-                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
-                                            "VALUES (?, ?, ?, ?, ?, ?)";
-                                PreparedStatement ps7 = conn.prepareStatement(importRecipe7);
-                                InputStream in7 = new FileInputStream("/main/recipeImages/<RECIPE FILE NAME.png>");
-                                ps6.setString(1, "7");
-                                ps6.setString(2, "Beef Curry");
-                                ps6.setBlob(3, in7);
-                                ps6.setString(4, "");
-                                ps6.setString(5, "");
-                                ps6.setString(6, "Sample Author");
-                                ps6.execute();*/
-
-                            } catch (SQLException e8) {
-                                e8.printStackTrace();
-                            }
-
-                            //ADD SAMPLE TAGS
-                            for (String[] t : tags) {
-                                UUID uuid = UUID.randomUUID();
-                                try {
-                                    String importTags = "INSERT INTO Tags (\n" +
-                                            "Id, TagName) \n" +
-                                            "VALUES (?, ?)";
-                                    PreparedStatement ps = conn.prepareStatement(importTags);
-                                    ps.setString(1, uuid.toString());
-                                    ps.setString(2, t[0]);
-
-                                    ps.execute();
-                                } catch (SQLException e5) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            //ADD SAMPLE MESSAGES
-                            for (String[] m : messages) {
-                                UUID uuid = UUID.randomUUID();
-                                try {
-                                    String importMessages = "INSERT INTO Messages (\n" +
-                                            "Id, SenderId, ReceiverId, MessageText, IsRead) \n" +
-                                            "VALUES (?, ?, ?, ?, ?)";
-                                    PreparedStatement ps = conn.prepareStatement(importMessages);
-                                    ps.setString(1, uuid.toString());
-                                    ps.setString(2, m[0]);
-                                    ps.setString(3, m[1]);
-                                    ps.setString(4, m[2]);
-                                    ps.setString(5, m[3]);
-
-                                    ps.execute();
-                                } catch (SQLException e4) {
-                                    e4.printStackTrace();
-                                }
-                            }
-
-                            //ADD SAMPLE COMMENTS
-                            for (String[] c : comments) {
-                                UUID uuid = UUID.randomUUID();
-                                try {
-                                    String importComments = "INSERT INTO Comments (\n" +
-                                            "Id, UserId, RecipeId, CommentText) \n" +
-                                            "VALUES (?, ?, ?, ?)";
-                                    PreparedStatement ps = conn.prepareStatement(importComments);
-                                    ps.setString(1, uuid.toString());
-                                    ps.setString(2, c[0]);
-                                    ps.setString(3, c[1]);
-                                    ps.setString(4, c[2]);
-
-                                    ps.execute();
-                                } catch (SQLException e3) {
-                                    e3.printStackTrace();
-                                }
-                            }
-
-                            //ADD SAMPLE INGREDIENTS + UNITS
-                            for (String[] i : ingredientUnits) {
-                                UUID uuid = UUID.randomUUID();
-                                try {
-                                    String importIngredientUnits = "INSERT INTO Ingredients (\n" +
-                                            "Id, IngredientName, UNIT) \n" +
-                                            "VALUES (?, ?, ?)";
-                                    PreparedStatement ps = conn.prepareStatement(importIngredientUnits);
-                                    ps.setString(1, uuid.toString());
-                                    ps.setString(2, i[0]);
-                                    ps.setString(3, i[1]);
-
-                                    ps.execute();
-                                } catch (SQLException e2) {
-                                    e2.printStackTrace();
-                                }
-                            }
-                            System.out.println("Data inserted successfully...");
-
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
-                        }
-                        //----------------------------------------------------------------------------------------------------
                     }catch (SQLException ex){
                         ex.printStackTrace();
                     }
@@ -397,6 +164,235 @@ public class DBUtils {
         }
 
     }
+    public void insertDataInDatabase() {
+        File usersFile = new File("src/main/resources/data/users.csv");
+        File recipesFile = new File("src/main/resources/data/recipes.csv");
+        File tagsFile = new File("src/main/resources/data/tags.csv");
+        File messagesFile = new File("src/main/resources/data/messages.csv");
+        File commentsFile = new File("src/main/resources/data/comments.csv");
+        File ingredientUnitsFile = new File("src/main/resources/data/ingredientUnits.csv");
+//        File imageDirectory = new File("src/main/resources/main/recipeImages.csv");
+
+        String usersPath = usersFile.getAbsolutePath();
+        String recipesPath = recipesFile.getAbsolutePath();
+        String tagsPath = tagsFile.getAbsolutePath();
+        String messagesPath = messagesFile.getAbsolutePath();
+        String commentsPath = commentsFile.getAbsolutePath();
+        String ingredientUnitsPath = ingredientUnitsFile.getAbsolutePath();
+
+        ArrayList<String[]> users = FileIo.readFromFileSaveToArrayList(usersPath);
+        ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
+        ArrayList<String[]> tags = FileIo.readFromFileSaveToArrayList(tagsPath);
+        ArrayList<String[]> messages = FileIo.readFromFileSaveToArrayList(messagesPath);
+        ArrayList<String[]> comments = FileIo.readFromFileSaveToArrayList(commentsPath);
+        ArrayList<String[]> ingredientUnits = FileIo.readFromFileSaveToArrayList(ingredientUnitsPath);
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            String useDb = "USE Cookbook";
+            stmt.execute(useDb);
+            //ADD SAMPLE USERS
+            for (String[] u : users) {
+                try {
+                    String importUsers = "INSERT INTO Users (\n" +
+                            "Id, Username, DisplayName, Email, Password) \n" +
+                            "VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement ps = conn.prepareStatement(importUsers);
+                    ps.setString(1, u[0]);
+                    ps.setString(2, u[1]);
+                    ps.setString(3, u[2]);
+                    ps.setString(4, u[3]);
+                    ps.setString(5, u[4]);
+
+                    ps.execute();
+                } catch (SQLException e7) {
+                    e7.printStackTrace();
+                }
+            }
+
+
+            try {
+                String importRecipe1 = "INSERT INTO Recipes (\n" +
+                        "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps1 = conn.prepareStatement(importRecipe1);
+                InputStream fis1 = getClass().getResourceAsStream("/recipeImages/Lasagna.png");
+                ps1.setString(1, "1");
+                ps1.setString(2, "Lasagna");
+                ps1.setBlob(3, fis1);
+                ps1.setString(4, "Lasagna is a wide, flat sheet of pasta. Lasagna can refer to either the type of noodle or to the typical lasagna dish which is a dish made with several layers of lasagna sheets with sauce and other ingredients, such as meats and cheese, in between the lasagna noodles.");
+                ps1.setString(5, "STEP 1: Preheat oven to 375 degrees F (190 degrees C). Bring a large pot of lightly salted water to a boil. Add noodles and cook for 8 to 10 minutes or until al dente. drain and set aside. STEP 2:Place pork and beef in a large, deep skillet. Cook over medium high heat until evenly brown. Stir in tomato sauce, crushed tomatoes, parsley, garlic, oregano, onion, sugar, basil and salt. Simmer over medium-low heat for 30 minutes, stirring occasionally. STEP 3: In a large bowl, combine cottage cheese, eggs, Parmesan cheese, parsley, salt and pepper. Step 4: In a 9x13 inch baking dish, place 2 layers of noodles on the bottom of dish. layer 1/2 of the cheese mixture, 1/2 of the mozzarella cheese and 1/2 of the sauce. Repeat layers. STEP 5: Cover with aluminum foil and bake in preheated oven for 30 to 40 minutes. Remove foil and bake for another 5 to 10 minutes. let stand for 10 minutes before cutting. serve.");
+                ps1.setString(6, "Sample Author");
+                ps1.execute();
+                System.out.println("Sample Recipe 1 successfully imported");
+
+                String importRecipe2 = "INSERT INTO Recipes (\n" +
+                        "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps2 = conn.prepareStatement(importRecipe2);
+                InputStream fis2 = getClass().getResourceAsStream("/recipeImages/banana-pancakes.png");
+                ps2.setString(1, "2");
+                ps2.setString(2, "Banana Pancakes");
+                ps2.setBlob(3, fis2);
+                ps2.setString(4, "Turn overripe, blackened bananas into sweet and fluffy American-style pancakes. Serve with syrup and crunchy, toasted pecan nuts as a delicious brunch treat");
+                ps2.setString(5, "STEP 1:Sieve the flour, baking powder and a generous pinch of salt into a large bowl. In a separate mixing bowl, mash the very ripe bananas with a fork until smooth, then whisk in the eggs, vanilla extract and milk. Make a well in the centre of the dry ingredients, tip in the wet ingredients and swiftly whisk together to create a smooth, silky batter.STEP 2:Heat a little knob of butter in a large non-stick pan over a medium heat. Add 2-3 tbsp of the batter to the pan and cook for several minutes, or until small bubbles start appearing on the surface. Flip the pancake over and cook for 1-2 mins on the other side. Repeat with the remaining batter, keeping the pancakes warm in a low oven.STEP 3:Stack the pancakes on plates and top with the banana slices, a glug of sticky maple syrup and a handful of pecan nuts, if you like.");
+                ps2.setString(6, "Sample Author");
+                ps2.execute();
+                System.out.println("Sample Recipe 2 successfully imported");
+
+                String importRecipe3 = "INSERT INTO Recipes (\n" +
+                        "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps3 = conn.prepareStatement(importRecipe3);
+                InputStream fis3 = getClass().getResourceAsStream("/recipeImages/beef-curry.png");
+                ps3.setString(1, "3");
+                ps3.setString(2, "Beef Curry");
+                ps3.setBlob(3, fis3);
+                ps3.setString(4, "Make our easy beef curry and serve with a hunk of naan bread to mop up the delicious juices. If you prefer it less spicy, simply add less chilli powder");
+                ps3.setString(5, "STEP 1:Heat one tbsp of the oil in a casserole pot over a medium-high heat. Season the beef and fry in the pot for 5-8 mins, turning with a pair of tongs half way until evenly browned. Set aside on a plate.STEP 2:Heat the remaining oil and butter in the pan and add the onions. Fry gently for 15 mins or until golden brown and caramelised. Add the garlic, ginger, chilli, turmeric, ground coriander and cardamom and fry for two mins. Tip in the tomatoes, stock and sugar and bring to the simmer.STEP 3:Add the beef, put a lid on top of the curry and cook over a low heat for 1 ½ – 2 hrs or until the meat is tender and falling apart. Remove the lid for the last 20 minutes of cooking.STEP 4:Stir through the garam masala and cream (if using) and season to taste. Scatter over the coriander and serve with naan breads or rice.");
+                ps3.setString(6, "Sample Author");
+                ps3.execute();
+                System.out.println("Sample Recipe 3 successfully imported");
+
+                String importRecipe4 = "INSERT INTO Recipes (\n" +
+                        "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps4 = conn.prepareStatement(importRecipe4);
+                InputStream fis4 = getClass().getResourceAsStream("/recipeImages/Tiramisu.png");
+                ps4.setString(1, "4");
+                ps4.setString(2, "Tiramisu");
+                ps4.setBlob(3, fis4);
+                ps4.setString(4, "Tiramisu is an elegant and rich layered Italian dessert made with delicate ladyfinger cookies, espresso or instant espresso, mascarpone cheese, eggs, sugar, Marsala wine, rum and cocoa powder. Through the grouping of these diverse ingredients, an intense yet refined dish emerges.");
+                ps4.setString(5, "STEP 1: Put the double cream, mascarpone, marsala and golden caster sugar in a large bowl. STEP 2: Whisk until the cream and mascarpone have completely combined and have the consistency of thickly whipped cream. STEP 3: Pour the coffee into a shallow dish. Dip in a few of the sponge fingers at a time, turning for a few seconds until they are nicely soaked, but not soggy. Layer these in a dish until you’ve used half the sponge fingers, then spread over half of the creamy mixture. STEP 4: Using the coarse side of the grater, grate over most of the dark chocolate. Then repeat the layers (you should use up all the coffee), finishing with the creamy layer. STEP 5: Cover and chill for a few hours or overnight. Will keep in the fridge for up to two days. STEP 6: To serve, dust with the cocoa powder and grate over the remainder of the chocolate.");
+                ps4.setString(6, "Sample Author");
+                ps4.execute();
+                System.out.println("Sample Recipe 4 successfully imported");
+
+                String importRecipe5 = "INSERT INTO Recipes (\n" +
+                        "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps5 = conn.prepareStatement(importRecipe5);
+                InputStream fis5 = getClass().getResourceAsStream("/recipeImages/Beef-Stroganoff.png");
+                ps5.setString(1, "5");
+                ps5.setString(2, "Beef Stroganoff");
+                ps5.setBlob(3, fis5);
+                ps5.setString(4, "Beef Stroganoff is a popular Russian dish of small pieces of beef fillet sautéed in sour cream sauce together with onions and mushrooms. The dish was named after Count Alexander Grigorievich Stroganoff, who lived in the late 19th century in Odessa.");
+                ps5.setString(5, "STEP 1: Heat 1 tbsp olive oil in a non-stick frying pan then add 1 sliced onion and cook on a medium heat until completely softened, around 15 mins, adding a little splash of water if it starts to stick. STEP 2: Crush in 1 garlic clove and cook for 2-3 mins more, then add 1 tbsp butter. STEP 3: Once the butter is foaming a little, add 250g sliced mushrooms and cook for around 5 mins until completely softened. STEP 4: Season everything well, then tip onto a plate. STEP 5: Tip 1 tbsp plain flour into a bowl with a big pinch of salt and pepper, then toss 500g sliced fillet steak in the seasoned flour. STEP 6: Add the steak pieces to the pan, splashing in a little oil if the pan looks dry, and fry for 3-4 mins, until well coloured. STEP 7: Tip the onions and mushrooms back into the pan. Whisk 150g crème fraîche, 1 tsp English mustard and 100ml beef stock together, then stir into the pan. STEP 8: Cook over a medium heat for around 5 mins. STEP 9: Scatter with some chopped parsley, and serve with pappardelle or rice.");
+                ps5.setString(6, "Sample Author");
+                ps5.execute();
+                System.out.println("Sample Recipe 5 successfully imported");
+
+                String importRecipe6 = "INSERT INTO Recipes (\n" +
+                        "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps6 = conn.prepareStatement(importRecipe6);
+                InputStream fis6 = getClass().getResourceAsStream("/recipeImages/greek-roast-lamb.png");
+                ps6.setString(1, "6");
+                ps6.setString(2, "Greek Roast Lamb");
+                ps6.setBlob(3, fis6);
+                ps6.setString(4, "If spring is in the air you don't want to be slaving over a hot oven, so make the most of seasonal lamb the easy way with this lazy roast.");
+                ps6.setString(5, "STEP 1:Heat oven to 240C/fan 220C/gas 9. Pound the garlic, half the oregano, lemon zest and a pinch of salt in a pestle and mortar, then add the lemon juice and a drizzle of olive oil. Stab the lamb all over with a sharp knife, then push as much of the herb paste as you can into the holes.STEP 2:Tip the potatoes into a large roasting tin, then toss in the remaining olive oil and any remaining herb paste. Nestle the lamb amongst the potatoes, roast for 20 mins, then reduce the temperature to 180C/fan 160C/gas 4. Roast for 1 hr 15 mins for medium-rare, adding another 15 mins if you prefer your lamb medium. Baste the lamb once or twice with the juices and toss the potatoes. When the lamb is done to your liking, remove from the tin and let it rest. Throw the rest of the oregano in with the potatoes, scoop from the tin and keep warm.STEP 3:Place the roasting tin over a medium flame, add the canned tomatoes and olives to the pan juices, then simmer for a few mins. Serve the lamb with the potatoes and sauce and a simple salad.");
+                ps6.setString(6, "Sample Author");
+                ps6.execute();
+                System.out.println("Sample Recipe 6 successfully imported");
+
+                                /*String importRecipe7 = "INSERT INTO Recipes (\n" +
+                                            "Id, RecipeName, Picture, RecipeDescription, Instructions, AuthorId) \n" +
+                                            "VALUES (?, ?, ?, ?, ?, ?)";
+                                PreparedStatement ps7 = conn.prepareStatement(importRecipe7);
+                                InputStream in7 = new FileInputStream("/main/recipeImages/<RECIPE FILE NAME.png>");
+                                ps6.setString(1, "7");
+                                ps6.setString(2, "Beef Curry");
+                                ps6.setBlob(3, in7);
+                                ps6.setString(4, "");
+                                ps6.setString(5, "");
+                                ps6.setString(6, "Sample Author");
+                                ps6.execute();*/
+
+            } catch (SQLException e8) {
+                e8.printStackTrace();
+            }
+
+            //ADD SAMPLE TAGS
+            for (String[] t : tags) {
+                UUID uuid = UUID.randomUUID();
+                try {
+                    String importTags = "INSERT INTO Tags (\n" +
+                            "Id, TagName) \n" +
+                            "VALUES (?, ?)";
+                    PreparedStatement ps = conn.prepareStatement(importTags);
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, t[0]);
+
+                    ps.execute();
+                } catch (SQLException e5) {
+                    e5.printStackTrace();
+                }
+            }
+
+            //ADD SAMPLE MESSAGES
+            for (String[] m : messages) {
+                UUID uuid = UUID.randomUUID();
+                try {
+                    String importMessages = "INSERT INTO Messages (\n" +
+                            "Id, SenderId, ReceiverId, MessageText, IsRead) \n" +
+                            "VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement ps = conn.prepareStatement(importMessages);
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, m[0]);
+                    ps.setString(3, m[1]);
+                    ps.setString(4, m[2]);
+                    ps.setString(5, m[3]);
+
+                    ps.execute();
+                } catch (SQLException e4) {
+                    e4.printStackTrace();
+                }
+            }
+
+            //ADD SAMPLE COMMENTS
+            for (String[] c : comments) {
+                UUID uuid = UUID.randomUUID();
+                try {
+                    String importComments = "INSERT INTO Comments (\n" +
+                            "Id, UserId, RecipeId, CommentText) \n" +
+                            "VALUES (?, ?, ?, ?)";
+                    PreparedStatement ps = conn.prepareStatement(importComments);
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, c[0]);
+                    ps.setString(3, c[1]);
+                    ps.setString(4, c[2]);
+
+                    ps.execute();
+                } catch (SQLException e3) {
+                    e3.printStackTrace();
+                }
+            }
+
+            //ADD SAMPLE INGREDIENTS + UNITS
+            for (String[] i : ingredientUnits) {
+                UUID uuid = UUID.randomUUID();
+                try {
+                    String importIngredientUnits = "INSERT INTO Ingredients (\n" +
+                            "Id, IngredientName, UNIT) \n" +
+                            "VALUES (?, ?, ?)";
+                    PreparedStatement ps = conn.prepareStatement(importIngredientUnits);
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, i[0]);
+                    ps.setString(3, i[1]);
+
+                    ps.execute();
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+            System.out.println("Data inserted successfully...");
+
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 
     public static void changeScene(ActionEvent event, String fxmlFIle, String username, String email){
         Parent root = null;
@@ -841,6 +837,35 @@ public class DBUtils {
                 }
             }
         }
+    }
+
+    public static ArrayList<Recipe> getFromFavorites(){
+        Connection connection = null;
+        PreparedStatement psGetFromFavorites = null;
+        ResultSet rs = null;
+        ArrayList<Recipe> favoriteRecipesData = new ArrayList<Recipe>();
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/Cookbook", "root", "root");
+            psGetFromFavorites = connection.prepareStatement("SELECT RecipeName, Picture, Id, AuthorId FROM Recipes INNER JOIN UsersFavorites ON Recipes.Id = UsersFavorites.RecipeId");
+            rs = psGetFromFavorites.executeQuery();
+
+            while (rs.next()) {
+                Recipe thisRecipe = new Recipe();
+
+                InputStream is = rs.getBinaryStream("Picture");
+                Image img = new Image(is);
+                thisRecipe.setName(rs.getString("RecipeName"));
+                thisRecipe.setRecipeId(rs.getString("Id"));
+                thisRecipe.setUserId(rs.getString("AuthorId"));
+                thisRecipe.setRecipeImage(img);
+                favoriteRecipesData.add(thisRecipe);
+                System.out.println("FAVORITE RECIPES RETRIEVED SUCCESSFULLY");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return favoriteRecipesData;
     }
 
     //IMPORT USER DEFINED RECIPES TO DATABASE

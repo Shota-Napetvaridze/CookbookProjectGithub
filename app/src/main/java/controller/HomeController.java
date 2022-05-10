@@ -101,9 +101,6 @@ public class HomeController implements Initializable {
 
 
 
-    private Image image;
-    private MyListener myListener;
-
     @FXML
     private Button refresh_button;
 
@@ -130,10 +127,17 @@ public class HomeController implements Initializable {
         }
     }
 
+
+    private Image image;
+    private MyListener myListener;
+    private Recipe recipe;
+
+
     // Lists ----------------------------
     private List<Recipe> recipeList = new ArrayList<>();
     private List<Message> msgList = new ArrayList<>();
     private List<Recipe> favouriteRecipeList = new ArrayList<>();
+    private List<Recipe> planList = new ArrayList<>();
     private List<Tag> tagList = new ArrayList<>();
     private List<Ingredient> ingredientsList = new ArrayList<>();
 
@@ -141,6 +145,11 @@ public class HomeController implements Initializable {
     private List<Recipe> getRecipeList() {
         ArrayList<Recipe> DB_recipe_list = DBUtils.getRecipesFromDB();
         return DB_recipe_list;
+    }
+
+    private List<Recipe> getFavoriteRecipeList() {
+        ArrayList<Recipe> DB_favorite_recipes_list = DBUtils.getFromFavorites();
+        return DB_favorite_recipes_list;
     }
 
     private List<Message> getMsgList(){
@@ -258,6 +267,7 @@ public class HomeController implements Initializable {
     }
 
     private void chosenRecipe(Recipe recipe){
+        this.recipe = recipe;
         image = recipe.getRecipeImage();
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
@@ -311,6 +321,8 @@ public class HomeController implements Initializable {
 
         // Adds all the recipes and messages
         recipeList.addAll(getRecipeList());
+        favouriteRecipeList.addAll(getFavoriteRecipeList());
+
         msgList.addAll(getMsgList());
         tagList.addAll(getTagList());
         ingredientsList.addAll(getIngredientList());
@@ -338,6 +350,7 @@ public class HomeController implements Initializable {
                         }
                     }
                     favouriteRecipeList.add(recipe);
+
                 }
 
                 @Override
@@ -452,6 +465,7 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                planList.add(recipe);
 
             }
         });
@@ -562,6 +576,38 @@ public class HomeController implements Initializable {
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
+                int column = 0;
+                int row = 0;
+                try {
+                    for(int i = 0; i<planList.size(); i++){
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
+                        AnchorPane anchorPane = fxmlLoader.load();
+                        RecipeController recipeController = fxmlLoader.getController();
+                        recipeController.setData(planList.get(i), myListener);
+
+                        if (column == 1) {
+                            column = 0;
+                            row++;
+                        }
+                        grid.add(anchorPane, column++, row);
+                        //Set grid width
+                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        //Set grid height
+                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+
+                        GridPane.setMargin(anchorPane, new Insets(10));
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
 
             }
         });

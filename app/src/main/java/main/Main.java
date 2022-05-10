@@ -23,7 +23,8 @@ public class Main extends Application {
         final String USER = "root";
         final String PASS = "root";
         DBUtils database = new DBUtils(DB_URL, USER, PASS);
-        database.createDatabase();
+        database.createTablesInDatabase();
+        database.insertDataInDatabase();
 
         //  Launch the cookbook app
         launch();
