@@ -86,8 +86,8 @@ public class FailMessages {
         // INGREDIENT
         //
         public static final String INGREDIENT_INVALID_NAME_LENGTH = "Ingredient name must be "
-                        + "between " + Variables.MIN_INGREDIENT_NAME_LENGHT + " and "
-                        + Variables.MAX_INGREDIENT_NAME_LENGHT + " characters long.";
+                        + "between " + Variables.MIN_INGREDIENT_NAME_LENGTH + " and "
+                        + Variables.MAX_INGREDIENT_NAME_LENGTH + " characters long.";
 
         public static final String INGREDIENT_NOT_EXIST = "Ingredient %s does not exist.";
         public static final String INGREDIENT_UNIT_NOT_EXIST = "Unit %s does not exist.";

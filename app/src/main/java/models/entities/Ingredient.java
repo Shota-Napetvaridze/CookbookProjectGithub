@@ -68,8 +68,8 @@ public class Ingredient extends BaseEntity {
     
     // VALIDATORS
     private void validateName(String name) throws InvalidLengthException, TakenIngredientName {
-        Validator.validateStringLength(name, Variables.MIN_INGREDIENT_NAME_LENGHT,
-                Variables.MAX_INGREDIENT_NAME_LENGHT);
+        Validator.validateStringLength(name, Variables.MIN_INGREDIENT_NAME_LENGTH,
+                Variables.MAX_INGREDIENT_NAME_LENGTH);
 
         if (!isUnique(name)) {
             throw new TakenIngredientName(name);

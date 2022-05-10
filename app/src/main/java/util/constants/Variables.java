@@ -21,8 +21,8 @@ public class Variables {
     public static final int MIN_USER_EMAIL_LENGTH = 8;
     public static final int MAX_USER_EMAIL_LENGTH = 50;
 
-    public static final int MIN_INGREDIENT_NAME_LENGHT = 3; // Ingredient
-    public static final int MAX_INGREDIENT_NAME_LENGHT = 25;
+    public static final int MIN_INGREDIENT_NAME_LENGTH = 3; // Ingredient
+    public static final int MAX_INGREDIENT_NAME_LENGTH = 25;
 
     public static final int MIN_MESSAGE_TEXT_LENGTH = 1; // Message
     public static final int MAX_MESSAGE_TEXT_LENGTH = 300;

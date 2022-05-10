@@ -15,7 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import java.io.File;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,8 +27,7 @@ import models.entities.Message;
 import models.entities.Recipe;
 import models.entities.Tag;
 import models.entities.User;
-import services.TagService;
-import services.UserService;
+
 import services.impl.IngredientServiceImpl;
 import services.impl.RecipeServiceImpl;
 import services.impl.TagServiceImpl;
@@ -100,10 +99,8 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button search;
-
     @FXML
     private TextField searchField;
-
     @FXML
     private Label tagsLbl;
 
@@ -113,11 +110,10 @@ public class HomeController implements Initializable {
     private TagServiceImpl tagService = new TagServiceImpl();
 
     private User user;
+    private  Recipe recipe;
     private Image image;
     private MyListener myListener;
 
-    @FXML
-    private Button refresh_button;
 
     @FXML
     void select(ActionEvent event) {
@@ -146,6 +142,8 @@ public class HomeController implements Initializable {
     private List<Recipe> recipeList = new ArrayList<>();
     private List<Message> msgList = new ArrayList<>();
     private List<Recipe> favouriteRecipeList = new ArrayList<>();
+
+    private List<Recipe> planList = new ArrayList<>();
     private List<Ingredient> ingredientsList = new ArrayList<>();
     private List<Ingredient> selectedIngredients = new ArrayList<>();
     private List<Tag> tagList = new ArrayList<>();
@@ -158,13 +156,11 @@ public class HomeController implements Initializable {
 
     private List<Message> getMsgList() {
         List<Message> messages = userService.getUserMessagesById(user.getId());
-
         return messages;
     }
 
     private List<Tag> getTagList() {
         List<Tag> tags = new ArrayList<>(); // TODO: tagService.getAllTags();
-
         return tags;
     }
 
@@ -175,8 +171,8 @@ public class HomeController implements Initializable {
     }
 
     private void chosenRecipe(Recipe recipe) {
+        this.recipe = recipe;
         image = recipe.getPicture();
-
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
     }
@@ -240,11 +236,13 @@ public class HomeController implements Initializable {
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
+                // When the user clicks on a specific recipe
                 @Override
                 public void onClickListener(Recipe recipe) {
                     chosenRecipe(recipe);
                 }
 
+                // When the User clicks on the heart button
                 @Override
                 public void favClickListener(Recipe recipe, ImageView heartImage) {
                     boolean isInFavorites = false;
@@ -263,7 +261,7 @@ public class HomeController implements Initializable {
 
                     // DBUtils.addToFavorites(recipe.getRecipeId(), recipe.getUserId(), heartImage);
                 }
-
+                // When the user clicks on a specific Ingredient
                 @Override
                 public void ingredientClickListener(Ingredient ingredient, Button ingredientButton) {
                     if (selectedIngredients.contains(ingredient)) {
@@ -274,7 +272,7 @@ public class HomeController implements Initializable {
                         selectedIngredients.add(ingredient);
                     }
                 }
-
+                // When the user clicks on a specific Tag
                 @Override
                 public void tagClickListener(Tag tag, Button tagButton) {
 
@@ -380,7 +378,7 @@ public class HomeController implements Initializable {
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                //TODO: implement method for this
             }
         });
 
@@ -389,6 +387,7 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                planList.add(recipe);
 
             }
         });

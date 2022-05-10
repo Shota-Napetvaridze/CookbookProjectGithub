@@ -8,10 +8,6 @@ import java.io.IOException;
 import util.common.DbContext;
 import util.constants.Variables;
 
-
-
-
-
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
