@@ -4,7 +4,7 @@ public class FailMessages {
         //
         // USER
         //
-        public static final String USER_NOT_EXIST = "User with nickname %s does not exist.";
+        public static final String USER_NOT_EXIST = "User does not exist.";
         public static final String USER_INVALID_NAME_LENGTH = "Username must be between "
                         + Variables.MIN_USER_NAME_LENGTH + " and " + Variables.MAX_USER_NAME_LENGTH
                         + " characters long.";
@@ -29,6 +29,11 @@ public class FailMessages {
         
         public static final String USER_RECIPE_NOT_FAVORITE = "Recipe is not in favorites.";
 
+        public static final String USER_ADD_FAIL = "Could not add user.";
+        public static final String USER_DELETE_FAIL = "Could not delete user.";
+        public static final String USER_SET_NICKNAME_FAIL = "Could not change user nickname.";
+        public static final String USER_SET_EMAIL_FAIL = "Could not change user email.";
+        public static final String USER_ADD_FAVORITE_RECIPE_FAIL = "Could not add recipe to favorites.";
         //
         // TAG
         //
@@ -72,9 +77,10 @@ public class FailMessages {
                         + Variables.MIN_MESSAGE_TEXT_LENGTH + " and "
                         + Variables.MAX_MESSAGE_TEXT_LENGTH + " characters long.";
 
-        public static final String MESSAGE_INVALID_RECEIVER = "Could not send message to user %s.";
+        public static final String MESSAGE_INVALID_RECEIVER = "Could not send message.";
 
-        public static final String MESSAGE_INVALID_SENDER = "Could not send message by %s.";
+        public static final String MESSAGE_INVALID_SENDER = "Could not send message.";
+        public static final String MESSAGE_DELETE_FAIL = "Could not delete message.";
 
         //
         // INGREDIENT

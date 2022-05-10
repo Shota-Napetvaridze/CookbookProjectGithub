@@ -2,7 +2,6 @@ package util.common;
 
 import java.util.UUID;
 
-import model.BaseEntity;
 import util.exceptions.common.InvalidCountException;
 import util.exceptions.common.InvalidInstanceException;
 import util.exceptions.common.InvalidLengthException;
@@ -47,11 +46,8 @@ public class Validator {
      * @param entity object instance
      * @throws InvalidInstanceException not in database
      */
-    public static void validateExists(BaseEntity entity) throws InvalidInstanceException {
-        UUID id = entity.getId();
-        String tableName = entity.getClass().getSimpleName() + "s";
-
-        if (id == null) { // if (DbContext.getInstance(id, tableName) == null) {
+    public static void validateExists(UUID id, String tableName) throws InvalidInstanceException {
+        if (DbContext.checkExistId(id, tableName)) {
             throw new InvalidInstanceException();
         }
     }

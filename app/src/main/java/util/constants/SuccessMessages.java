@@ -13,6 +13,10 @@ public class SuccessMessages {
 
     public static final String USER_ADDED_FAVORITE_RECIPE = "Added recipe to favorites.";
     public static final String USER_REMOVED_FAVORITE_RECIPE = "Removed recipe from favorites.";
+
+    public static final String USER_ADDED = "User added successfully.";
+    public static final String USER_DELETED = "User deleted successfully.";
+    
     //
     // TAG
     //
@@ -33,8 +37,9 @@ public class SuccessMessages {
     // MESSAGE
     //
     public static final String MESSAGE_SET_TEXT = "Message text set.";
-    public static final String MESSAGE_SET_RECEIVER = "Message sent to %s.";
-    public static final String MESSAGE_SET_SENDER = "Message sent by %s.";
+    public static final String MESSAGE_SET_RECEIVER = "Message sent.";
+    public static final String MESSAGE_SET_SENDER = "Message sent.";
+    public static final String MESSAGE_DELETED = "Message deleted.";
 
     //
     // INGREDIENT

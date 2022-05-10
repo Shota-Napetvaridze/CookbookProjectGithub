@@ -1,6 +1,6 @@
 package services;
 
-import model.Tag;
+import models.entities.Tag;
 
 public interface TagService {
     public String addTag(String name);

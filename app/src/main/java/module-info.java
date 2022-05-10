@@ -9,6 +9,6 @@ module main.cookbookproject {
 
     opens main to javafx.fxml;
     exports main;
-    exports controller;
-    opens controller to javafx.fxml;
+    exports controllers;
+    opens controllers to javafx.fxml;
 }

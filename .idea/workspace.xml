@@ -5,23 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ead98ddf-7b72-4e74-9ed8-e31a63b0cc65" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/Controller.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/DBUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/main/DBUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/LoggedInController.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/CookbookProjectGithub.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/HomeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/IngredientController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/LogInController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/MsgController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/NewRecipeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/RecipeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/SignUpController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/controller/TagController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/DBUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/FileIo.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/RecipeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/SignUpController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/main/MyListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/BaseEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/Comment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/Ingredient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/Message.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/Recipe.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/Tag.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/model/enums/Unit.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/Background_New.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/resources/main/Background_New.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/LoginPage.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/resources/main/LoginPage.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/RegisterPage.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/resources/main/RegisterPage.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/example.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/home.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/login.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/msg.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/resources/main/msg.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/recipeItem.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/main/signUp.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/cookbook/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/cookbook/AppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/services/RecipeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/RecipeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/services/TagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/TagService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/common/Validator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/common/Validator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/constants/FailMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/constants/FailMessages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/constants/SqlQueries.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/constants/SqlQueries.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/constants/SuccessMessages.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/constants/SuccessMessages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/constants/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/constants/Variables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/common/InvalidCountException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/common/InvalidCountException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/common/InvalidInstanceException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/common/InvalidInstanceException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/common/InvalidLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/common/InvalidLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/ingredient/InvalidUnitException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/ingredient/InvalidUnitException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/ingredient/TakenIngredientName.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/ingredient/TakenIngredientName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/message/InvalidMessageTextException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/message/InvalidMessageTextException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InexistentRecipeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InexistentRecipeException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeDescriptionLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeDescriptionLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeIngredientsCountException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeIngredientsCountException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeInstructionsLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeInstructionsLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeNameLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeNameLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeServingSizeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeServingSizeException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeTagsCountException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/recipe/InvalidRecipeTagsCountException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/tag/InvalidTagNameLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/tag/InvalidTagNameLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidEmailException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidEmailException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidNicknameLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidNicknameLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidPasswordComplexityException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidPasswordComplexityException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidUserException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidUserException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidUserNameLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/InvalidUserNameLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/TakenEmailException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/TakenEmailException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/TakenNicknameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/TakenNicknameException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/TakenUsernameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/exceptions/user/TakenUsernameException.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +84,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/macbookpro/Desktop/OOP/CookbookProjectGithub&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
+      <module name="cookbook.app.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -63,6 +113,17 @@
       <updated>1651434525332</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

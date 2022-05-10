@@ -1,6 +1,10 @@
 package util.constants;
 
 public class Variables {
+    public static final int DATABASE_PORT = 3306;
+    public static final String DATABASE_USER = "root";
+    public static final String DATABASE_PASS = "root";
+
     public static final int MIN_USER_NAME_LENGTH = 3; // User
     public static final int MAX_USER_NAME_LENGTH = 25;
 

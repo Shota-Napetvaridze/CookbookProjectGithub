@@ -1,38 +1,40 @@
 package services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
-
-import model.Comment;
-import model.Ingredient;
-import model.Recipe;
-import model.User;
+import java.util.UUID;
+import models.entities.Message;
+import models.entities.User;
 
 public interface UserService {
+    public User loginUser(String username, String password);
+    
     public Set<User> getUsers();
-    public User addUser(String username, String nickname, String email, String password);
-    public String removeUser(User user);
+    public User getUserById(UUID id);
+    public User getUserByNickname(String nickname);
+    public String addUser(String username, String email, String password);
+    public String removeUserById(UUID userId);
 
-    public String changeNickname(User user, String nickname);
-    public String changeEmail(User user, String email);
-    public String adminChangeNickname(User user, User target, String nickname);
-    public String adminChangeEmail(User user, User target, String email);
+    public String changeNickname(UUID userId, String nickname);
+    public String changeEmail(UUID userId, String email);
 
-    public String sendMessage(User user, String message);
-    public String sendRecipe(User user, Recipe recipe, String message);
+    public List<Message> getUserMessagesById(UUID userId);
+    public String sendMessage(UUID senderId, UUID receiverId, String message);
+    public String sendRecipe(UUID senderId, UUID receiverId, UUID recipeId, String message);
+    public String removeMessageById(UUID messageId);
 
-    public String addToCart(Ingredient ingredient, int amount);
-    public String removeFromCart(Ingredient ingredient);
-    public String changeAmount(Ingredient ingredient, int amount);
-    public String generateCart();
+    public String addToCart(UUID ingredientId, int amount);
+    public String removeFromCart(UUID ingredientId);
+    public String changeAmount(UUID ingredientId, int amount);
 
-    public String addToFavorites(Recipe recipe);
-    public String removeFromFavorites(Recipe recipe);
+    public boolean addToFavorites(UUID userId, UUID recipeId);
+    public String removeFromFavorites(UUID recipeId);
 
-    public String addToList(Recipe recipe, Date date);
-    public String removeFromList(Recipe recipe, Date date);
+    public String addToList(UUID recipeId, Date date);
+    public String removeFromList(UUID recipeId, Date date);
 
-    public String addComment(Comment comment);
-    public String editComment(Comment oldComment, Comment newComment);
-    public String removeComment(Comment comment);
+    public String addComment(UUID commentId);
+    public String editComment(UUID oldCommentId, UUID newCommentId);
+    public String removeComment(UUID commentId);
 }

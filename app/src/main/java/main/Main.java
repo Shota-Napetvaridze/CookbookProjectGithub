@@ -5,26 +5,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import util.common.DbContext;
+import util.constants.Variables;
+
+
+
 
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxmlFiles/home.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1315.0 , 810.0 ); // TODO: 600 400 (Replace)
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/main/login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("CookBook!");
         stage.setScene(scene);
         stage.show();
     }
 
-    public static void main(String[] args) {
-        final String DB_URL = "jdbc:mysql://localhost:8889/"; // MAMP SERVER
-        final String USER = "root";
-        final String PASS = "root";
-        DBUtils database = new DBUtils(DB_URL, USER, PASS);
-        database.createTablesInDatabase();
-        database.insertDataInDatabase();
+
+        public static void main(String[] args) {
+            DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
+            dbContext.createDatabase("Cookbook");
+            dbContext.importRecords();
 
         //  Launch the cookbook app
         launch();

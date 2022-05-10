@@ -1,19 +1,23 @@
 package services;
 
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-import model.Ingredient;
-import model.Recipe;
-import model.Tag;
-import model.User;
+import models.entities.Recipe;
+import javafx.scene.image.Image;
 
 public interface RecipeService {
-    public Set<Recipe> getRecipes();
-    public Recipe getRecipe(String name);
-    public Set<Recipe> getRecipesFiltered(Set<Tag> tags, Set<Ingredient> ingredients);
-    public Set<Recipe> getFavoriteRecipes();
-    public String addRecipe(User user, Recipe recipe);
-    public String editRecipe(User user, Recipe oldRecipe, Recipe newRecipe);
-    public String removeRecipe(Recipe recipe);
-    public Set<Recipe> getDinnerList();
+    public List<Recipe> getAllRecipes();
+    public Recipe getRecipeById(UUID id);
+    public Recipe getRecipeByName(String name);
+    public List<Recipe> getRecipesFiltered(Set<String> filters);
+    public List<Recipe> getFavoriteRecipes();
+
+    public String addRecipe(UUID id, String name, Image picture, String description,
+    String instructions, UUID authorId);
+
+    public String editRecipe(UUID userId, UUID oldRecipeId, UUID newRecipeId);
+    public String removeRecipe(UUID recipeId);
+    public List<Recipe> getDinnerList();
 }
