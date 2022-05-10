@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class DbContext {
     }
 
     private void importIngredients() {
-        File ingredientUnitsFile = new File("app/src/main/resources/main/data/ingredientUnits.csv");
+        File ingredientUnitsFile = new File("app/src/main/resources/data/ingredientUnits.csv");
         String ingredientUnitsPath = ingredientUnitsFile.getAbsolutePath();
         ArrayList<String[]> ingredientUnits = FileIo.readFromFileSaveToArrayList(ingredientUnitsPath);
 
@@ -124,7 +125,7 @@ public class DbContext {
     }
 
     private void importComments() {
-        File commentsFile = new File("app/src/main/resources/main/data/comments.csv");
+        File commentsFile = new File("app/src/main/resources/data/comments.csv");
         String commentsPath = commentsFile.getAbsolutePath();
         ArrayList<String[]> comments = FileIo.readFromFileSaveToArrayList(commentsPath);
 
@@ -146,7 +147,7 @@ public class DbContext {
     }
 
     private void importMessages() {
-        File messagesFile = new File("app/src/main/resources/main/data/messages.csv");
+        File messagesFile = new File("app/src/main/resources/data/messages.csv");
         String messagesPath = messagesFile.getAbsolutePath();
         ArrayList<String[]> messages = FileIo.readFromFileSaveToArrayList(messagesPath);
 
@@ -169,7 +170,7 @@ public class DbContext {
     }
 
     private void importTags() {
-        File tagsFile = new File("app/src/main/resources/main/data/tags.csv");
+        File tagsFile = new File("app/src/main/resources/data/tags.csv");
         String tagsPath = tagsFile.getAbsolutePath();
         ArrayList<String[]> tags = FileIo.readFromFileSaveToArrayList(tagsPath);
 
@@ -188,7 +189,7 @@ public class DbContext {
     }
 
     private void importRecipes() {
-        File recipesFile = new File("app/src/main/resources/main/data/recipes.csv");
+        File recipesFile = new File("app/src/main/resources/data/recipes.csv");
         String recipesPath = recipesFile.getAbsolutePath();
         ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
 
@@ -200,8 +201,8 @@ public class DbContext {
                 ps.setString(3, "NULL");
                 ps.setString(4, recipe[3]);
                 ps.setString(5, recipe[4]);
-                ps.setString(6, recipe[5]);
-
+                InputStream inputStream = getClass().getResourceAsStream(recipe[5]);
+                ps.setBlob(6, inputStream);
                 ps.execute();
                 ps.close();
             } catch (SQLException e) {
@@ -211,7 +212,7 @@ public class DbContext {
     }
 
     private void importUsers() {
-        File usersFile = new File("app/src/main/resources/main/data/users.csv");
+        File usersFile = new File("app/src/main/resources/data/users.csv");
         String usersPath = usersFile.getAbsolutePath();
         ArrayList<String[]> users = FileIo.readFromFileSaveToArrayList(usersPath);
 
@@ -226,8 +227,8 @@ public class DbContext {
 
                 ps.execute();
                 ps.close();
-            } catch (SQLException exept) {
-                exept.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -448,7 +449,6 @@ public class DbContext {
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipeFavorite);
             ps.setString(1, userId.toString());
             ps.setString(2, recipeId.toString());
-
             ps.execute();
             ps.close();
             return true;
@@ -611,7 +611,7 @@ public class DbContext {
     }
 
     public String addRecipe(Recipe recipe) {
-        return null; // TODO: Implement
+
         // int counter = 0;
         //                     for (String[] r : recipes) {
 
@@ -628,13 +628,15 @@ public class DbContext {
         //                             ps.setString(5, r[5]);
         //                             InputStream fis = getClass().getResourceAsStream(r[6]);
         //                             ps.setBlob(6, fis);
-        //                             ps.execute(); 
+        //                             ps.execute();
         //                             System.out.println("Sample recipe " + counter + " successfully imported!");
 
         //                         } catch (SQLException e8) {
         //                             e8.printStackTrace();
         //                         }
         //                     }
+        return null; // TODO: Implement
+
     }
 
 

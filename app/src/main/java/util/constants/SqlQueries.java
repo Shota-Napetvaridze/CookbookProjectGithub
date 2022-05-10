@@ -48,7 +48,7 @@ public class SqlQueries {
         public static final String createTableRecipes = "CREATE TABLE recipes ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
                         + "name VARCHAR(30) NOT NULL,"
-                        + "picture BLOB NOT NULL,"
+                        + "picture LONGBLOB NOT NULL,"
                         + "description VARCHAR(1500) NOT NULL,"
                         + "instructions VARCHAR(1500) NOT NULL,"
                         + "serving_size BIT NOT NULL,"
@@ -109,6 +109,7 @@ public class SqlQueries {
                         + "PRIMARY KEY (user_id, recipe_id, tag_id)"
                         + ");";
 
+        // INSERT------------------------------------------------------
         public static final String addRecipe = "INSERT INTO recipes (\n" +
                         "id, recipe_name, picture, recipe_description, instructions, author_id) \n" +
                         "VALUES (?, ?, ?, ?, ?, ?)";
@@ -118,7 +119,7 @@ public class SqlQueries {
                         "VALUES (?, ?, ?, ?, ?)";
 
         public static final String addTag = "INSERT INTO tags (\n" +
-                        "id, tag_name) \n" +
+                        "id, TagName) \n" +
                         "VALUES (?, ?)";
 
         public static final String addMessage = "INSERT INTO messages (\n" +

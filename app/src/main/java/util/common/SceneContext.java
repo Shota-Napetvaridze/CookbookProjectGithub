@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
+
 public class SceneContext {
     public static void changeScene(ActionEvent event, String fxmlFile, User user) {
         Parent root = null;
