@@ -16,6 +16,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("CookBook!");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

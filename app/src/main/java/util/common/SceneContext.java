@@ -34,12 +34,14 @@ public class SceneContext {
             stage.setScene(new Scene(root, 600,400 ));
             String title = String.format("Welcome to Cookbook");
             stage.setTitle(title);
+            stage.setResizable(false);
             stage.show();
         } else {
             stage.setScene(new Scene(root, 1315.0,810.0 ));
             stage.centerOnScreen();
             String title = String.format("Welcome to Cookbook %s");
             stage.setTitle(title);
+            stage.setResizable(false);
             stage.show();
         }
     }
