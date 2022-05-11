@@ -6,16 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="ead98ddf-7b72-4e74-9ed8-e31a63b0cc65" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/classes/java/main/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/classes/java/main/main/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/classes/java/main/services/impl/IngredientServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/classes/java/main/services/impl/IngredientServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/classes/java/main/services/impl/RecipeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/classes/java/main/services/impl/RecipeServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/classes/java/main/services/impl/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/classes/java/main/services/impl/UserServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/libs/app.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/libs/app.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/resources/main/fxmlFiles/home.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/resources/main/fxmlFiles/home.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/util/common/DbContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/common/DbContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/common/SceneContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/common/SceneContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/constants/SqlQueries.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/constants/SqlQueries.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/util/constants/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/util/constants/Variables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/resources/fxmlFiles/home.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/resources/fxmlFiles/home.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +54,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="main.Main" />
       <module name="cookbook.app.main" />
+      <option name="VM_PARAMETERS" value="--add-modules javafx.controls,javafx.fxml,javafx.graphics" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

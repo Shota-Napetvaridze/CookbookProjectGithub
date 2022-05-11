@@ -37,7 +37,7 @@ public class LogInController implements Initializable {
                 
                 User user = userService.loginUser(username.getText(), password.getText());
                 if (user != null) {
-                    SceneContext.changeScene(event, "home2.fxml", user);
+                    SceneContext.changeScene(event, "/fxmlFiles/home2.fxml");
                 }
             }
         });
@@ -45,7 +45,7 @@ public class LogInController implements Initializable {
         signup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SceneContext.changeScene(event, "/main/fxmlFiles/signUp.fxml",  null);
+                SceneContext.changeScene(event, "/fxmlFiles/signUp.fxml");
             }
         });
 

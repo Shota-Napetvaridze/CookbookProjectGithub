@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/main/login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxmlFiles/home.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("CookBook!");
         stage.setScene(scene);
@@ -22,8 +22,7 @@ public class Main extends Application {
 
         public static void main(String[] args) {
             DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
-            dbContext.createDatabase("Cookbook");
-            dbContext.importRecords();
+            dbContext.createDatabase();
 
         //  Launch the cookbook app
         launch();

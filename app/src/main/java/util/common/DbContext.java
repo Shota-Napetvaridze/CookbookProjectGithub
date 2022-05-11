@@ -2,8 +2,6 @@ package util.common;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-
-import java.io.File;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javafx.scene.image.Image;
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
@@ -22,6 +21,7 @@ import models.entities.User;
 import util.constants.FailMessages;
 import util.constants.SqlQueries;
 import util.constants.SuccessMessages;
+import util.constants.Variables;
 import util.exceptions.common.InvalidLengthException;
 import util.exceptions.user.InvalidEmailException;
 import util.exceptions.user.TakenEmailException;
@@ -38,42 +38,50 @@ public class DbContext {
         this.user = user;
         this.pass = pass;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:" + port + "/",
-                    user, pass);
+            conn = DriverManager.getConnection(Variables.DATABASE_SERVER_URL,
+                    Variables.DATABASE_USER, Variables.DATABASE_PASS);
             // stmt = conn.createStatement();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     // ------------------- INIT -------------------//
-    public String useDatabase(String dbName) throws SQLException {
-        PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.useDatabase);
-        preparedStatement.setString(1, dbName);
-        preparedStatement.execute();
-        return "Using database ...";
+    public void useDatabase() throws SQLException {
+        PreparedStatement preparedStatement1 = conn.prepareStatement(SqlQueries.setMaxAllowedPackage);
+        PreparedStatement preparedStatement2 = conn.prepareStatement(SqlQueries.useDatabase);
+        //preparedStatement.setString(1, dbName); modified here
+        preparedStatement1.execute();
+        preparedStatement2.execute();
     }
 
-    public String createDatabase(String dbName) {
+    public void createDatabase() {
         try {
-            return useDatabase(dbName);
+            useDatabase();
+            System.out.println("USING COOKBOOK DATABASE");
         } catch (SQLException e) {
             try {
-                
-                PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.createDatabase);
-                preparedStatement.setString(1, dbName);
-                preparedStatement.execute();
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:" + port + "/"
-                        + dbName, user, pass);
+                PreparedStatement preparedStatement1 = conn.prepareStatement(SqlQueries.setMaxAllowedPackage);
+                PreparedStatement preparedStatement2 = conn.prepareStatement(SqlQueries.createDatabase);
+                //preparedStatement.setString(1, dbName); modified here
+                preparedStatement1.execute();
+                preparedStatement2.execute();
+
+                conn = DriverManager.getConnection(Variables.DATABASE_COOKBOOK_URL, Variables.DATABASE_USER, Variables.DATABASE_PASS);
                 // Statement stmt = conn.createStatement();
                 try {
                     createTables();
-                    useDatabase(dbName);
-                    return "Using database ...";
+                    useDatabase();
+                    importRecords();
+                    System.out.println("CREATED DATABASE SUCCESSFULLY !!!");
+                    System.out.println("USING DATABASE ....");
                 } catch (SQLException ex) {
-                    return "Failed to create tables ...";
+                    ex.printStackTrace(); // modified here
+                    System.out.println("FAILED TO CREATE TABLES ...");
                 }
             } catch (SQLException exe) {
-                return "Failed to create database ...";
+                exe.printStackTrace(); // modified here
+                System.out.println("FAILED TO CREATE DATABASE");
             }
         }
     }
@@ -105,11 +113,12 @@ public class DbContext {
     }
 
     private void importIngredients() {
-        File ingredientUnitsFile = new File("app/src/main/resources/data/ingredientUnits.csv");
-        String ingredientUnitsPath = ingredientUnitsFile.getAbsolutePath();
+        String ingredientUnitsFile = "/app/src/main/resources/data/ingredientUnits.csv";
+        String ingredientUnitsPath = System.getProperty("user.dir") + ingredientUnitsFile;
         ArrayList<String[]> ingredientUnits = FileIo.readFromFileSaveToArrayList(ingredientUnitsPath);
-
+        int counter = 0;
         for (String[] ingredient : ingredientUnits) {
+            counter++;
             try {
                 PreparedStatement ps = conn.prepareStatement(SqlQueries.addIngredient);
                 ps.setString(1, ingredient[0]);
@@ -118,18 +127,21 @@ public class DbContext {
 
                 ps.execute();
                 ps.close();
+                System.out.println("INGREDIENT NO " + counter + " IMPORTED SUCCESSFULLY");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println();
     }
 
     private void importComments() {
-        File commentsFile = new File("app/src/main/resources/data/comments.csv");
-        String commentsPath = commentsFile.getAbsolutePath();
+        String commentsFile = "/app/src/main/resources/data/comments.csv";
+        String commentsPath = System.getProperty("user.dir") + commentsFile;
         ArrayList<String[]> comments = FileIo.readFromFileSaveToArrayList(commentsPath);
-
+        int counter = 0;
         for (String[] comment : comments) {
+            counter++;
             try {
                 PreparedStatement ps = conn.prepareStatement(SqlQueries.addComment);
                 ps.setString(1, comment[0]);
@@ -139,19 +151,21 @@ public class DbContext {
 
                 ps.execute();
                 ps.close();
+                System.out.println("COMMENT NO " + counter + " IMPORTED SUCCESSFULLY");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
+        System.out.println();
     }
 
     private void importMessages() {
-        File messagesFile = new File("app/src/main/resources/data/messages.csv");
-        String messagesPath = messagesFile.getAbsolutePath();
+        String messagesFile = "/app/src/main/resources/data/messages.csv";
+        String messagesPath = System.getProperty("user.dir") + messagesFile;
         ArrayList<String[]> messages = FileIo.readFromFileSaveToArrayList(messagesPath);
-
+        int counter = 0;
         for (String[] message : messages) {
+            counter++;
             try {
                 PreparedStatement ps = conn.prepareStatement(SqlQueries.addMessage);
                 ps.setString(1, message[0]);
@@ -162,19 +176,22 @@ public class DbContext {
 
                 ps.execute();
                 ps.close();
+                System.out.println("MESSAGE NO " + counter + " IMPORTED SUCCESSFULLY !!!");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println();
 
     }
 
     private void importTags() {
-        File tagsFile = new File("app/src/main/resources/data/tags.csv");
-        String tagsPath = tagsFile.getAbsolutePath();
+        String tagsFile = "/app/src/main/resources/data/tags.csv";
+        String tagsPath = System.getProperty("user.dir") + tagsFile;
         ArrayList<String[]> tags = FileIo.readFromFileSaveToArrayList(tagsPath);
-
+        int counter = 0;
         for (String[] tag : tags) {
+            counter++;
             try {
                 PreparedStatement ps = conn.prepareStatement(SqlQueries.addTag);
                 ps.setString(1, tag[0]);
@@ -182,41 +199,47 @@ public class DbContext {
 
                 ps.execute();
                 ps.close();
+                System.out.println("TAG NO " + counter + " IMPORTED SUCCESSFULLY !!!");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println();
     }
 
-    private void importRecipes() {
-        File recipesFile = new File("app/src/main/resources/data/recipes.csv");
-        String recipesPath = recipesFile.getAbsolutePath();
+    private void importRecipes() { // WORKS NOW
+        String recipesFile = "/app/src/main/resources/data/recipes.csv";
+        String recipesPath = System.getProperty("user.dir") + recipesFile;
         ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
-
+        int counter = 0;
         for (String[] recipe : recipes) {
+            counter++;
             try {
                 PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipe);
-                ps.setString(1, recipe[0]);
-                ps.setString(2, recipe[1]);
-                ps.setString(3, "NULL");
-                ps.setString(4, recipe[3]);
+                InputStream inputStream = getClass().getResourceAsStream(recipe[6]);
+                ps.setString(1, recipe[5]);
+                ps.setString(2, recipe[0]);
+                ps.setBlob(3, inputStream);
+                ps.setString(4, recipe[2]);
                 ps.setString(5, recipe[4]);
-                InputStream inputStream = getClass().getResourceAsStream(recipe[5]);
-                ps.setBlob(6, inputStream);
+                ps.setString(6, "SAMPLE AUTHOR");
                 ps.execute();
                 ps.close();
+                System.out.println("RECIPE NO " + counter + " IMPORTED SUCCESSFULLY !!!");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println();
     }
 
     private void importUsers() {
-        File usersFile = new File("app/src/main/resources/data/users.csv");
-        String usersPath = usersFile.getAbsolutePath();
+        String usersFile = "/app/src/main/resources/data/users.csv";
+        String usersPath = System.getProperty("user.dir") + usersFile;
         ArrayList<String[]> users = FileIo.readFromFileSaveToArrayList(usersPath);
-
+        int counter = 0;
         for (String[] user : users) {
+            counter++;
             try {
                 PreparedStatement ps = conn.prepareStatement(SqlQueries.addUser);
                 ps.setString(1, user[0]);
@@ -227,10 +250,12 @@ public class DbContext {
 
                 ps.execute();
                 ps.close();
+                System.out.println("USER NO" + counter + " IMPORTED SUCCESSFULLY");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println();
     }
 
     // ------------------- USER -------------------//
@@ -365,7 +390,8 @@ public class DbContext {
             e.printStackTrace();
         }
 
-        return user;    }
+        return user;
+    }
 
     private Set<UUID> getUserMessageIds(UUID id) {
         Set<UUID> messages = new HashSet<>();
@@ -596,7 +622,28 @@ public class DbContext {
     // ------------------- RECIPE -------------------//
 
     public List<Recipe> getAllRecipes() {
-        return null;
+        User user = null;
+        Recipe recipe = null;
+        ArrayList<Recipe> recipeData = new ArrayList<Recipe>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserRecipes);
+            ps.setString(1, user.getUsername());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                InputStream is = rs.getBinaryStream("Picture");
+                Image img = new Image(is);
+                recipe.setName(rs.getString("RecipeName"));
+
+                recipe.setPicture(img);
+                recipeData.add(recipe);
+            }
+            System.out.println("RECIPES RETRIEVED SUCCESSFULLY");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return recipeData;
         // TODO: Implement
     }
 
@@ -667,70 +714,70 @@ public class DbContext {
         }
     }
 
-    public void signUpUser(ActionEvent event, String username, String email, String password) {
-        User user = getUserByCredentials(username, password);
-        try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
-
-            ps.setString(1, username);
-
-            ResultSet resultSet = ps.executeQuery();
-
-            if (resultSet.isBeforeFirst()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("You cannot use this username");
-                alert.show();
-            } else {
-                ps = conn.prepareStatement(
-                        "INSERT INTO Users (Id, Username, DisplayName, Email,  Password) VALUES (?, ?, ?, ?, ?)");
-                UUID uuid = UUID.randomUUID();
-                String randomIdString = uuid.toString().substring(0, 6);
-                ps.setString(1, randomIdString);
-                ps.setString(2, username);
-                ps.setString(3, "NULL");
-                ps.setString(4, email);
-                ps.setString(5, password);
-                ps.executeUpdate();
-                SceneContext.changeScene(event, "home2.fxml", user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void logInUser(ActionEvent event, String username, String password) {
-        User user = null;
-        try {
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByCredentials);
-            ps.setString(1, username);
-            ps.setString(2, Hasher.hashString(password));
-            ResultSet resultSet = ps.executeQuery();
-
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("User not found!");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Provided Credentials are incorrect");
-                alert.show();
-            } else {
-                // password comparison
-                while (resultSet.next()) {
-                    String retrievedPassword = resultSet.getString("Password");
-
-                    if (retrievedPassword.equals(password)) {
-                        SceneContext.changeScene(event, "home2.fxml", null);
-                    } else {
-                        System.out.println("Passwords did not match!");
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setContentText("Provided Credentials are incorrect");
-                        alert.show();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-    }
+//    public void signUpUser(ActionEvent event, String username, String email, String password) {
+//        User user = getUserByCredentials(username, password);
+//        try {
+//            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
+//
+//            ps.setString(1, username);
+//
+//            ResultSet resultSet = ps.executeQuery();
+//
+//            if (resultSet.isBeforeFirst()) {
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setContentText("You cannot use this username");
+//                alert.show();
+//            } else {
+//                ps = conn.prepareStatement(
+//                        "INSERT INTO Users (Id, Username, DisplayName, Email,  Password) VALUES (?, ?, ?, ?, ?)");
+//                UUID uuid = UUID.randomUUID();
+//                String randomIdString = uuid.toString().substring(0, 6);
+//                ps.setString(1, randomIdString);
+//                ps.setString(2, username);
+//                ps.setString(3, "NULL");
+//                ps.setString(4, email);
+//                ps.setString(5, password);
+//                ps.executeUpdate();
+//                SceneContext.changeScene(event, "home2.fxml");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void logInUser(ActionEvent event, String username, String password) {
+//        User user = null;
+//        try {
+//            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByCredentials);
+//            ps.setString(1, username);
+//            ps.setString(2, Hasher.hashString(password));
+//            ResultSet resultSet = ps.executeQuery();
+//
+//            if (!resultSet.isBeforeFirst()) {
+//                System.out.println("User not found!");
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setContentText("Provided Credentials are incorrect");
+//                alert.show();
+//            } else {
+//                // password comparison
+//                while (resultSet.next()) {
+//                    String retrievedPassword = resultSet.getString("Password");
+//
+//                    if (retrievedPassword.equals(password)) {
+//                        SceneContext.changeScene(event, "home2.fxml");
+//                    } else {
+//                        System.out.println("Passwords did not match!");
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setContentText("Provided Credentials are incorrect");
+//                        alert.show();
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
 
 
 }

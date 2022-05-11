@@ -89,7 +89,7 @@ public class NewRecipeController implements Initializable {
                 recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), user.getId());
                 
                 // DBUtils.importUserRecipe(event, recipe_name.getText(), recipe_description.getText(), recipe_instruction.getText(), file);
-                SceneContext.changeScene(event, "/fxmlFiles/home.fxml",  null);
+                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
             }
 
         });

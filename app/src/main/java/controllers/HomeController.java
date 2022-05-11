@@ -122,7 +122,7 @@ public class HomeController implements Initializable {
             comboBox.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    SceneContext.changeScene(event, "/fxmlFiles/login.fxml", null);
+                    SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
                 }
             });
 
@@ -150,17 +150,17 @@ public class HomeController implements Initializable {
     private List<Tag> selectedTags = new ArrayList<>();
 
     private List<Recipe> getRecipeList() {
-        List<Recipe> allRecipes = recipeService.getAllRecipes();
+        List<Recipe> allRecipes = recipeService.getAllRecipes(); // TODO: recipeService.getAllTags();
         return allRecipes;
     }
 
     private List<Message> getMsgList() {
-        List<Message> messages = userService.getUserMessagesById(user.getId());
+        List<Message> messages = userService.getUserMessagesById(user.getId()); // TODO: tagService.getAllTags();
         return messages;
     }
 
     private List<Tag> getTagList() {
-        List<Tag> tags = new ArrayList<>(); // TODO: tagService.getAllTags();
+        List<Tag> tags = new ArrayList<>();                // TODO: messageService.getAllTags();
         return tags;
     }
 
@@ -223,10 +223,10 @@ public class HomeController implements Initializable {
         comboBox.setItems(list);
 
         // Adds all the recipes and messages
-        recipeList.addAll(getRecipeList());
-        msgList.addAll(getMsgList());
-        tagList.addAll(getTagList());
-        ingredientsList.addAll(getIngredientList());
+//        recipeList.addAll(getRecipeList());                        //TODO: This should be fixed !!!!!!
+//        msgList.addAll(getMsgList());
+//        tagList.addAll(getTagList());
+//        ingredientsList.addAll(getIngredientList());
 
         // Set message count
         String s = String.valueOf(msgList.size());
@@ -550,7 +550,7 @@ public class HomeController implements Initializable {
         logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SceneContext.changeScene(event, "fxmlFiles/login.fxml", null);
+                SceneContext.changeScene(event, "fxmlFiles/login.fxml");
             }
         });
 

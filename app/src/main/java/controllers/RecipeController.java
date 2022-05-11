@@ -64,7 +64,7 @@ public class RecipeController implements Initializable {
         remove_recipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SceneContext.changeScene(event, "/fxmlFiles/home.fxml", null);
+                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
             }
         });
     }

@@ -1,6 +1,9 @@
 package util.constants;
 
 public class Variables {
+    public static final String DATABASE_SERVER_URL = "jdbc:mysql://localhost:8889/";
+    public static final String DATABASE_COOKBOOK_URL = "jdbc:mysql://localhost:8889/Cookbook";
+
     public static final int DATABASE_PORT = 8889;
     public static final String DATABASE_USER = "root";
     public static final String DATABASE_PASS = "root";

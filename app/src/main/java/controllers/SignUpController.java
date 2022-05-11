@@ -50,7 +50,7 @@ public class SignUpController implements Initializable {
                 if (!usernameNew.getText().trim().isEmpty() && !passwordNew.getText().trim().isEmpty()){
                     userService.addUser(usernameNew.getText(), email.getText(), passwordNew.getText());
                     user = userService.getUserByNickname(usernameNew.getText());
-                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml", user);
+                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
 
                     // DBUtils. (event, usernameNew.getText(), email.getText(), passwordNew.getText());
                 }else {
@@ -64,7 +64,7 @@ public class SignUpController implements Initializable {
         button_login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SceneContext.changeScene(event, "/main/fxmlFiles/login.fxml", null);
+                SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
             }
         });
 

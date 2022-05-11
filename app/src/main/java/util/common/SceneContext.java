@@ -12,28 +12,36 @@ import javafx.scene.Node;
 
 
 public class SceneContext {
-    public static void changeScene(ActionEvent event, String fxmlFile, User user) {
+    public static void changeScene(ActionEvent event, String fxmlFile) {
         Parent root = null;
-
-        if (user != null) {
+        if (!fxmlFile.equals("")){
             try {
                 FXMLLoader loader = new FXMLLoader(DbContext.class.getResource(fxmlFile));
                 root = loader.load();
-            } catch (IOException e) {
+            }catch (IOException e){
                 e.printStackTrace();
             }
-        } else {
+        }else {
             try {
                 root = FXMLLoader.load(DbContext.class.getResource(fxmlFile));
-            } catch (IOException e) {
+            }catch (IOException e){
                 e.printStackTrace();
             }
         }
+        //SIZES OF THE DIFFERENT SCENES
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root, 1315.0, 810.0));
-        String s = String.format("Welcome to Cookbook %s", user.getUsername().toUpperCase());
-        stage.setTitle(s);
-        stage.show();
+        if (fxmlFile.equals("/fxmlFiles/login.fxml") || fxmlFile.equals("/fxmlFiles/signUp.fxml") || fxmlFile.equals("/fxmlFiles/addNewRecipe.fxml")){
+            stage.setScene(new Scene(root, 600,400 ));
+            String title = String.format("Welcome to Cookbook");
+            stage.setTitle(title);
+            stage.show();
+        } else {
+            stage.setScene(new Scene(root, 1315.0,810.0 ));
+            stage.centerOnScreen();
+            String title = String.format("Welcome to Cookbook %s");
+            stage.setTitle(title);
+            stage.show();
+        }
     }
 
 }

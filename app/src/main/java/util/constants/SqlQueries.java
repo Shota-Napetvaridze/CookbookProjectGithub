@@ -1,15 +1,15 @@
 package util.constants;
 
 public class SqlQueries {
-        public static final String dropDatabase = "DROP DATABASE ?";
-        public static final String createDatabase = "SET GLOBAL max_allowed_packet=10000000 \n" +
-                        "CREATE DATABASE ?";
-        public static final String useDatabase = "SET GLOBAL max_allowed_packet=10000000 \n" +
-                        "USE ?";
+        public static final String dropDatabase = "DROP DATABASE Cookbook"; // modified here
+        public static final String setMaxAllowedPackage = "SET GLOBAL max_allowed_packet=10000000"; // modified here
+        public static final String useDatabase = "USE Cookbook"; // modified here
 
+        // CREATE -------------
+        public static final String createDatabase = "CREATE DATABASE Cookbook"; // modified here
         public static final String createTableTags = "CREATE TABLE tags ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
-                        + "tag_name VARCHAR(20) NOT NULL"
+                        + "tag_name VARCHAR(30) NOT NULL"
                         + ");";
 
         public static final String createTableUsers = "CREATE TABLE users ("
@@ -20,11 +20,11 @@ public class SqlQueries {
                         + "password CHAR(64) NOT NULL"
                         + ");";
 
-        public static final String createTableMessages = "CRECREATE TABLE messages ("
+        public static final String createTableMessages = "CREATE TABLE messages ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
-                        + "sender_id CHAR(38) NOT NULL"
+                        + "sender_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
-                        + "receiver_id CHAR(38) NOT NULL"
+                        + "receiver_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
                         + "message_text VARCHAR(300) NOT NULL,"
                         + "is_read BOOL NOT NULL"
@@ -32,14 +32,14 @@ public class SqlQueries {
 
         public static final String createTableIngredients = "CREATE TABLE ingredients ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
-                        + "ingredient_name VARCHAR(20) NOT NULL,"
+                        + "ingredient_name VARCHAR(60) NOT NULL,"
                         + "unit VARCHAR(20) NOT NULL"
                         + ");";
 
         public static final String createTableUserIngredients = "CREATE TABLE users_ingredients ("
-                        + "user_id CHAR(38) NOT NULL"
+                        + "user_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
-                        + "ingredient_id CHAR(38) NOT NULL"
+                        + "ingredient_id CHAR(38) NOT NULL "
                         + "REFERENCES ingredients(id),"
                         + "quantity INT NOT NULL,"
                         + "PRIMARY KEY (user_id, ingredient_id)"
@@ -47,64 +47,64 @@ public class SqlQueries {
 
         public static final String createTableRecipes = "CREATE TABLE recipes ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
-                        + "name VARCHAR(30) NOT NULL,"
+                        + "recipe_name VARCHAR(60) NOT NULL,"
                         + "picture LONGBLOB NOT NULL,"
-                        + "description VARCHAR(1500) NOT NULL,"
-                        + "instructions VARCHAR(1500) NOT NULL,"
-                        + "serving_size BIT NOT NULL,"
-                        + "author_id CHAR(38) NOT NULL"
+                        + "recipe_description VARCHAR(1500) NOT NULL,"
+                        + "instructions VARCHAR(4000) NOT NULL,"
+                        //+ "serving_size BIT NOT NULL,"
+                        + "author_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id)"
                         + ");";
 
         public static final String createTableComments = "CREATE TABLE comments ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
-                        + "user_id CHAR(38) NOT NULL"
+                        + "user_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
-                        + "recipe_id CHAR(38) NOT NULL"
+                        + "recipe_id CHAR(38) NOT NULL "
                         + "REFERENCES recipes(id),"
                         + "text VARCHAR(300) NOT NULL"
                         + ");";
 
         public static final String createTableRecipeIngredients = "CREATE TABLE recipes_ingredients ("
-                        + "recipe_id CHAR(38) NOT NULL"
+                        + "recipe_id CHAR(38) NOT NULL "
                         + "REFERENCES recipes(id),"
-                        + "ingredient_id CHAR(38) NOT NULL"
+                        + "ingredient_id CHAR(38) NOT NULL "
                         + "REFERENCES ingredients(id),"
                         + "quantity INT NOT NULL,"
                         + "PRIMARY KEY (recipe_id, ingredient_id)"
                         + ");";
 
         public static final String createTableRecipeTags = "CREATE TABLE recipes_tags ("
-                        + "recipe_id CHAR(38) NOT NULL"
+                        + "recipe_id CHAR(38) NOT NULL "
                         + "REFERENCES recipes(id),"
-                        + "tag_id CHAR(38) NOT NULL"
+                        + "tag_id CHAR(38) NOT NULL "
                         + "REFERENCES tags(id),"
                         + "PRIMARY KEY(recipe_id, tag_id)"
                         + ");";
 
         public static final String createTableUsersFavorites = "CREATE TABLE users_favorites ("
-                        + "user_id CHAR(38) NOT NULL"
+                        + "user_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
-                        + "recipe_id CHAR(38) NOT NULL"
+                        + "recipe_id CHAR(38) NOT NULL "
                         + "REFERENCES recipes(id),"
                         + "PRIMARY KEY (user_id, recipe_id)"
                         + ");";
 
         public static final String createTableWeeklyPlans = "CREATE TABLE weekly_plans ("
-                        + "user_id CHAR(38) NOT NULL"
+                        + "user_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
-                        + "recipe_id CHAR(38)"
+                        + "recipe_id CHAR(38) "
                         + "REFERENCES recipes(id),"
                         + "Day DATE NOT NULL,"
                         + "PRIMARY KEY (user_id, recipe_id)"
                         + ");";
 
         public static final String createTableUsersRecipeTags = "CREATE TABLE users_recipes_tags ("
-                        + "user_id CHAR(38) NOT NULL"
+                        + "user_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
-                        + "recipe_id CHAR(38) NOT NULL"
+                        + "recipe_id CHAR(38) NOT NULL "
                         + "REFERENCES recipes(id),"
-                        + "tag_id CHAR(38) NOT NULL"
+                        + "tag_id CHAR(38) NOT NULL "
                         + "REFERENCES tags(id),"
                         + "PRIMARY KEY (user_id, recipe_id, tag_id)"
                         + ");";
@@ -115,11 +115,11 @@ public class SqlQueries {
                         "VALUES (?, ?, ?, ?, ?, ?)";
 
         public static final String addUser = "INSERT INTO users (\n" +
-                        "id, user_name, display_name, email, password) \n" +
+                        "id, username, display_name, email, password) \n" +
                         "VALUES (?, ?, ?, ?, ?)";
 
         public static final String addTag = "INSERT INTO tags (\n" +
-                        "id, TagName) \n" +
+                        "id, tag_name) \n" +
                         "VALUES (?, ?)";
 
         public static final String addMessage = "INSERT INTO messages (\n" +
@@ -127,13 +127,14 @@ public class SqlQueries {
                         "VALUES (?, ?, ?, ?, ?)";
 
         public static final String addComment = "INSERT INTO comments (\n" +
-                        "id, user_id, recipe_id, comment_text) \n" +
+                        "id, user_id, recipe_id, text) \n" +
                         "VALUES (?, ?, ?, ?)";
 
         public static final String addIngredient = "INSERT INTO ingredients (\n" +
                         "id, ingredient_name, unit) \n" +
                         "VALUES (?, ?, ?)";
 
+        // SELECT -------------
         public static final String getUserByCredentials = "SELECT * FROM users WHERE username = ? AND password = ?";
 
         public static final String getUserByNickname = "SELECT * FROM users WHERE display_name = ?";
@@ -158,6 +159,7 @@ public class SqlQueries {
 
         public static final String removeUserWithId = "DELETE FROM users WHERE id = ?";
 
+        // UPDATE -------------
         public static final String updateNickname = "UPDATE users SET display_name = ? WHERE id = ?";
 
         public static final String updateEmail = "UPDATE users SET email = ? WHERE id = ?";
