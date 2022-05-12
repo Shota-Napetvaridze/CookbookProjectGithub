@@ -550,7 +550,7 @@ public class HomeController implements Initializable {
         logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SceneContext.changeScene(event, "fxmlFiles/login.fxml");
+                SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
             }
         });
 
