@@ -113,7 +113,7 @@ public class DbContext {
     }
 
     private void importIngredients() {
-        String ingredientUnitsFile = "/app/src/main/resources/data/ingredientUnits.csv";
+        String ingredientUnitsFile = "/src/main/resources/data/ingredientUnits.csv";
         String ingredientUnitsPath = System.getProperty("user.dir") + ingredientUnitsFile;
         ArrayList<String[]> ingredientUnits = FileIo.readFromFileSaveToArrayList(ingredientUnitsPath);
         int counter = 0;
@@ -136,7 +136,7 @@ public class DbContext {
     }
 
     private void importComments() {
-        String commentsFile = "/app/src/main/resources/data/comments.csv";
+        String commentsFile = "/src/main/resources/data/comments.csv";
         String commentsPath = System.getProperty("user.dir") + commentsFile;
         ArrayList<String[]> comments = FileIo.readFromFileSaveToArrayList(commentsPath);
         int counter = 0;
@@ -160,7 +160,7 @@ public class DbContext {
     }
 
     private void importMessages() {
-        String messagesFile = "/app/src/main/resources/data/messages.csv";
+        String messagesFile = "/src/main/resources/data/messages.csv";
         String messagesPath = System.getProperty("user.dir") + messagesFile;
         ArrayList<String[]> messages = FileIo.readFromFileSaveToArrayList(messagesPath);
         int counter = 0;
@@ -186,7 +186,7 @@ public class DbContext {
     }
 
     private void importTags() {
-        String tagsFile = "/app/src/main/resources/data/tags.csv";
+        String tagsFile = "/src/main/resources/data/tags.csv";
         String tagsPath = System.getProperty("user.dir") + tagsFile;
         ArrayList<String[]> tags = FileIo.readFromFileSaveToArrayList(tagsPath);
         int counter = 0;
@@ -208,7 +208,7 @@ public class DbContext {
     }
 
     private void importRecipes() { // WORKS NOW
-        String recipesFile = "/app/src/main/resources/data/recipes.csv";
+        String recipesFile = "/src/main/resources/data/recipes.csv";
         String recipesPath = System.getProperty("user.dir") + recipesFile;
         ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
         int counter = 0;
@@ -234,7 +234,7 @@ public class DbContext {
     }
 
     private void importUsers() {
-        String usersFile = "/app/src/main/resources/data/users.csv";
+        String usersFile = "/src/main/resources/data/users.csv";
         String usersPath = System.getProperty("user.dir") + usersFile;
         ArrayList<String[]> users = FileIo.readFromFileSaveToArrayList(usersPath);
         int counter = 0;
@@ -261,6 +261,8 @@ public class DbContext {
     // ------------------- USER -------------------//
     public String addUser(String username, String email, String password) {
         try {
+            PreparedStatement ps1 = conn.prepareStatement(SqlQueries.useDatabase); //modified
+            ps1.execute(); //modified
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addUser);
             ps.setString(1, UUID.randomUUID().toString());
             ps.setString(2, username);
@@ -269,6 +271,7 @@ public class DbContext {
             ps.setString(5, Hasher.hashString(password));
             ps.execute();
             ps.close();
+            ps1.close(); //modified
             return String.format(SuccessMessages.USER_ADDED);
         } catch (SQLException e) {
             return String.format(FailMessages.USER_ADD_FAIL);
