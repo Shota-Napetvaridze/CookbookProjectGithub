@@ -25,10 +25,10 @@ public class Main extends Application {
 
         public static void main(String[] args) throws IOException, InterruptedException{
             // Start MAMP server Automatically
-            Runtime.getRuntime().exec("open /Applications/MAMP/MAMP.app/");
-            Runtime.getRuntime().exec("/Applications/MAMP/bin/startApache.sh");
-            Runtime.getRuntime().exec("/Applications/MAMP/bin/startMysql.sh");
-            TimeUnit.SECONDS.sleep(5);
+            // Runtime.getRuntime().exec("open /Applications/MAMP/MAMP.app/");
+            // Runtime.getRuntime().exec("/Applications/MAMP/bin/startApache.sh");
+            // Runtime.getRuntime().exec("/Applications/MAMP/bin/startMysql.sh");
+            // TimeUnit.SECONDS.sleep(5);
 
             //---------------------------------------------------------------
             DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
