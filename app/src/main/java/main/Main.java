@@ -26,7 +26,7 @@ public class Main extends Application {
     }
 
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws IOException, InterruptedException {
             // Start MAMP server Automatically
             
             Runtime.getRuntime().exec("open /Applications/MAMP/MAMP.app/");
