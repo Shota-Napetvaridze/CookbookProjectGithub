@@ -49,6 +49,7 @@ public class NewRecipeController implements Initializable {
 
     private RecipeServiceImpl recipeService = new RecipeServiceImpl();
 
+    private User user = SceneContext.user;
     private File file;
     private Image image;
 
@@ -85,9 +86,8 @@ public class NewRecipeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 
-                recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), UUID.randomUUID());
+                recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), user.getId());
                 
-                // DBUtils.importUserRecipe(event, recipe_name.getText(), recipe_description.getText(), recipe_instruction.getText(), file);
                 SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
             }
 

@@ -10,8 +10,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
-
 public class SceneContext {
+    public static User user;
+
     public static void changeScene(ActionEvent event, String fxmlFile) {
         Parent root = null;
         if (!fxmlFile.equals("")){
@@ -30,7 +31,7 @@ public class SceneContext {
         }
         //SIZES OF THE DIFFERENT SCENES
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if (fxmlFile.equals("/fxmlFiles/login.fxml") || fxmlFile.equals("/fxmlFiles/signUp.fxml") || fxmlFile.equals("/fxmlFiles/addNewRecipe.fxml")){
+        if (fxmlFile.equals("/fxmlFiles/login.fxml") || fxmlFile.equals("/fxmlFiles/signUp.fxml")){
             stage.setScene(new Scene(root, 600,400 ));
             String title = String.format("Welcome to Cookbook");
             stage.setTitle(title);
@@ -39,12 +40,11 @@ public class SceneContext {
         } else {
             stage.setScene(new Scene(root, 1315.0,810.0 ));
             stage.centerOnScreen();
-            String title = String.format("Welcome to Cookbook"); // TODO:  %s add userNickname here
+            String title = String.format("Welcome to Cookbook  %s", user.getNickname());
             stage.setTitle(title);
             stage.setResizable(false);
 
             stage.show();
         }
     }
-
 }

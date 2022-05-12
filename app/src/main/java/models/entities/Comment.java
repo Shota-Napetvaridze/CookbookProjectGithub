@@ -14,12 +14,12 @@ public class Comment extends BaseEntity {
     private UUID recipeId;
 
     // Creating new Comment
-    public Comment(UUID userId, String text, UUID recipeId) {
-        super();
-        setUser(userId);
-        setText(text);
-        setRecipe(recipeId);
-    }
+    // public Comment(UUID userId, String text, UUID recipeId) {
+    //     super();
+    //     setUser(userId);
+    //     setText(text);
+    //     setRecipe(recipeId);
+    // }
 
     // Importing an existing Comment
     public Comment(UUID id, UUID userId, String text, UUID recipeId) {
@@ -88,10 +88,10 @@ public class Comment extends BaseEntity {
     }
 
     private void validateUser(UUID userId) throws InvalidInstanceException {
-        Validator.validateExists(userId, "users");
+        Validator.validateUser(userId);
     }
 
     private void validateRecipe(UUID recipeId) throws InvalidInstanceException {
-        Validator.validateExists(recipeId, "recipes");
+        Validator.validateRecipe(recipeId);
     }
 }

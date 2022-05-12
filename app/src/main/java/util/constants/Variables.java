@@ -1,12 +1,12 @@
 package util.constants;
 
 public class Variables {
-    public static final String DATABASE_SERVER_URL = "jdbc:mysql://localhost:8889/";
-    public static final String DATABASE_COOKBOOK_URL = "jdbc:mysql://localhost:8889/Cookbook";
-
     public static final int DATABASE_PORT = 8889;
     public static final String DATABASE_USER = "root";
     public static final String DATABASE_PASS = "root";
+
+    public static final String DATABASE_SERVER_URL = "jdbc:mysql://localhost:" + DATABASE_PORT + "/";
+    public static final String DATABASE_COOKBOOK_URL = "jdbc:mysql://localhost:" + DATABASE_PORT + "/Cookbook";
 
     public static final int MIN_USER_NAME_LENGTH = 3; // User
     public static final int MAX_USER_NAME_LENGTH = 25;
@@ -29,7 +29,7 @@ public class Variables {
 
     public static final int MIN_MESSAGE_TEXT_LENGTH = 1; // Message
     public static final int MAX_MESSAGE_TEXT_LENGTH = 300;
-    
+
     public static final int MIN_RECIPE_NAME_LENGTH = 3; // Recipe
     public static final int MAX_RECIPE_NAME_LENGTH = 70;
     public static final int MIN_RECIPE_DESC_LENGTH = 10;

@@ -34,7 +34,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public String addUser(String username, String email, String password) {
         // User user = new User(username, email, password);
-        return dbContext.addUser(username, email, password);
+        boolean isUnique = dbContext.validateUniqueCredentials(username, email);
+        if (isUnique) {
+            return dbContext.addUser(username, email, password);
+        }
+        return String.format(FailMessages.USER_ADD_FAIL);
     }
 
     @Override
@@ -105,10 +109,10 @@ public class UserServiceImpl implements UserService {
         return dbContext.addRecipeToFavorites(userId, recipeId);
     }
 
+
     @Override
-    public String removeFromFavorites(UUID recipeId) {
-        // TODO Auto-generated method stub
-        return null;
+    public boolean removeFromFavorites(UUID userId, UUID recipeId) {
+        return dbContext.removeRecipeFromFavorites(userId, recipeId);
     }
 
     @Override

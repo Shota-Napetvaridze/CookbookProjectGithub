@@ -29,12 +29,12 @@ public class User extends BaseEntity {
     private Set<UUID> recipes;
 
     // Creating a new user
-    public User(String username, String email, String password) throws InvalidEmailException, TakenEmailException {
-        super();
-        setUsername(username);
-        setEmail(email);
-        setPassword(password);
-    }
+    // public User(String username, String email, String password) throws InvalidEmailException, TakenEmailException {
+    //     super();
+    //     setUsername(username);
+    //     setEmail(email);
+    //     setPassword(password);
+    // }
 
     // Importing an existing user
     public User(UUID id, String username, String nickname, String email, String password,
@@ -56,7 +56,7 @@ public class User extends BaseEntity {
     // OPERATIONS
     public String addRecipeToFavorites(UUID recipeId) {
         try {
-            Validator.validateExists(recipeId, "recipes");
+            Validator.validateRecipe(recipeId);
             this.favorites.add(recipeId);
             return String.format(SuccessMessages.USER_ADDED_FAVORITE_RECIPE);
         } catch (InvalidInstanceException e) {

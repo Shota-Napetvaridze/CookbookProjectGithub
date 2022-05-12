@@ -16,13 +16,13 @@ public class Message extends BaseEntity {
     private boolean isRead;
 
     // Create new Message
-    public Message(UUID senderId, UUID receiverId, String text) {
-        super();
-        setSender(senderId);
-        setReceiver(receiverId);
-        setText(text);
-        isRead = false;
-    }
+    // public Message(UUID senderId, UUID receiverId, String text) {
+    //     super();
+    //     setSender(senderId);
+    //     setReceiver(receiverId);
+    //     setText(text);
+    //     isRead = false;
+    // }
 
     // Import an existing Message
     public Message(UUID id, UUID senderId, UUID receiverId, String text, boolean isRead) {
@@ -97,6 +97,6 @@ public class Message extends BaseEntity {
     }
 
     private void validateUser(UUID userId) throws InvalidInstanceException {
-        Validator.validateExists(userId, "users");
+        Validator.validateUser(userId);
     }
 }

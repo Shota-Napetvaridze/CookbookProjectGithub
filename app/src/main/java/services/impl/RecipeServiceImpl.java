@@ -52,9 +52,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getFavoriteRecipes() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Recipe> getFavoriteRecipes(UUID userId) {
+        return dbContext.getFavoriteRecipes(userId);
     }
 
     @Override

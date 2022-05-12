@@ -16,11 +16,11 @@ public class Ingredient extends BaseEntity {
     private String name;
     private Unit unit;
 
-    public Ingredient(String name, Unit unit) {
-        super();
-        setName(name);
-        setUnit(unit);
-    }
+    // public Ingredient(String name, Unit unit) {
+    //     super();
+    //     setName(name);
+    //     setUnit(unit);
+    // }
 
     public Ingredient(UUID id, String name, Unit unit) {
         super.id = id;

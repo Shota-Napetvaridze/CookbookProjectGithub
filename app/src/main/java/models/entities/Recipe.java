@@ -28,22 +28,22 @@ public class Recipe extends BaseEntity {
     public Recipe(){}
 
     // Create new Recipe
-    public Recipe(String name, Image picture, String description,
-            String instructions, UUID authorId, Set<UUID> tags,
-            Dictionary<UUID, Integer> ingredients, byte servingSize) {
-        super();
-        setName(name);
-        setPicture(picture);
-        setDescription(description);
-        setInstructions(instructions);
-        setAuthor(authorId);
-        setTags(tags);
-        setIngredients(ingredients);
-        setServingSize(servingSize);
-        // TODO: DbContext.addRecipe(String name, char[] picture, String description,
-        // String instructions, User author, Set<Tag> tags,
-        // Dictionary<Ingredient, Integer> ingredients, byte servingSize)
-    }
+    // public Recipe(String name, Image picture, String description,
+    //         String instructions, UUID authorId, Set<UUID> tags,
+    //         Dictionary<UUID, Integer> ingredients, byte servingSize) {
+    //     super();
+    //     setName(name);
+    //     setPicture(picture);
+    //     setDescription(description);
+    //     setInstructions(instructions);
+    //     setAuthor(authorId);
+    //     setTags(tags);
+    //     setIngredients(ingredients);
+    //     setServingSize(servingSize);
+    //     // TODO: DbContext.addRecipe(String name, char[] picture, String description,
+    //     // String instructions, User author, Set<Tag> tags,
+    //     // Dictionary<Ingredient, Integer> ingredients, byte servingSize)
+    // }
 
     // Import existing Recipe
     public Recipe(UUID id, String name, Image picture, String description,
@@ -222,7 +222,7 @@ public class Recipe extends BaseEntity {
     }
 
     private void validateAuthor(UUID authorId) throws InvalidInstanceException {
-        Validator.validateExists(authorId, "users");
+        Validator.validateUser(authorId);
     }
 
 }

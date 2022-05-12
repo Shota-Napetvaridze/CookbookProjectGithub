@@ -2,12 +2,13 @@ package util.common;
 
 import java.util.UUID;
 
+import util.constants.Variables;
 import util.exceptions.common.InvalidCountException;
 import util.exceptions.common.InvalidInstanceException;
 import util.exceptions.common.InvalidLengthException;
 
 public class Validator {
-
+    private static DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
     /**
      * Checks if a string is within given length.
      *
@@ -41,13 +42,19 @@ public class Validator {
     }
 
     /**
-     * Checks if an instance exists in the database.
+     * Checks if a user exists in the database.
      *
-     * @param entity object instance
+     * @param entity user
      * @throws InvalidInstanceException not in database
      */
-    public static void validateExists(UUID id, String tableName) throws InvalidInstanceException {
-        if (DbContext.checkExistId(id, tableName)) {
+    public static void validateUser(UUID id) throws InvalidInstanceException {
+        if (dbContext.getUserById(id) == null) {
+            throw new InvalidInstanceException();
+        }
+    }
+
+    public static void validateRecipe(UUID id) throws InvalidInstanceException {
+        if (dbContext.getRecipeById(id) == null) {
             throw new InvalidInstanceException();
         }
     }

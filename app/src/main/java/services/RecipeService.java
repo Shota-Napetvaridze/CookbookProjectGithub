@@ -12,7 +12,7 @@ public interface RecipeService {
     public Recipe getRecipeById(UUID id);
     public Recipe getRecipeByName(String name);
     public List<Recipe> getRecipesFiltered(Set<String> filters);
-    public List<Recipe> getFavoriteRecipes();
+    public List<Recipe> getFavoriteRecipes(UUID userId);
 
     public String addRecipe(UUID id, String name, Image picture, String description,
     String instructions, UUID authorId);

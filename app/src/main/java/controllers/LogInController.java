@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import java.net.URL;
@@ -27,7 +28,7 @@ public class LogInController implements Initializable {
     @FXML
     private TextField password;
 
-    private UserServiceImpl userService;
+    private UserServiceImpl userService = new UserServiceImpl();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -37,7 +38,14 @@ public class LogInController implements Initializable {
             public void handle(ActionEvent event) {
                 User user = userService.loginUser(username.getText(), password.getText());
                 if (user != null) {
-                    SceneContext.changeScene(event, "/fxmlFiles/home2.fxml");
+                    SceneContext.user = user;
+                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+                }
+                else {
+                    System.out.println("User not found!");
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("Provided Credentials are incorrect");
+                    alert.show();
                 }
             }
         });

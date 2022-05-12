@@ -29,7 +29,8 @@ public interface UserService {
     public String changeAmount(UUID ingredientId, int amount);
 
     public boolean addToFavorites(UUID userId, UUID recipeId);
-    public String removeFromFavorites(UUID recipeId);
+    public boolean removeFromFavorites(UUID userId, UUID recipeId);
+
 
     public String addToList(UUID recipeId, Date date);
     public String removeFromList(UUID recipeId, Date date);

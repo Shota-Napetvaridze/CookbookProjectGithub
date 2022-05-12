@@ -99,8 +99,10 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button search;
+
     @FXML
     private TextField searchField;
+
     @FXML
     private Label tagsLbl;
 
@@ -109,8 +111,8 @@ public class HomeController implements Initializable {
     private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
     private TagServiceImpl tagService = new TagServiceImpl();
 
-    private User user;
-    private  Recipe recipe;
+    private User user = SceneContext.user;
+    private Recipe recipe;
     private Image image;
     private MyListener myListener;
 
@@ -139,36 +141,16 @@ public class HomeController implements Initializable {
     }
 
     // Lists ----------------------------
-    private List<Recipe> recipeList = new ArrayList<>();
-    private List<Message> msgList = new ArrayList<>();
-    private List<Recipe> favouriteRecipeList = new ArrayList<>();
+    private List<Recipe> recipeList = recipeService.getAllRecipes();
+    private List<Message> msgList = userService.getUserMessagesById(user.getId());
+    private List<Recipe> favouriteRecipeList = recipeService.getFavoriteRecipes(user.getId());
     private List<Recipe> planList = new ArrayList<>();
 
-    private List<Ingredient> ingredientsList = new ArrayList<>();
+    private List<Ingredient> ingredientsList = new ArrayList<>(); // TODO: ingredientService.getAllIngredients();
     private List<Ingredient> selectedIngredients = new ArrayList<>();
-    private List<Tag> tagList = new ArrayList<>();
+    private List<Tag> tagList = new ArrayList<>(); // TODO: tagService.getAllTags();
     private List<Tag> selectedTags = new ArrayList<>();
 
-    private List<Recipe> getRecipeList() {
-        List<Recipe> allRecipes = recipeService.getAllRecipes(); // TODO: recipeService.getAllRecipes();
-        return allRecipes;
-    }
-
-    private List<Message> getMsgList() {
-        List<Message> messages = userService.getUserMessagesById(user.getId()); // TODO: tagService.getAllTags();
-        return messages;
-    }
-
-    private List<Tag> getTagList() {
-        List<Tag> tags = new ArrayList<>();                // TODO: messageService.getAllTags();
-        return tags;
-    }
-
-    private List<Ingredient> getIngredientList() {
-        List<Ingredient> ingredients = new ArrayList<>(); // TODO: ingredientService.getAllIngredients();
-
-        return ingredients;
-    }
 
     private void chosenRecipe(Recipe recipe) {
         this.recipe = recipe;
@@ -221,12 +203,8 @@ public class HomeController implements Initializable {
         // ComboBox User
         ObservableList<String> list = FXCollections.observableArrayList("Settings", "Profile");
         comboBox.setItems(list);
+        comboBox.setPromptText(user.getNickname());
 
-        // Adds all the recipes and messages
-        recipeList.addAll(getRecipeList());                        //TODO: This should be fixed !!!!!!
-//        msgList.addAll(getMsgList());
-//        tagList.addAll(getTagList());
-//        ingredientsList.addAll(getIngredientList());
 
         // Set message count
         String s = String.valueOf(msgList.size());
@@ -247,20 +225,24 @@ public class HomeController implements Initializable {
                 public void favClickListener(Recipe recipe, ImageView heartImage) {
                     boolean isInFavorites = false;
 
-                    for (Recipe r : favouriteRecipeList) {
-                        if (recipe == r) {
-                            favouriteRecipeList.remove(recipe);
-                            isInFavorites = true;
-                        }
-                    }
-                    if (isInFavorites == false) {
-                        if (userService.addToFavorites(user.getId(), recipe.getId())) {
-                            favouriteRecipeList.add(recipe);
-                        }
-                    }
+                    if (favouriteRecipeList.contains(recipe)) {
+                        userService.removeFromFavorites(user.getId(), recipe.getId());
 
-                    // DBUtils.addToFavorites(recipe.getRecipeId(), recipe.getUserId(), heartImage);
+                        favouriteRecipeList.remove(recipe);
+                            isInFavorites = true;
+                            Image empty = new Image("/img/heartEmpty.png");
+                            heartImage.setImage(empty);
+                    }
+                    else {
+                        userService.addToFavorites(user.getId(), recipe.getId());
+                        favouriteRecipeList.add(recipe);
+                        isInFavorites = true;
+
+                        Image filled = new Image("/img/heartFilled.png");
+                        heartImage.setImage(filled);
+                    }
                 }
+
                 // When the user clicks on a specific Ingredient
                 @Override
                 public void ingredientClickListener(Ingredient ingredient, Button ingredientButton) {
@@ -275,7 +257,6 @@ public class HomeController implements Initializable {
                 // When the user clicks on a specific Tag
                 @Override
                 public void tagClickListener(Tag tag, Button tagButton) {
-
                     if (selectedIngredients.contains(tag)) {
                         tagButton.setStyle("-fx-background-color: #FFFFFF");
                         selectedTags.remove(tag);
@@ -383,7 +364,6 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 planList.add(recipe);
-
             }
         });
 
@@ -433,6 +413,7 @@ public class HomeController implements Initializable {
                 grid.getChildren().clear();
                 grid.setStyle("-fx-background-color: #ffffff");
                 initializeGrid();
+                // SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
             }
         });
 
@@ -492,6 +473,37 @@ public class HomeController implements Initializable {
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
 
+                int column = 0;
+                int row = 0;
+                try {
+                    for (int i = 0; i < planList.size(); i++) {
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
+                        AnchorPane anchorPane = fxmlLoader.load();
+                        RecipeController recipeController = fxmlLoader.getController();
+                        recipeController.setData(planList.get(i), myListener);
+
+                        if (column == 1) {
+                            column = 0;
+                            row++;
+                        }
+                        grid.add(anchorPane, column++, row);
+                        // Set grid width
+                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                        // Set grid height
+                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                        grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+                        GridPane.setMargin(anchorPane, new Insets(10));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -547,6 +559,5 @@ public class HomeController implements Initializable {
                 SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
             }
         });
-
     }
 }

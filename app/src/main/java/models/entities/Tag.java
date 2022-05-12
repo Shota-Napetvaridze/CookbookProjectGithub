@@ -13,10 +13,10 @@ public class Tag extends BaseEntity {
     private String name;
 
     // Creating new Tag
-    public Tag(String name) {
-        super();
-        setName(name);
-    }
+    // public Tag(String name) {
+    //     super();
+    //     setName(name);
+    // }
 
     // Importing existing Tag
     public Tag(UUID id, String name) {

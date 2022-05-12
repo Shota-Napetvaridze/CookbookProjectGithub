@@ -51,7 +51,7 @@ public class SqlQueries {
                         + "picture LONGBLOB NOT NULL,"
                         + "recipe_description VARCHAR(1500) NOT NULL,"
                         + "instructions VARCHAR(4000) NOT NULL,"
-                        //+ "serving_size BIT NOT NULL,"
+                        // + "serving_size BIT NOT NULL,"
                         + "author_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id)"
                         + ");";
@@ -138,7 +138,7 @@ public class SqlQueries {
         public static final String getUserByCredentials = "SELECT * FROM users WHERE username = ? AND password = ?";
 
         public static final String getUserByNickname = "SELECT * FROM users WHERE display_name = ?";
-        
+
         public static final String getUserCart = "SELECT * FROM users_ingredients WHERE user_id = ?";
 
         public static final String getIngredientById = "SELECT * FROM ingredients WHERE id = ?";
@@ -154,7 +154,19 @@ public class SqlQueries {
         public static final String getUserFavorites = "SELECT * FROM users_favorites WHERE user_id = ?";
 
         public static final String getUserRecipes = "SELECT * FROM recipes WHERE author_id = ?";
+        
+        public static final String getAllRecipes = "SELECT * FROM recipes";
 
+        public static final String getRecipeById = "SELECT * FROM recipes WHERE id = ?";
+
+        public static final String getRecipeTagsById = "SELECT * FROM recipes_tags WHERE recipe_id = ?";
+
+        public static final String getRecipeIngredientsById = "SELECT * FROM recipes_ingredients WHERE recipe_id = ?";
+
+        public static final String getRecipeCommentsById = "SELECT * FROM comments WHERE recipe_id = ?";
+
+        public static final String getFavoriteRecipes = "SELECT * FROM users_favorites WHERE user_id = ?";
+        
         public static final String getAllUsers = "SELECT * FROM users";
 
         public static final String removeUserWithId = "DELETE FROM users WHERE id = ?";
@@ -169,4 +181,7 @@ public class SqlQueries {
         public static final String addRecipeFavorite = "INSERT INTO users_favorites (\n" +
                         "user_id, recipe_id) \n" +
                         "VALUES (?, ?)";
+        public static final String removeRecipeFromFavorites = "DELETE FROM users_favorites  WHERE recipe_id = ? AND user_id = ?";
+
+        public static final String validateUniqueCredentials = "SELECT * FROM users WHERE username = ? OR email = ?";
 }

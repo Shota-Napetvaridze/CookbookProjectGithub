@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import models.entities.User;
-import services.UserService;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 
@@ -35,8 +34,6 @@ public class SignUpController implements Initializable {
 
     @FXML
     private TextField passwordNew;
-
-    private User user;
     
     private UserServiceImpl userService = new UserServiceImpl();
 
@@ -49,10 +46,8 @@ public class SignUpController implements Initializable {
             public void handle(ActionEvent event) {
                 if (!usernameNew.getText().trim().isEmpty() && !passwordNew.getText().trim().isEmpty()){
                     userService.addUser(usernameNew.getText(), email.getText(), passwordNew.getText());
-                    user = userService.getUserByNickname(usernameNew.getText());
-                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-
-                    // DBUtils. (event, usernameNew.getText(), email.getText(), passwordNew.getText());
+                    SceneContext.user = userService.getUserByNickname(usernameNew.getText());
+                    SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
                 }else {
                     System.out.println("Please fill in all information!");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
