@@ -142,15 +142,15 @@ public class HomeController implements Initializable {
     private List<Recipe> recipeList = new ArrayList<>();
     private List<Message> msgList = new ArrayList<>();
     private List<Recipe> favouriteRecipeList = new ArrayList<>();
-
     private List<Recipe> planList = new ArrayList<>();
+
     private List<Ingredient> ingredientsList = new ArrayList<>();
     private List<Ingredient> selectedIngredients = new ArrayList<>();
     private List<Tag> tagList = new ArrayList<>();
     private List<Tag> selectedTags = new ArrayList<>();
 
     private List<Recipe> getRecipeList() {
-        List<Recipe> allRecipes = recipeService.getAllRecipes(); // TODO: recipeService.getAllTags();
+        List<Recipe> allRecipes = recipeService.getAllRecipes(); // TODO: recipeService.getAllRecipes();
         return allRecipes;
     }
 
@@ -223,7 +223,7 @@ public class HomeController implements Initializable {
         comboBox.setItems(list);
 
         // Adds all the recipes and messages
-//        recipeList.addAll(getRecipeList());                        //TODO: This should be fixed !!!!!!
+        recipeList.addAll(getRecipeList());                        //TODO: This should be fixed !!!!!!
 //        msgList.addAll(getMsgList());
 //        tagList.addAll(getTagList());
 //        ingredientsList.addAll(getIngredientList());
@@ -232,7 +232,7 @@ public class HomeController implements Initializable {
         String s = String.valueOf(msgList.size());
         msgCountLbl.setText(s);
 
-        // When User clicks on a specific recipe, tag or ingredient
+        // -----------------------------------------MYLISTENER-----------------------------------------------
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
@@ -286,11 +286,6 @@ public class HomeController implements Initializable {
 
                 }
 
-                @Override
-                public void removeClickListener(Recipe recipe) {
-                    // DBUtils.removeRecipeFromHome(recipe.getRecipeId());
-
-                }
 
             };
         }
@@ -298,20 +293,21 @@ public class HomeController implements Initializable {
         // Initialize grid-----------------------------------------
         initializeGrid();
 
-        // Search Button-----------------------------------------
+        // -----------------------------------------BUTTONS-----------------------------------------------
 
+
+        // Search Button-----------------------------------------
         search.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                grid.getChildren().clear();
                 recipeService.getRecipeByName(searchField.getText());
 
                 // DBUtils.searchRecipe(event, searchField.getText());
-                grid.getChildren().clear();
             }
         });
 
         // Filter Button-----------------------------------------
-
         filter.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -373,8 +369,8 @@ public class HomeController implements Initializable {
             }
         });
 
-        // Open for a detailed view Button-----------------------------------------
 
+        // Open for a detailed view Button-----------------------------------------
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -383,7 +379,6 @@ public class HomeController implements Initializable {
         });
 
         // Add to a plan Button-----------------------------------------
-
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -393,7 +388,6 @@ public class HomeController implements Initializable {
         });
 
         // Add New Recipe Button-----------------------------------------
-
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

@@ -1,6 +1,5 @@
 package util.common;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
@@ -261,8 +260,8 @@ public class DbContext {
     // ------------------- USER -------------------//
     public String addUser(String username, String email, String password) {
         try {
-            PreparedStatement ps1 = conn.prepareStatement(SqlQueries.useDatabase); //modified
-            ps1.execute(); //modified
+            PreparedStatement useDatabase = conn.prepareStatement(SqlQueries.useDatabase); //modified
+            useDatabase.execute(); //modified
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addUser);
             ps.setString(1, UUID.randomUUID().toString());
             ps.setString(2, username);
@@ -271,7 +270,7 @@ public class DbContext {
             ps.setString(5, Hasher.hashString(password));
             ps.execute();
             ps.close();
-            ps1.close(); //modified
+            useDatabase.close(); //modified
             return String.format(SuccessMessages.USER_ADDED);
         } catch (SQLException e) {
             return String.format(FailMessages.USER_ADD_FAIL);
@@ -300,29 +299,32 @@ public class DbContext {
 
     public User getUserByCredentials(String username, String password) {
         User user = null;
+
         try {
-            String hashedPassword = Hasher.hashString(password);
+            PreparedStatement useDatabase = conn.prepareStatement(SqlQueries.useDatabase); //modified
+            useDatabase.execute(); //modified
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByCredentials);
             ps.setString(1, username);
-            ps.setString(2, hashedPassword);
+            ps.setString(2, Hasher.hashString(password));
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 UUID userId = UUID.fromString(rs.getString("id"));
                 user = getUserById(userId);
-
             }
             ps.close();
+            useDatabase.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return user;
     }
 
     public User getUserById(UUID id) {
         User user = null;
         try {
+            PreparedStatement useDatabase = conn.prepareStatement(SqlQueries.useDatabase); //modified
+            useDatabase.execute(); //modified
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserById);
             ps.setString(1, id.toString());
             ResultSet rs = ps.executeQuery();
@@ -339,15 +341,11 @@ public class DbContext {
                 Set<UUID> favorites = getUserFavorites(id);
                 Set<UUID> recipes = getUserRecipes(id);
 
-                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
-                        recipes);
+                user = new User(username, email, password);
             }
-
+            useDatabase.close(); // modified
+            ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InvalidLengthException e) {
-            e.printStackTrace();
-        } catch (TakenNicknameException e) {
             e.printStackTrace();
         } catch (InvalidEmailException e) {
             e.printStackTrace();
@@ -626,22 +624,27 @@ public class DbContext {
 
     public List<Recipe> getAllRecipes() {
         User user = null;
-        Recipe recipe = null;
-        ArrayList<Recipe> recipeData = new ArrayList<Recipe>();
+        List<Recipe> recipeData = new ArrayList<>();
+        Recipe recipe = new Recipe();
+
 
         try {
+            PreparedStatement useDatabase = conn.prepareStatement(SqlQueries.useDatabase);
+            useDatabase.execute();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserRecipes);
-            ps.setString(1, user.getUsername());
+            ps.setString(1, "Sample Author");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                InputStream is = rs.getBinaryStream("Picture");
-                Image img = new Image(is);
-                recipe.setName(rs.getString("RecipeName"));
+                InputStream inputStream = rs.getBinaryStream("picture");
+                Image img = new Image(inputStream);
+                recipe.setName(rs.getString("recipe_name"));
 
                 recipe.setPicture(img);
                 recipeData.add(recipe);
             }
+            ps.close();
+            useDatabase.close();
             System.out.println("RECIPES RETRIEVED SUCCESSFULLY");
         }catch (SQLException e){
             e.printStackTrace();
@@ -660,33 +663,25 @@ public class DbContext {
         // TODO: Implement
     }
 
-    public String addRecipe(Recipe recipe) {
-
-        // int counter = 0;
-        //                     for (String[] r : recipes) {
-
-        //                         try {
-        //                             counter++;
-        //                             String importRecipes = "INSERT INTO Recipes (\n" +
-        //                                     "RecipeName, RecipeDescription, Instructions, AuthorId, Id, Picture) \n" +
-        //                                     "VALUES (?, ?, ?, ?, ?, ?)";
-        //                             PreparedStatement ps = conn.prepareStatement(importRecipes);
-        //                             ps.setString(1, r[0]);
-        //                             ps.setString(2, r[2]);
-        //                             ps.setString(3, r[4]);
-        //                             ps.setString(4, "Sample Author");
-        //                             ps.setString(5, r[5]);
-        //                             InputStream fis = getClass().getResourceAsStream(r[6]);
-        //                             ps.setBlob(6, fis);
-        //                             ps.execute();
-        //                             System.out.println("Sample recipe " + counter + " successfully imported!");
-
-        //                         } catch (SQLException e8) {
-        //                             e8.printStackTrace();
-        //                         }
-        //                     }
-        return null; // TODO: Implement
-
+    public String addRecipe(UUID id, String name, Image picture, String description, String instructions, UUID authorId) {
+        try {
+            PreparedStatement useDatabase = conn.prepareStatement(SqlQueries.useDatabase); //modified
+            useDatabase.execute(); //modified
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipe);
+            ps.setString(1, String.valueOf(id));
+            ps.setString(2, name);
+            ps.setString(3, String.valueOf(picture));
+            ps.setString(4, description);
+            ps.setString(5, instructions);
+            ps.setString(6, String.valueOf(authorId));
+            ps.executeUpdate();
+            ps.close();
+            useDatabase.close();
+        } catch (SQLException e8) {
+            e8.printStackTrace();
+        }
+        return String.format(SuccessMessages.RECIPE_ADDED);
+        // TODO: Implement
     }
 
 

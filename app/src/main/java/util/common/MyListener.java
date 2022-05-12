@@ -12,5 +12,4 @@ public interface MyListener {
     public void favClickListener(Recipe recipe, ImageView imageView);
     public void ingredientClickListener(Ingredient ingredient, Button ingredientButton);
     public void tagClickListener(Tag tag, Button tagButton);
-    public void removeClickListener(Recipe recipe);
 }

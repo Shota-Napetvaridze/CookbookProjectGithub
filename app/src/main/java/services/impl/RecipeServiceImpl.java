@@ -60,7 +60,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public String addRecipe(UUID id, String name, Image picture, String description,
     String instructions, UUID authorId) {
-        return null;
+        return dbContext.addRecipe(id, name, picture, description, instructions, authorId);
     }
 
     @Override

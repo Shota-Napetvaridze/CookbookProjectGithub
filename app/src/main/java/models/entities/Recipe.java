@@ -25,6 +25,8 @@ public class Recipe extends BaseEntity {
     private byte servingSize;
     private Set<UUID> commentsIds;
 
+    public Recipe(){}
+
     // Create new Recipe
     public Recipe(String name, Image picture, String description,
             String instructions, UUID authorId, Set<UUID> tags,

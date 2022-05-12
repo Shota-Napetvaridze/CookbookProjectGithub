@@ -51,7 +51,6 @@ public class NewRecipeController implements Initializable {
 
     private File file;
     private Image image;
-    private User user;
 
     private Stage createStage() {
         VBox vBox = new VBox(new Label("A Label"));
@@ -86,7 +85,7 @@ public class NewRecipeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 
-                recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), user.getId());
+                recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), UUID.randomUUID());
                 
                 // DBUtils.importUserRecipe(event, recipe_name.getText(), recipe_description.getText(), recipe_instruction.getText(), file);
                 SceneContext.changeScene(event, "/fxmlFiles/home.fxml");

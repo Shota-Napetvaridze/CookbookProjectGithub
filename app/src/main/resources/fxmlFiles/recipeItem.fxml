@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMousePressed="#click" prefHeight="215.0" prefWidth="225.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RecipeController">
+<AnchorPane onMousePressed="#click" prefHeight="186.0" prefWidth="225.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RecipeController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="63.0" layoutY="8.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="63.0" layoutY="8.0" prefHeight="188.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="image" fitHeight="126.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
                <image>
@@ -33,14 +33,13 @@
                      <graphic>
                         <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-image: favorites-heart.png;">
                            <children>
-                              <ImageView fx:id="heartImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="heartImage" fitHeight="30.0" fitWidth="30.0" layoutX="11.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../img/heart.png" />
                                  </image>
                               </ImageView>
                            </children></AnchorPane>
                      </graphic></Button>
-                  <Button fx:id="remove_recipe" mnemonicParsing="false" onMousePressed="#removeRecipe" prefHeight="26.0" prefWidth="21.0" />
                </children>
             </HBox>
          </children>

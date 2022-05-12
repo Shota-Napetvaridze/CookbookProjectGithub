@@ -26,6 +26,7 @@ public class SuccessMessages {
     //
     // RECIPE
     //
+    public static final String RECIPE_ADDED = "Recipe added successfully.";
     public static final String RECIPE_SET_NAME = "Recipe name set to %s.";
     public static final String RECIPE_SET_DESC = "Recipe description set.";
     public static final String RECIPE_SET_INSTRUCTIONS = "Recipe instructions set.";

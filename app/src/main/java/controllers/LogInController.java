@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import models.entities.User;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
@@ -34,7 +35,6 @@ public class LogInController implements Initializable {
         login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
                 User user = userService.loginUser(username.getText(), password.getText());
                 if (user != null) {
                     SceneContext.changeScene(event, "/fxmlFiles/home2.fxml");
