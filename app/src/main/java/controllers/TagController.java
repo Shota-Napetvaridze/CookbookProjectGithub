@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 
@@ -13,7 +14,7 @@ import java.util.ResourceBundle;
 import models.entities.Tag;
 import util.common.MyListener;
 
-public class TagController implements Initializable{
+public class TagController{
 
     private Tag tag;
     private MyListener myListener;
@@ -22,7 +23,7 @@ public class TagController implements Initializable{
     private Label tagLbl;
 
     @FXML
-    private Button tagButton;
+    private ImageView tagButton;
 
     @FXML
     private void tagClick(MouseEvent event) {
@@ -35,12 +36,4 @@ public class TagController implements Initializable{
         tagLbl.setText(tag.getName());
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        tagButton.setShape(new Circle(1.5));
-        tagButton.setMinWidth(20);
-        tagButton.setMaxWidth(20);
-        tagButton.setMinHeight(20);
-        tagButton.setMaxHeight(20);
-    }
 }

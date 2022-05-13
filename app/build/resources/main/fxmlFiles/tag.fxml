@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="34.0" prefWidth="134.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TagController">
+<AnchorPane prefHeight="36.0" prefWidth="141.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TagController">
    <children>
       <HBox alignment="CENTER" prefHeight="34.0" prefWidth="134.0" spacing="5.0">
          <children>
-            <Button fx:id="tagButton" mnemonicParsing="false" onMousePressed="#tagClick" prefHeight="26.0" prefWidth="23.0" style="-fx-border-color: #000000;">
+            <AnchorPane onMousePressed="#tagClick" prefHeight="34.0" prefWidth="25.0">
                <HBox.margin>
-                  <Insets left="2.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </HBox.margin>
-            </Button>
+               <children>
+                  <ImageView fx:id="tagButton" fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <image>
+                        <Image url="@../img/uncheck.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <Label fx:id="tagLbl" prefHeight="24.0" prefWidth="78.0" text="Vegan" />
          </children>
       </HBox>

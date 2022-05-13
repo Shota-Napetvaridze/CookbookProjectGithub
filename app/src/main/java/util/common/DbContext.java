@@ -348,9 +348,6 @@ public class DbContext {
 
         try {
             useDatabase();
-            System.out.println(conn.getSchema());
-            System.out.println("----------------------------");
-
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByCredentials);
             ps.setString(1, username);
             ps.setString(2, Hasher.hashString(password));

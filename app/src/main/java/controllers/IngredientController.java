@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import java.net.URL;
@@ -21,7 +22,7 @@ public class IngredientController implements Initializable{
     private Label ingredientLbl;
 
     @FXML
-    private Button ingredientButton;
+    private ImageView ingredientButton;
 
     @FXML
     private void ingredientClick(MouseEvent event) {
@@ -36,10 +37,6 @@ public class IngredientController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ingredientButton.setShape(new Circle(1.5));
-        ingredientButton.setMinWidth(20);
-        ingredientButton.setMaxWidth(20);
-        ingredientButton.setMinHeight(20);
-        ingredientButton.setMaxHeight(20);
+
     }
 }

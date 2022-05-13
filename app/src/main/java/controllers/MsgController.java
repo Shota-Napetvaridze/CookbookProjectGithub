@@ -10,17 +10,28 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import models.entities.Message;
 import services.impl.UserServiceImpl;
+import util.common.MyListener;
 
 
 public class MsgController implements Initializable{
+    private UserServiceImpl userService = new UserServiceImpl();
+    private MyListener myListener;
+    private Message message;
+
+
 
     @FXML
     private Label MsgUserLbl;
 
     @FXML
-    private Label messageLbl;
+    private TextArea messageReceivedArea;
+
+    @FXML
+    private TextArea messageSendArea;
 
     @FXML
     private Button removeMsg;
@@ -28,22 +39,23 @@ public class MsgController implements Initializable{
     @FXML
     private Button reply;
 
+    @FXML
+    void reply(MouseEvent event) {
+        myListener.replyMsgListener(message, messageSendArea);
+    }
 
-    private UserServiceImpl userService = new UserServiceImpl();
-    private Message message;
 
 
 
-
-    public void setData(Message message){
+    public void setData(Message message, MyListener mylistener){
         this.message = message;
-        messageLbl.setText(message.getText());
+        this.myListener = myListener;
+        messageReceivedArea.setText(message.getText());
         MsgUserLbl.setText(userService.getUserById(message.getSender()).getNickname());
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        removeMsg.setStyle("-fx-background-color: rgb(254, 215, 0)");
         removeMsg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

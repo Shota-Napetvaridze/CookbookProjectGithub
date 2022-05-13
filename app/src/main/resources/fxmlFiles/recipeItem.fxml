@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -12,21 +13,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMouseEntered="#descriptionEntered" onMouseExited="#descriptionExited" onMousePressed="#click" prefHeight="200.0" prefWidth="226.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RecipeController">
+<AnchorPane onMouseEntered="#descriptionEntered" onMouseExited="#descriptionExited" onMousePressed="#click" prefHeight="200.0" prefWidth="226.0" style="-fx-background-color: ffa9a9;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RecipeController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="63.0" layoutY="8.0" prefHeight="200.0" prefWidth="205.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="image" fitHeight="143.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" styleClass="recipeImageStyle" VBox.vgrow="NEVER">
-               <image>
-                  <Image url="@../recipeImages/banana-pancakes.png" />
-               </image>
+            <ImageView fx:id="image" fitHeight="143.0" fitWidth="175.0" pickOnBounds="true" styleClass="recipeImageStyle" VBox.vgrow="NEVER">
                <VBox.margin>
                   <Insets bottom="10.0" top="20.0" />
                </VBox.margin>
             </ImageView>
             <HBox alignment="CENTER" prefHeight="51.0" prefWidth="225.0">
                <children>
-                  <Label fx:id="recipeName" prefHeight="41.0" prefWidth="137.0" text="recipeName" wrapText="true">
+                  <Label fx:id="recipeName" prefHeight="41.0" prefWidth="137.0" styleClass="black" stylesheets="@style.css" text="recipeName" wrapText="true">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -61,4 +59,8 @@
          </children>
       </AnchorPane>
    </children>
+   <styleClass>
+      <String fx:value="recipeAnchorStyle" />
+      <String fx:value="transparent" />
+   </styleClass>
 </AnchorPane>
