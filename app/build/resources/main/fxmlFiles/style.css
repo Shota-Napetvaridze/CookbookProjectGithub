@@ -1,7 +1,7 @@
 .recipeAnchorStyle {
-    -fx-background-radius: 50px;
+    -fx-background-radius: 30px;
 
-    -fx-border-radius: 50px;
+    -fx-border-radius: 30px;
     -fx-border-color: black;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
@@ -9,13 +9,13 @@
     -fx-padding: 10;
     -fx-background-color: firebrick;
 
-    -fx-background-radius: 50px;
+    -fx-background-radius: 30px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 .text-area {
     -fx-background-color: transparent;
-    -fx-background-radius: 50px;
-    -fx-border-radius: 50px;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
 
 
 }

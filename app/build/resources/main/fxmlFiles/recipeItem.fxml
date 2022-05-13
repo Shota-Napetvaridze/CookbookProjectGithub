@@ -50,7 +50,7 @@
       </VBox>
       <AnchorPane layoutY="-1.0" prefHeight="191.0" prefWidth="161.0">
          <children>
-            <TextArea fx:id="recipeDescriptionHover" editable="false" prefHeight="191.0" prefWidth="161.0" styleClass="text-area" stylesheets="@style.css" visible="false">
+            <TextArea fx:id="recipeDescriptionHover" editable="false" opacity="0.65" prefHeight="191.0" prefWidth="161.0" style="-fx-background-color: #ffffff;" styleClass="text-area" stylesheets="@style.css" visible="false">
                <cursor>
                   <Cursor fx:constant="NONE" />
                </cursor>

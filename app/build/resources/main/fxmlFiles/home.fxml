@@ -90,7 +90,7 @@
                                     </HBox>
                                     <HBox prefHeight="12.0" prefWidth="316.0" spacing="20.0">
                                        <children>
-                                          <TextField promptText="search">
+                                          <TextField fx:id="tagsSearchField" promptText="search">
                                              <HBox.margin>
                                                 <Insets left="10.0" />
                                              </HBox.margin>
@@ -98,7 +98,7 @@
                                                 <Font size="11.0" />
                                              </font>
                                           </TextField>
-                                          <TextField promptText="search">
+                                          <TextField fx:id="ingredientsSearchField" promptText="search">
                                              <HBox.margin>
                                                 <Insets right="10.0" />
                                              </HBox.margin>
@@ -136,9 +136,14 @@
                                           </ScrollPane>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0" spacing="80.0">
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="71.0" style="-fx-background-color: FED700;" text="Search">
+                                          <Button fx:id="searchTag" mnemonicParsing="false" prefHeight="44.0" prefWidth="71.0" style="-fx-background-color: FED700;" text="Search">
+                                             <HBox.margin>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button fx:id="searchIngredient" mnemonicParsing="false" prefHeight="52.0" prefWidth="71.0" style="-fx-background-color: FED700;" text="Search">
                                              <HBox.margin>
                                                 <Insets bottom="5.0" right="5.0" top="5.0" />
                                              </HBox.margin>
