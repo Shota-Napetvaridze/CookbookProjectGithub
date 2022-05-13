@@ -21,9 +21,9 @@
             </ImageView>
             <AnchorPane fx:id="anchorVisible" layoutX="152.0" layoutY="28.0" prefHeight="344.0" prefWidth="282.0">
                <children>
-                  <Label layoutX="72.0" layoutY="14.0" text="CookBook">
+                  <Label alignment="CENTER" layoutX="61.0" layoutY="34.0" prefHeight="46.0" prefWidth="157.0" style="-fx-background-color: FED700;" styleClass="recipeAnchorStyle" stylesheets="@style.css" text="CookBook">
                      <font>
-                        <Font size="32.0" />
+                        <Font size="26.0" />
                      </font>
                   </Label>
                   <TextField fx:id="username" layoutX="44.0" layoutY="102.0" promptText="username">
@@ -36,7 +36,7 @@
                         <Font size="10.0" />
                      </font>
                   </PasswordField>
-                  <Button fx:id="login" layoutX="71.0" layoutY="190.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700;" text="Login">
+                  <Button fx:id="login" layoutX="71.0" layoutY="190.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Login">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -46,7 +46,7 @@
                         <Font size="17.0" />
                      </font>
                   </Label>
-                  <Button fx:id="signup" layoutX="162.0" layoutY="257.0" mnemonicParsing="false" style="-fx-background-color: FED700;" text="Sign up!" underline="true" />
+                  <Button fx:id="signup" layoutX="162.0" layoutY="257.0" mnemonicParsing="false" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Sign up!" underline="true" />
                </children>
             </AnchorPane>
             <ImageView fx:id="logo" fitHeight="328.0" fitWidth="329.0" layoutX="137.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="136.0" AnchorPane.topAnchor="32.0">

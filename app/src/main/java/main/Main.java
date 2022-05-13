@@ -19,7 +19,7 @@ public class Main extends Application {
 
         //
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxmlFiles/login.fxml"));
-        Scene loginScene = new Scene(fxmlLoader.load(), 600 , 400 ); // TODO: 600 400 (Replace) 1315.0, 810.0
+        Scene loginScene = new Scene(fxmlLoader.load(), 600 , 400 );
         stage.setTitle("CookBook!");
         stage.setResizable(false);
         stage.setScene(loginScene);

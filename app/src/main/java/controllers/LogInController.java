@@ -47,8 +47,7 @@ public class LogInController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
+        // Animation ----------- ----------- -----------
         logo.setVisible(true);
         anchorVisible.setVisible(false);
 
@@ -66,7 +65,6 @@ public class LogInController implements Initializable {
         );
         visiblePause.setOnFinished(
                 event -> logo.setVisible(false)
-
         );
         visiblePause.play();
         PauseTransition visiblePause1 = new PauseTransition(
@@ -74,10 +72,9 @@ public class LogInController implements Initializable {
         );
         visiblePause1.setOnFinished(
                 event -> anchorVisible.setVisible(true)
-
         );
         visiblePause1.play();
-
+        //          ----------- ----------- -----------
 
 
         login.setOnAction(new EventHandler<ActionEvent>() {
