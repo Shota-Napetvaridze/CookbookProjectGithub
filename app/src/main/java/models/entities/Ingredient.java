@@ -14,7 +14,7 @@ import util.exceptions.ingredient.TakenIngredientName;
 public class Ingredient extends BaseEntity {
 
     private String name;
-    private Unit unit;
+    private String unit;
 
     // public Ingredient(String name, Unit unit) {
     //     super();
@@ -22,7 +22,7 @@ public class Ingredient extends BaseEntity {
     //     setUnit(unit);
     // }
 
-    public Ingredient(UUID id, String name, Unit unit) {
+    public Ingredient(UUID id, String name, String unit) {
         super.id = id;
         this.name = name;
         this.unit = unit;
@@ -35,7 +35,7 @@ public class Ingredient extends BaseEntity {
         return name;
     }
 
-    public Unit getUnit() {
+    public String getUnit() {
         return unit;
     }
 
@@ -54,7 +54,7 @@ public class Ingredient extends BaseEntity {
         }
     }
 
-    private String setUnit(Unit unit) {
+    private String setUnit(String unit) {
         try {
             validateUnit(unit);
             this.unit = unit;
@@ -71,22 +71,22 @@ public class Ingredient extends BaseEntity {
         Validator.validateStringLength(name, Variables.MIN_INGREDIENT_NAME_LENGTH,
                 Variables.MAX_INGREDIENT_NAME_LENGTH);
 
-        if (!isUnique(name)) {
-            throw new TakenIngredientName(name);
-        }
+        // if (!isUnique(name)) {
+        //     throw new TakenIngredientName(name);
+        // }
     }
 
-    private void validateUnit(Unit unit) throws InvalidUnitException {
+    private void validateUnit(String unit) throws InvalidUnitException {
         if (unit == null) {
             throw new InvalidUnitException();
         }
     }
 
-    private boolean isUnique(String name) {
-        if (name == "taken") {
-            return false;
-        }
-        return true;
-    }
+    // private boolean isUnique(String name) {
+    //     if (name == "taken") {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
 }

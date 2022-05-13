@@ -15,15 +15,22 @@ import javafx.scene.image.Image;
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
+import models.entities.Tag;
 import models.entities.User;
+import models.entities.enums.Unit;
 import util.constants.FailMessages;
 import util.constants.SqlQueries;
 import util.constants.SuccessMessages;
 import util.constants.Variables;
 import util.exceptions.common.InvalidLengthException;
 import util.exceptions.user.InvalidEmailException;
+import util.exceptions.user.InvalidNicknameLengthException;
+import util.exceptions.user.InvalidPasswordComplexityException;
+import util.exceptions.user.InvalidPasswordLengthException;
+import util.exceptions.user.InvalidUserNameLengthException;
 import util.exceptions.user.TakenEmailException;
 import util.exceptions.user.TakenNicknameException;
+import util.exceptions.user.TakenUsernameException;
 
 public class DbContext {
     private static Connection conn;
@@ -52,6 +59,7 @@ public class DbContext {
             conn = DriverManager.getConnection(Variables.DATABASE_COOKBOOK_URL, Variables.DATABASE_USER,
                     Variables.DATABASE_PASS);
             useDatabase();
+            System.out.println("Using Cookbook Database");
         } catch (SQLException e) {
             try {
                 PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.setMaxAllowedPackage);
@@ -203,7 +211,7 @@ public class DbContext {
         System.out.println();
     }
 
-    private void importRecipes() {
+    private void importRecipes() { // WORKS NOW
         String recipesFile = "/src/main/resources/data/recipes.csv";
         String recipesPath = System.getProperty("user.dir") + recipesFile;
         ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
@@ -255,27 +263,52 @@ public class DbContext {
     }
 
     // ------------------- USER -------------------//
-    public boolean validateUniqueCredentials(String username, String email) {
-        try {
-            useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.validateUniqueCredentials);
-            ps.setString(1, username);
-            ps.setString(2, email);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                rs.close();
-                ps.close();
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public boolean validateUniqueCredentials(String username, String email) throws TakenUsernameException,
+            TakenEmailException, InvalidUserNameLengthException, TakenNicknameException, InvalidNicknameLengthException,
+            InvalidPasswordComplexityException, InvalidPasswordLengthException, InvalidEmailException {
+        if (getUserByUsername(username) != null) {
+            throw new TakenUsernameException(username);
+        }
+        if (getUserByEmail(email) != null) {
+            throw new TakenEmailException();
         }
         return true;
+        // try {
+        // useDatabase();
+        // PreparedStatement ps =
+        // conn.prepareStatement(SqlQueries.validateUniqueCredentials);
+        // ps.setString(1, username);
+        // ps.setString(2, email);
+        // ResultSet rs = ps.executeQuery();
+
+        // if (rs.next()) {
+        // rs.close();
+        // ps.close();
+        // return false;
+        // }
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // return true;
     }
 
-    public String addUser(String username, String email, String password) {
+    public String addUser(String username, String email, String password)
+            throws TakenUsernameException, InvalidUserNameLengthException, TakenNicknameException,
+            InvalidNicknameLengthException, InvalidPasswordComplexityException, InvalidPasswordLengthException,
+            InvalidEmailException, TakenEmailException {
         try {
+            UUID id = UUID.randomUUID();
+            String nickname = username;
+            Validator.validatePassword(password);
+            String hashedPassword = Hasher.hashString(password);
+            Dictionary<UUID, Integer> cart = new Hashtable<>();
+            Set<UUID> messages = new HashSet<>();
+            Dictionary<UUID, Date> weeklyList = new Hashtable<>();
+            Set<UUID> favorites = new HashSet<>();
+            Set<UUID> recipes = new HashSet<>();
+            User user = new User(id, username, nickname, email, hashedPassword, cart, messages, weeklyList, favorites,
+                    recipes);
+
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addUser);
             ps.setString(1, UUID.randomUUID().toString());
             ps.setString(2, username);
@@ -315,6 +348,9 @@ public class DbContext {
 
         try {
             useDatabase();
+            System.out.println(conn.getSchema());
+            System.out.println("----------------------------");
+
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByCredentials);
             ps.setString(1, username);
             ps.setString(2, Hasher.hashString(password));
@@ -351,30 +387,50 @@ public class DbContext {
                 Set<UUID> favorites = getUserFavorites(id);
                 Set<UUID> recipes = getUserRecipes(id);
 
-                try {
-                    user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
-                            recipes);
-                } catch (InvalidLengthException e) {
-                    e.printStackTrace();
-                } catch (TakenNicknameException e) {
-                    e.printStackTrace();
-                }
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
+                        recipes);
             }
             ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InvalidEmailException e) {
-            e.printStackTrace();
-        } catch (TakenEmailException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return user;
     }
 
+    private User getUserByUsername(String username) {
+        User user = null;
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByUsername);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                UUID id = UUID.fromString(rs.getString("id"));
+                String nickname = rs.getString("display_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+
+                Dictionary<UUID, Integer> cart = getUserCart(id);
+                Set<UUID> messages = getUserMessageIds(id);
+                Dictionary<UUID, Date> weeklyList = getUserWeeklyList(id);
+                Set<UUID> favorites = getUserFavorites(id);
+                Set<UUID> recipes = getUserRecipes(id);
+
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
+                        recipes);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     public User getUserByNickname(String nickname) {
         User user = null;
         try {
+            useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByNickname);
             ps.setString(1, nickname);
             ResultSet rs = ps.executeQuery();
@@ -395,15 +451,38 @@ public class DbContext {
                         recipes);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InvalidLengthException e) {
-            e.printStackTrace();
-        } catch (TakenNicknameException e) {
-            e.printStackTrace();
-        } catch (InvalidEmailException e) {
-            e.printStackTrace();
-        } catch (TakenEmailException e) {
+        }
+
+        return user;
+    }
+
+    private User getUserByEmail(String email) {
+        User user = null;
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserByEmail);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                UUID id = UUID.fromString(rs.getString("id"));
+                String username = rs.getString("username");
+                String nickname = rs.getString("display_name");
+                String password = rs.getString("password");
+
+                Dictionary<UUID, Integer> cart = getUserCart(id);
+                Set<UUID> messages = getUserMessageIds(id);
+                Dictionary<UUID, Date> weeklyList = getUserWeeklyList(id);
+                Set<UUID> favorites = getUserFavorites(id);
+                Set<UUID> recipes = getUserRecipes(id);
+
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
+                        recipes);
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -488,8 +567,9 @@ public class DbContext {
         return favorites;
     }
 
-    public static boolean addRecipeToFavorites(UUID userId, UUID recipeId) {
+    public boolean addRecipeToFavorites(UUID userId, UUID recipeId) {
         try {
+            // useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipeFavorite);
             ps.setString(1, userId.toString());
             ps.setString(2, recipeId.toString());
@@ -500,9 +580,10 @@ public class DbContext {
             return false;
         }
     }
-    public static boolean removeRecipeFromFavorites(UUID userId, UUID recipeId) {
+
+    public boolean removeRecipeFromFavorites(UUID userId, UUID recipeId) {
         try {
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeRecipeFromFavorites);
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeRecipeFavorite);
             ps.setString(1, userId.toString());
             ps.setString(2, recipeId.toString());
             ps.execute();
@@ -513,7 +594,7 @@ public class DbContext {
         }
     }
 
-    public static Dictionary<UUID, Date> getUserWeeklyList(UUID id) {
+    public Dictionary<UUID, Date> getUserWeeklyList(UUID id) {
         Dictionary<UUID, Date> weeklyList = new Hashtable<>();
 
         try {
@@ -538,6 +619,7 @@ public class DbContext {
         List<Message> messages = new ArrayList<>();
 
         try {
+            useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserMessages);
             ps.setString(1, id.toString());
             ps.setString(2, id.toString());
@@ -808,6 +890,43 @@ public class DbContext {
 
     // ------------------- INGREDIENT -------------------//
 
+    public List<Ingredient> getAllIngredients() {
+        List<Ingredient> ingredients = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SqlQueries.getAllIngredients);
+
+            while (rs.next()) {
+                UUID ingredientId = UUID.fromString(rs.getString("id"));
+                ingredients.add(getIngredientById(ingredientId));
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ingredients;
+    }
+
+    private Ingredient getIngredientById(UUID ingredientId) {
+        Ingredient ingredient = null;
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getIngredientById);
+            ps.setString(1, ingredientId.toString());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("ingredient_name");
+                String unit = rs.getString("unit");
+
+                ingredient = new Ingredient(ingredientId, name, unit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ingredient;
+    }
+
     public Ingredient getIngredientByName(String name) {
         return null;
         // TODO: Implement
@@ -830,5 +949,42 @@ public class DbContext {
         } catch (SQLException e) {
             return String.format(FailMessages.MESSAGE_DELETE_FAIL);
         }
+    }
+
+    // ------------------- TAG -------------------//
+    public List<Tag> getAllTags() {
+        List<Tag> tags = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SqlQueries.getAllTags);
+
+            while (rs.next()) {
+                UUID tagId = UUID.fromString(rs.getString("id"));
+                tags.add(getTagById(tagId));
+            }
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tags;
+    }
+
+    private Tag getTagById(UUID tagId) {
+        Tag tag = null;
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getTagById);
+            ps.setString(1, tagId.toString());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("tag_name");
+
+                tag = new Tag(tagId, name);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tag;
     }
 }

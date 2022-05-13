@@ -1,5 +1,7 @@
 package services.impl;
 
+import java.util.List;
+
 import models.entities.Ingredient;
 import services.IngredientService;
 import util.common.DbContext;
@@ -16,6 +18,11 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Ingredient getIngredientByName(String name) {
         return dbContext.getIngredientByName(name);
+    }
+
+    @Override
+    public List<Ingredient> getAllIngredients() {
+        return dbContext.getAllIngredients();
     }
     
 }

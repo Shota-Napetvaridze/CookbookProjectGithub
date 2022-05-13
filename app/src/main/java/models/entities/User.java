@@ -29,18 +29,21 @@ public class User extends BaseEntity {
     private Set<UUID> recipes;
 
     // Creating a new user
-    // public User(String username, String email, String password) throws InvalidEmailException, TakenEmailException {
-    //     super();
-    //     setUsername(username);
-    //     setEmail(email);
-    //     setPassword(password);
+    // public User(String username, String email, String password) throws
+    // InvalidEmailException, TakenEmailException {
+    // super();
+    // setUsername(username);
+    // setEmail(email);
+    // setPassword(password);
     // }
 
     // Importing an existing user
     public User(UUID id, String username, String nickname, String email, String password,
             Dictionary<UUID, Integer> cart, Set<UUID> messages, Dictionary<UUID, Date> weeklyList,
             Set<UUID> favorites, Set<UUID> recipes)
-            throws InvalidLengthException, TakenNicknameException, InvalidEmailException, TakenEmailException {
+            throws TakenUsernameException, InvalidUserNameLengthException, TakenNicknameException,
+            InvalidNicknameLengthException, InvalidPasswordComplexityException, InvalidPasswordLengthException,
+            InvalidEmailException, TakenEmailException {
         super.id = id;
         setUsername(username);
         setNickname(nickname);
@@ -109,18 +112,15 @@ public class User extends BaseEntity {
     }
 
     // SETTERS
-    public String setPassword(String password) {
+    public String setPassword(String password)
+            throws InvalidPasswordComplexityException, InvalidPasswordLengthException {
+        // validatePassword(password);
         try {
-            validatePassword(password);
             this.password = Hasher.hashString(password);
-            return String.format(SuccessMessages.USER_SET_PASSWORD);
-        } catch (InvalidLengthException e) {
-            return String.format(FailMessages.USER_INVALID_PASSWORD_LENGTH);
         } catch (NoSuchAlgorithmException e) {
-            return String.format(FailMessages.INVALID_ALGORITHM);
-        } catch (InvalidPasswordComplexityException e) {
-            return String.format(FailMessages.USER_INVALID_PASSWORD_COMPLEXITY);
+            e.printStackTrace();
         }
+        return String.format(SuccessMessages.USER_SET_PASSWORD);
     }
 
     public void setEmail(String email) throws InvalidEmailException, TakenEmailException {
@@ -128,22 +128,16 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public void setNickname(String nickname) throws InvalidLengthException, TakenNicknameException {
+    public void setNickname(String nickname) throws TakenNicknameException, InvalidNicknameLengthException {
         validateNickname(nickname);
         this.nickname = nickname;
     }
 
-    private String setUsername(String username) {
-        try {
-            validateUsername(username);
-            this.username = username;
-            // TODO: DbContext.updateUserName(UUID id, String username);
-            return String.format(SuccessMessages.USER_SET_USERNAME, username);
-        } catch (TakenUsernameException e) {
-            return String.format(FailMessages.USER_NAME_TAKEN, username);
-        } catch (InvalidLengthException e) {
-            return String.format(FailMessages.USER_INVALID_NAME_LENGTH);
-        }
+    private String setUsername(String username) throws TakenUsernameException, InvalidUserNameLengthException {
+        validateUsername(username);
+        this.username = username;
+        return String.format(SuccessMessages.USER_SET_USERNAME, username);
+
     }
 
     private void setWeeklyList(Dictionary<UUID, Date> weeklyList) {
@@ -167,32 +161,38 @@ public class User extends BaseEntity {
     }
 
     // VALIDATORS
-    private void validateLength(String nickname, int minLength, int maxLength) throws InvalidLengthException {
-        Validator.validateStringLength(nickname, minLength, maxLength);
+    private void validateLength(String string, int minLength, int maxLength) throws InvalidLengthException {
+        Validator.validateStringLength(string, minLength, maxLength);
     }
 
-    private void validateUsername(String username)
-            throws InvalidLengthException, TakenUsernameException {
-        validateLength(username, Variables.MIN_USER_NAME_LENGTH, Variables.MAX_USER_NAME_LENGTH);
+    private void validateUsername(String username) throws TakenUsernameException, InvalidUserNameLengthException {
+        try {
+            validateLength(username, Variables.MIN_USER_NAME_LENGTH, Variables.MAX_USER_NAME_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidUserNameLengthException();
+        }
 
-        if (isUniqueUsername(username)) {
+        if (!isUniqueUsername(username)) {
             throw new TakenUsernameException(username);
         }
     }
 
-    private void validateNickname(String nickname)
-            throws InvalidLengthException, TakenNicknameException {
-        validateLength(nickname, Variables.MIN_USER_NICK_LENGTH, Variables.MAX_USER_NICK_LENGTH);
+    private void validateNickname(String nickname) throws TakenNicknameException, InvalidNicknameLengthException {
+        try {
+            validateLength(nickname, Variables.MIN_USER_NICK_LENGTH, Variables.MAX_USER_NICK_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidNicknameLengthException();
+        }
 
         if (!isUniqueNickname(nickname)) {
             throw new TakenNicknameException(nickname);
         }
     }
 
-    private void validatePassword(String password) throws InvalidLengthException, InvalidPasswordComplexityException {
-        validateLength(password, Variables.MIN_PASSWORD_LENGTH, Variables.MAX_PASSWORD_LENGTH);
-        validatePasswordComplexity(password);
-    }
+    // private void validatePassword(String password)
+    //         throws InvalidPasswordComplexityException {
+    //     validatePasswordComplexity(password);
+    // }
 
     private void validateEmail(String email) throws InvalidEmailException, TakenEmailException {
         if (!isEmail(email)) {
@@ -204,46 +204,48 @@ public class User extends BaseEntity {
     }
 
     private boolean isUniqueUsername(String username) {
-        if (username == "taken") { // TODO: DbContext.getUserByUsername(username); see if username is taken
-            return false;
-        }
+        // if (username == "taken") { // TODO: DbContext.getUserByUsername(username);
+        // see if username is taken
+        // return false;
+        // }
         return true;
     }
 
     private boolean isUniqueNickname(String nickname) {
-        if (nickname == "Taken") { // TODO: DbContext.getUserByNickname(nickname); see if nickname is taken
-            return false;
-        }
+        // if (nickname == "Taken") { // TODO: DbContext.getUserByNickname(nickname);
+        // see if nickname is taken
+        // return false;
+        // }
         return true;
     }
 
-    private void validatePasswordComplexity(String password) throws InvalidPasswordComplexityException {
-        boolean hasLowerCase = false;
-        boolean hasUpperCase = false;
-        boolean hasDigit = false;
-        for (int i = 0; i < password.length(); i++) { // Check for lowercase, uppercase and digit
-            Character currChar = password.charAt(i);
-            if (Character.isLowerCase(currChar)
-                    || !hasLowerCase) {
-                hasLowerCase = true;
-            } else if (Character.isUpperCase(currChar)
-                    || !hasUpperCase) {
-                hasUpperCase = true;
-            } else if (Character.isDigit(currChar)
-                    || !hasDigit) {
-                hasDigit = true;
-            }
-            if (hasLowerCase && hasUpperCase && hasDigit) {
-                break;
-            }
+    // private void validatePasswordComplexity(String password) throws InvalidPasswordComplexityException {
+    //     boolean hasLowerCase = false;
+    //     boolean hasUpperCase = false;
+    //     boolean hasDigit = false;
+    //     for (int i = 0; i < password.length(); i++) { // Check for lowercase, uppercase and digit
+    //         Character currChar = password.charAt(i);
+    //         if (Character.isLowerCase(currChar)
+    //                 || !hasLowerCase) {
+    //             hasLowerCase = true;
+    //         } else if (Character.isUpperCase(currChar)
+    //                 || !hasUpperCase) {
+    //             hasUpperCase = true;
+    //         } else if (Character.isDigit(currChar)
+    //                 || !hasDigit) {
+    //             hasDigit = true;
+    //         }
+    //         if (hasLowerCase && hasUpperCase && hasDigit) {
+    //             break;
+    //         }
 
-            if (!hasLowerCase
-                    || !hasUpperCase
-                    || !hasDigit) {
-                throw new InvalidPasswordComplexityException();
-            }
-        }
-    }
+    //         if (!hasLowerCase
+    //                 || !hasUpperCase
+    //                 || !hasDigit) {
+    //             throw new InvalidPasswordComplexityException();
+    //         }
+    //     }
+    // }
 
     private boolean isEmail(String email) {
         Pattern pattern = Pattern.compile(Variables.USER_EMAIL_REGEX,
@@ -253,7 +255,6 @@ public class User extends BaseEntity {
     }
 
     private boolean isUniqueEmail(String email) {
-        // TODO: DbContext.getUserWithEmail(String email);
         return true;
     }
 

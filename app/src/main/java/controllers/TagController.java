@@ -24,14 +24,10 @@ public class TagController implements Initializable{
     @FXML
     private Button tagButton;
 
-
     @FXML
     private void tagClick(MouseEvent event) {
         myListener.tagClickListener(tag, tagButton);
     }
-
-
-
 
     public void setData(Tag tag, MyListener myListener){
         this.tag = tag;

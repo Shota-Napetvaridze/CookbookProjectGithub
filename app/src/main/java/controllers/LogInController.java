@@ -42,9 +42,8 @@ public class LogInController implements Initializable {
                     SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
                 }
                 else {
-                    System.out.println("User not found!");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("Provided Credentials are incorrect");
+                    alert.setContentText("Credentials are incorrect");
                     alert.show();
                 }
             }

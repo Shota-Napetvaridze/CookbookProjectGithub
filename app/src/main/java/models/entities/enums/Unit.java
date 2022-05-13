@@ -6,4 +6,6 @@ public enum Unit {
     tsp,
     tbsp,
     pinch,
+    nr,
+    
 }

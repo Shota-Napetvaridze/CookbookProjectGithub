@@ -55,19 +55,17 @@ public class RecipeController implements Initializable{
         myListener.recipeExited(recipe, recipeDescriptionHover);
     }
 
-
-
-    public void setData(Recipe recipe, MyListener myListener) {
+    public void setData(Recipe recipe, Image heartImage, MyListener myListener) {
         this.recipe = recipe;
         this.myListener = myListener;
         recipeName.setText(recipe.getName());
         image.setImage(recipe.getPicture());
+        this.heartImage.setImage(heartImage);
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 //        ScrollBar scrollBar = (ScrollBar)ta.lookup(".scroll-bar:vertical");
-//        scrollBar.setDisable(true);
+//        scrollBar.setDisable(true); 
     }
 }

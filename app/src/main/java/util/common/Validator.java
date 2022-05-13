@@ -6,6 +6,8 @@ import util.constants.Variables;
 import util.exceptions.common.InvalidCountException;
 import util.exceptions.common.InvalidInstanceException;
 import util.exceptions.common.InvalidLengthException;
+import util.exceptions.user.InvalidPasswordComplexityException;
+import util.exceptions.user.InvalidPasswordLengthException;
 
 public class Validator {
     private static DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
@@ -56,6 +58,45 @@ public class Validator {
     public static void validateRecipe(UUID id) throws InvalidInstanceException {
         if (dbContext.getRecipeById(id) == null) {
             throw new InvalidInstanceException();
+        }
+    }
+
+    public static void validatePassword(String password) throws InvalidPasswordLengthException, InvalidPasswordComplexityException {
+        try {
+            validateStringLength(password, Variables.MIN_PASSWORD_LENGTH, Variables.MAX_PASSWORD_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidPasswordLengthException();
+        }
+        validatePasswordComplexity(password);
+    }
+
+    private static void validatePasswordComplexity(String password) throws InvalidPasswordComplexityException {
+        boolean hasLowerCase = false;
+        boolean hasUpperCase = false;
+        boolean hasDigit = false;
+        for (int i = 0; i < password.length(); i++) { // Check for lowercase, uppercase and digit
+            Character currChar = password.charAt(i);
+            System.out.println(currChar);
+            if (Character.isLowerCase(currChar)
+                    && !hasLowerCase) {
+                hasLowerCase = true;
+            } else if (Character.isUpperCase(currChar)
+                    && !hasUpperCase) {
+                hasUpperCase = true;
+            } else if (Character.isDigit(currChar)
+                    && !hasDigit) {
+                hasDigit = true;
+            }
+            if (hasLowerCase && hasUpperCase && hasDigit) {
+                break;
+            }
+
+            }
+            if (!hasLowerCase
+            || !hasUpperCase
+            || !hasDigit) {
+        throw new InvalidPasswordComplexityException();
+
         }
     }
 }

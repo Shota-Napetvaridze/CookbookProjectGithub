@@ -23,9 +23,6 @@ public class MsgController implements Initializable{
     private Label messageLbl;
 
     @FXML
-    private Label msgOtherUserLbl;
-
-    @FXML
     private Button removeMsg;
 
     @FXML
@@ -51,6 +48,7 @@ public class MsgController implements Initializable{
             @Override
             public void handle(ActionEvent event) {
                 userService.removeMessageById(message.getId());
+                // TODO: Refresh message list in HomeController
             }
         });
     }

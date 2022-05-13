@@ -52,11 +52,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getFavoriteRecipes(UUID userId) {
-        return dbContext.getFavoriteRecipes(userId);
-    }
-
-    @Override
     public String addRecipe(UUID id, String name, Image picture, String description,
     String instructions, UUID authorId) {
         return dbContext.addRecipe(id, name, picture, description, instructions, authorId);

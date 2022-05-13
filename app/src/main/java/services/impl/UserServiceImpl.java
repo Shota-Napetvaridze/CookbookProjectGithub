@@ -1,12 +1,13 @@
 package services.impl;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-
 import models.entities.Message;
+import models.entities.Recipe;
 import models.entities.User;
 import services.UserService;
 import util.common.DbContext;
@@ -14,9 +15,13 @@ import util.constants.FailMessages;
 import util.constants.Variables;
 import util.exceptions.common.InvalidLengthException;
 import util.exceptions.user.InvalidEmailException;
+import util.exceptions.user.InvalidNicknameLengthException;
+import util.exceptions.user.InvalidPasswordComplexityException;
+import util.exceptions.user.InvalidPasswordLengthException;
+import util.exceptions.user.InvalidUserNameLengthException;
 import util.exceptions.user.TakenEmailException;
 import util.exceptions.user.TakenNicknameException;
-
+import util.exceptions.user.TakenUsernameException;
 
 public class UserServiceImpl implements UserService {
     private DbContext dbContext;
@@ -32,8 +37,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addUser(String username, String email, String password) {
-        // User user = new User(username, email, password);
+    public String addUser(String username, String email, String password)
+            throws TakenUsernameException, InvalidUserNameLengthException, TakenNicknameException,
+            InvalidNicknameLengthException, InvalidPasswordComplexityException, InvalidPasswordLengthException,
+            InvalidEmailException, TakenEmailException {
         boolean isUnique = dbContext.validateUniqueCredentials(username, email);
         if (isUnique) {
             return dbContext.addUser(username, email, password);
@@ -47,17 +54,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changeNickname(UUID userId, String nickname) {
+    public String changeNickname(UUID userId, String nickname)
+            throws TakenNicknameException, InvalidNicknameLengthException {
         User user = dbContext.getUserById(userId);
 
-        try {
-            user.setNickname(nickname);
-            return dbContext.userChangeNickname(userId, nickname);
-        } catch (InvalidLengthException e) {
-            return String.format(FailMessages.USER_INVALID_NICKNAME_LENGTH);
-        } catch (TakenNicknameException e) {
-            return String.format(FailMessages.USER_NICK_TAKEN, nickname);
-        }
+        user.setNickname(nickname);
+        return dbContext.userChangeNickname(userId, nickname);
     }
 
     @Override
@@ -109,20 +111,19 @@ public class UserServiceImpl implements UserService {
         return dbContext.addRecipeToFavorites(userId, recipeId);
     }
 
-
     @Override
     public boolean removeFromFavorites(UUID userId, UUID recipeId) {
         return dbContext.removeRecipeFromFavorites(userId, recipeId);
     }
 
     @Override
-    public String addToList(UUID recipeId, Date date) {
+    public String addToPlan(UUID recipeId, Date date) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String removeFromList(UUID recipeId, Date date) {
+    public String removeFromPlan(UUID recipeId, Date date) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -168,6 +169,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByNickname(String nickname) {
         return dbContext.getUserByNickname(nickname);
+    }
+
+    @Override
+    public List<Recipe> getFavoriteRecipes(UUID userId) {
+        return dbContext.getFavoriteRecipes(userId);
+    }
+
+    public Dictionary<UUID, Date> getWeeklyPlan(UUID userId) {
+        return dbContext.getUserWeeklyList(userId);
+    }
+
+    public List<Recipe> getPlanRecipes(UUID id) {
+        return null;
     }
 
 }

@@ -23,8 +23,6 @@ public class IngredientController implements Initializable{
     @FXML
     private Button ingredientButton;
 
-
-
     @FXML
     private void ingredientClick(MouseEvent event) {
         myListener.ingredientClickListener(ingredient, ingredientButton);
@@ -35,7 +33,6 @@ public class IngredientController implements Initializable{
         this.myListener = myListener;
         ingredientLbl.setText(ingredient.getName());
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

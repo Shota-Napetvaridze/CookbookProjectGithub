@@ -1,8 +1,11 @@
 package util.common;
 
 import java.io.IOException;
+import java.util.List;
 
+import models.entities.Recipe;
 import models.entities.User;
+import services.impl.RecipeServiceImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,7 +43,7 @@ public class SceneContext {
         } else {
             stage.setScene(new Scene(root, 1315.0,810.0 ));
             stage.centerOnScreen();
-            String title = String.format("Welcome to Cookbook  %s", user.getNickname());
+            String title = String.format("Welcome to Cookbook"); // TODO:  %s add userNickname here
             stage.setTitle(title);
             stage.setResizable(false);
 
