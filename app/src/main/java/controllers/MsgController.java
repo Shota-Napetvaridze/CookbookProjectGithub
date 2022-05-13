@@ -41,7 +41,7 @@ public class MsgController implements Initializable{
 
     @FXML
     void reply(MouseEvent event) {
-        myListener.replyMsgListener(message, messageSendArea);
+        myListener.replyMsgListener(message);
     }
 
 

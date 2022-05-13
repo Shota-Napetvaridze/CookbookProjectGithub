@@ -123,6 +123,7 @@ public class HomeController implements Initializable {
 
     private User user = SceneContext.user;
     private Recipe recipe;
+    private Message message;
     private Image image;
     private MyListener myListener;
 
@@ -166,6 +167,7 @@ public class HomeController implements Initializable {
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
     }
+
 
     private void initializeGrid() {
         int column = 0;
@@ -213,8 +215,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        home.setStyle("-fx-color: rgb(239, 242, 255)" +
-                "-fx-background-color: rgb(15, 125, 242)");
+        home.setStyle("-fx-color: rgb(239, 242, 255)");
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // ComboBox User
@@ -226,7 +227,8 @@ public class HomeController implements Initializable {
         String messageCount = String.valueOf(msgList.size());
         msgCountLbl.setText(messageCount);
 
-        // -----------------------------------------MYLISTENER-----------------------------------------------
+
+        // -----------------------------------------MYLISTENER----------------------------------------------- //
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
@@ -308,10 +310,10 @@ public class HomeController implements Initializable {
                 }
 
                 @Override
-                public void replyMsgListener(Message message, TextArea textArea) {
-                    textArea.setVisible(true);
+                public void replyMsgListener(Message message) {
+                    MsgController msgController = new MsgController();
+                    msgController.setData(message, myListener);
                 }
-
             };
         }
 
@@ -397,6 +399,27 @@ public class HomeController implements Initializable {
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                grid.getChildren().clear();
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
+                try {
+                    AnchorPane anchorPane = fxmlLoader.load();
+                    grid.add(anchorPane, 1, 1);
+                    grid.setAlignment(Pos.CENTER);
+
+                    // Set grid width
+                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                    grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                    // Set grid height
+                    grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                    grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    grid.setMaxHeight(Region.USE_PREF_SIZE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 // TODO: implement method for this
             }
         });
@@ -449,8 +472,7 @@ public class HomeController implements Initializable {
             public void handle(ActionEvent event) {
                 recipeImg.setVisible(true);
                 recipeLbl.setVisible(true);
-                home.setStyle("-fx-color: rgb(239, 242, 255)" +
-                        "-fx-background-color: rgb(15, 125, 242)");
+                home.setStyle("-fx-color: rgb(239, 242, 255)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
@@ -464,8 +486,7 @@ public class HomeController implements Initializable {
         favorites.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                favorites.setStyle("-fx-color: rgb(239, 242, 255)" +
-                        "-fx-background-color: rgb(15, 125, 242)");
+                favorites.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
@@ -479,8 +500,6 @@ public class HomeController implements Initializable {
                         AnchorPane anchorPane = fxmlLoader.load();
                         RecipeController recipeController = fxmlLoader.getController();
                         String imgFile = "/img/heartFilled.png";
-//                        String imgPath = System.getProperty("user.dir") + imgFile;
-//                        Image filled = new Image(imgPath);
                         Image filled = new Image(getClass().getResourceAsStream(imgFile));
                         recipeController.setData(favouriteRecipeList.get(i), filled, myListener);
 
@@ -513,8 +532,7 @@ public class HomeController implements Initializable {
         plan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                plan.setStyle("-fx-color: rgb(239, 242, 255)" +
-                        "-fx-background-color: rgb(15, 125, 242)");
+                plan.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();

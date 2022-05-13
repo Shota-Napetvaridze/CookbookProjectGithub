@@ -17,6 +17,5 @@ public interface MyListener {
 
     public void recipeEntered(Recipe recipe, TextArea textArea);
     public void recipeExited(Recipe recipe, TextArea textArea);
-
-    public void replyMsgListener(Message message, TextArea textArea);
+    public void replyMsgListener(Message message);
 }
