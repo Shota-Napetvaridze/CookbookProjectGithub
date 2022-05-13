@@ -5,20 +5,21 @@ import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Button;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
 import models.entities.Recipe;
 import util.common.MyListener;
 import util.common.SceneContext;
 
-public class RecipeController  {
+public class RecipeController implements Initializable{
     private Recipe recipe;
     private MyListener myListener;
 
@@ -31,6 +32,9 @@ public class RecipeController  {
     @FXML
     private ImageView heartImage;
 
+    @FXML
+    private TextArea recipeDescriptionHover;
+
 
     @FXML
     void favoritesClick(MouseEvent event) {
@@ -42,6 +46,15 @@ public class RecipeController  {
         myListener.onClickListener(recipe);
     }
 
+    @FXML
+    void descriptionEntered(MouseEvent event) {
+        myListener.recipeEntered(recipe, recipeDescriptionHover);
+    }
+    @FXML
+    void descriptionExited(MouseEvent event) {
+        myListener.recipeExited(recipe, recipeDescriptionHover);
+    }
+
 
 
     public void setData(Recipe recipe, MyListener myListener) {
@@ -51,4 +64,10 @@ public class RecipeController  {
         image.setImage(recipe.getPicture());
     }
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+//        ScrollBar scrollBar = (ScrollBar)ta.lookup(".scroll-bar:vertical");
+//        scrollBar.setDisable(true);
+    }
 }

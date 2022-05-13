@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.scene.shape.Circle;
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
@@ -199,6 +201,7 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         home.setStyle("-fx-color: rgb(239, 242, 255)" +
                 "-fx-background-color: rgb(15, 125, 242)");
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // ComboBox User
         ObservableList<String> list = FXCollections.observableArrayList("Settings", "Profile");
@@ -265,6 +268,18 @@ public class HomeController implements Initializable {
                         selectedTags.add(tag);
                     }
 
+                }
+
+                @Override
+                public void recipeEntered(Recipe recipe, TextArea textArea) {
+                    textArea.setVisible(true);
+                    textArea.setText(recipe.getDescription());
+                    textArea.setWrapText(true);
+                }
+
+                @Override
+                public void recipeExited(Recipe recipe, TextArea textArea) {
+                    textArea.setVisible(false);
                 }
 
 

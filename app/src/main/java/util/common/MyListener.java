@@ -1,5 +1,6 @@
 package util.common;
 
+import javafx.scene.control.TextArea;
 import models.entities.Ingredient;
 import models.entities.Recipe;
 import models.entities.Tag;
@@ -12,4 +13,7 @@ public interface MyListener {
     public void favClickListener(Recipe recipe, ImageView imageView);
     public void ingredientClickListener(Ingredient ingredient, Button ingredientButton);
     public void tagClickListener(Tag tag, Button tagButton);
+
+    public void recipeEntered(Recipe recipe, TextArea textArea);
+    public void recipeExited(Recipe recipe, TextArea textArea);
 }
