@@ -47,6 +47,11 @@ public class RecipeController implements Initializable{
     }
 
     @FXML
+    void clickDescription(MouseEvent event) {
+        myListener.descriptionListener(recipe);
+    }
+
+    @FXML
     void descriptionEntered(MouseEvent event) {
         myListener.recipeEntered(recipe, recipeDescriptionHover);
     }

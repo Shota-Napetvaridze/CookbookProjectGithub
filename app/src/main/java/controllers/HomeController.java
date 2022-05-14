@@ -237,6 +237,12 @@ public class HomeController implements Initializable {
                 public void onClickListener(Recipe recipe) {
                     chosenRecipe(recipe);
                 }
+
+                @Override
+                public void descriptionListener(Recipe recipe) {
+                    chosenRecipe(recipe);
+                }
+
                 // When the User clicks on the heart button
                 @Override
                 public void favClickListener(Recipe recipe, ImageView heartImage) {
@@ -294,8 +300,6 @@ public class HomeController implements Initializable {
                         shortDescription.append(descriptionWords[i] + " ");
                     }
                     textArea.setText(shortDescription.toString());
-                    textArea.setStyle("-fx-background-color: rgb(0, 0, 0)");
-                    // textArea.setStyle("-fx-font-color: #FFFFFF;");
                     textArea.setOpacity(0.8);
                     textArea.setWrapText(true);
                 }

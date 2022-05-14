@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 
 public interface MyListener {
     public void onClickListener(Recipe recipe);
+    public void descriptionListener(Recipe recipe);
     public void favClickListener(Recipe recipe, ImageView imageView);
     public void ingredientClickListener(Ingredient ingredient, ImageView ingredientButton);
     public void tagClickListener(Tag tag, ImageView tagButton);
@@ -18,4 +19,5 @@ public interface MyListener {
     public void recipeEntered(Recipe recipe, TextArea textArea);
     public void recipeExited(Recipe recipe, TextArea textArea);
     public void replyMsgListener(Message message);
+
 }
