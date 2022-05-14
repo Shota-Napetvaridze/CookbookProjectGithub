@@ -290,6 +290,8 @@ public class DbContext {
             throws TakenUsernameException, InvalidUserNameLengthException, TakenNicknameException,
             InvalidNicknameLengthException, InvalidPasswordComplexityException, InvalidPasswordLengthException,
             InvalidEmailException, TakenEmailException {
+        User user = null;
+        
         try {
             UUID id = UUID.randomUUID();
             String nickname = username;
@@ -300,9 +302,11 @@ public class DbContext {
             Dictionary<UUID, Date> weeklyList = new Hashtable<>();
             Set<UUID> favorites = new HashSet<>();
             Set<UUID> recipes = new HashSet<>();
-            User user = new User(id, username, nickname, email, hashedPassword, cart, messages, weeklyList, favorites,
+            user = new User(id, username, nickname, email, hashedPassword, cart, messages, weeklyList, favorites,
                     recipes);
-
+            if (user == null) {
+                System.out.println("Could not register user");
+            }
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addUser);
             ps.setString(1, UUID.randomUUID().toString());
             ps.setString(2, username);
@@ -841,7 +845,7 @@ public class DbContext {
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeTagsById);
             ps.setString(1, id.toString());
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 Tag tag = getTagById(UUID.fromString(rs.getString("tag_id")));
                 tags.add(tag);

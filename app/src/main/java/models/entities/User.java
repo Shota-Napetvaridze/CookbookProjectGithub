@@ -112,14 +112,8 @@ public class User extends BaseEntity {
     }
 
     // SETTERS
-    public String setPassword(String password)
-            throws InvalidPasswordComplexityException, InvalidPasswordLengthException {
-        // validatePassword(password);
-        try {
-            this.password = Hasher.hashString(password);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+    public String setPassword(String password) {
+        this.password = password;
         return String.format(SuccessMessages.USER_SET_PASSWORD);
     }
 
@@ -190,8 +184,8 @@ public class User extends BaseEntity {
     }
 
     // private void validatePassword(String password)
-    //         throws InvalidPasswordComplexityException {
-    //     validatePasswordComplexity(password);
+    // throws InvalidPasswordComplexityException {
+    // validatePasswordComplexity(password);
     // }
 
     private void validateEmail(String email) throws InvalidEmailException, TakenEmailException {
@@ -219,32 +213,34 @@ public class User extends BaseEntity {
         return true;
     }
 
-    // private void validatePasswordComplexity(String password) throws InvalidPasswordComplexityException {
-    //     boolean hasLowerCase = false;
-    //     boolean hasUpperCase = false;
-    //     boolean hasDigit = false;
-    //     for (int i = 0; i < password.length(); i++) { // Check for lowercase, uppercase and digit
-    //         Character currChar = password.charAt(i);
-    //         if (Character.isLowerCase(currChar)
-    //                 || !hasLowerCase) {
-    //             hasLowerCase = true;
-    //         } else if (Character.isUpperCase(currChar)
-    //                 || !hasUpperCase) {
-    //             hasUpperCase = true;
-    //         } else if (Character.isDigit(currChar)
-    //                 || !hasDigit) {
-    //             hasDigit = true;
-    //         }
-    //         if (hasLowerCase && hasUpperCase && hasDigit) {
-    //             break;
-    //         }
+    // private void validatePasswordComplexity(String password) throws
+    // InvalidPasswordComplexityException {
+    // boolean hasLowerCase = false;
+    // boolean hasUpperCase = false;
+    // boolean hasDigit = false;
+    // for (int i = 0; i < password.length(); i++) { // Check for lowercase,
+    // uppercase and digit
+    // Character currChar = password.charAt(i);
+    // if (Character.isLowerCase(currChar)
+    // || !hasLowerCase) {
+    // hasLowerCase = true;
+    // } else if (Character.isUpperCase(currChar)
+    // || !hasUpperCase) {
+    // hasUpperCase = true;
+    // } else if (Character.isDigit(currChar)
+    // || !hasDigit) {
+    // hasDigit = true;
+    // }
+    // if (hasLowerCase && hasUpperCase && hasDigit) {
+    // break;
+    // }
 
-    //         if (!hasLowerCase
-    //                 || !hasUpperCase
-    //                 || !hasDigit) {
-    //             throw new InvalidPasswordComplexityException();
-    //         }
-    //     }
+    // if (!hasLowerCase
+    // || !hasUpperCase
+    // || !hasDigit) {
+    // throw new InvalidPasswordComplexityException();
+    // }
+    // }
     // }
 
     private boolean isEmail(String email) {

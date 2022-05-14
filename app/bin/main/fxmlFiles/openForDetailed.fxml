@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="detailedAnchor" prefHeight="695.0" prefWidth="735.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DetailedViewController">
+    <children>
+        <Label fx:id="recipe_Name" layoutX="17.0" layoutY="17.0" text="Name" textFill="WHITE">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Button fx:id="close" layoutX="479.0" layoutY="638.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: #efff78;" text="Close">
+            <font>
+                <Font size="23.0" />
+            </font>
+        </Button>
+        <ImageView fx:id="recipe_Img" fitHeight="152.0" fitWidth="223.0" layoutX="240.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" />
+        <Label layoutX="17.0" layoutY="150.0" text="Description" textFill="WHITE">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Label layoutX="17.0" layoutY="481.0" text="Instructions" textFill="WHITE">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <TextArea fx:id="recipe_Description" layoutX="17.0" layoutY="183.0" prefHeight="276.0" prefWidth="445.0" promptText="Recipe description" styleClass="text-area" stylesheets="@style.css" wrapText="true">
+         <font>
+            <Font size="21.0" />
+         </font></TextArea>
+        <TextArea fx:id="recipe_Instruction" layoutX="17.0" layoutY="516.0" prefHeight="166.0" prefWidth="445.0" promptText="Recipe instruction" styleClass="text-area" stylesheets="@style.css" wrapText="true">
+         <font>
+            <Font size="21.0" />
+         </font></TextArea>
+      <Button fx:id="sendTheRecipe" layoutX="479.0" layoutY="578.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: #efff78;" text="Send ">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
+    </children>
+</AnchorPane>

@@ -96,7 +96,6 @@ public class Validator {
             || !hasUpperCase
             || !hasDigit) {
         throw new InvalidPasswordComplexityException();
-
         }
     }
 }
