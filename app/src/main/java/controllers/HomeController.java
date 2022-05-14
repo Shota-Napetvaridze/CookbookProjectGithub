@@ -214,6 +214,9 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         home.setStyle("-fx-color: rgb(239, 242, 255)");
+        home.setStyle("-fx-border-color: #000000");
+
+
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // ComboBox User
@@ -519,6 +522,7 @@ public class HomeController implements Initializable {
                 favorites.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
+
                 grid.getChildren().clear();
 
                 int column = 0;
@@ -616,6 +620,7 @@ public class HomeController implements Initializable {
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
+
                 grid.getChildren().clear();
                 // msgCountLbl.setText("...");
                 grid.setStyle("-fx-background-color: #ffffff");
