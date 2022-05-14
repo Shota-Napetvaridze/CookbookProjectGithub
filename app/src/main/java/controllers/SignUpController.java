@@ -54,7 +54,7 @@ public class SignUpController implements Initializable {
                         System.out.println(
                                 userService.addUser(usernameNew.getText(), email.getText(), passwordNew.getText()));
                         SceneContext.user = userService.getUserByNickname(usernameNew.getText());
-                        SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
+                        SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
                     } catch (Exception e) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setContentText(e.getMessage());

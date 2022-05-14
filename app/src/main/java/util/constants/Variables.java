@@ -1,7 +1,7 @@
 package util.constants;
 
 public class Variables {
-    public static final int DATABASE_PORT = 8889;
+    public static final int DATABASE_PORT = 3306;
     public static final String DATABASE_USER = "root";
     public static final String DATABASE_PASS = "root";
 
@@ -38,7 +38,7 @@ public class Variables {
     public static final int MAX_RECIPE_INSTRUCTIONS_LENGTH = 1000;
     public static final int MIN_RECIPE_INGREDIENTS = 1;
     public static final int MAX_RECIPE_INGREDIENTS = 15;
-    public static final int MIN_RECIPE_TAGS = 2;
+    public static final int MIN_RECIPE_TAGS = 1;
     public static final int MAX_RECIPE_TAGS = 15;
     public static final int MIN_RECIPE_SERVING_SIZE = 2;
     public static final int MAX_RECIPE_SERVING_SIZE = 16;

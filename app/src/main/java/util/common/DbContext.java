@@ -8,6 +8,7 @@ import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -59,7 +60,6 @@ public class DbContext {
             conn = DriverManager.getConnection(Variables.DATABASE_COOKBOOK_URL, Variables.DATABASE_USER,
                     Variables.DATABASE_PASS);
             useDatabase();
-            System.out.println("Using Cookbook Database");
         } catch (SQLException e) {
             try {
                 PreparedStatement preparedStatement = conn.prepareStatement(SqlQueries.setMaxAllowedPackage);
@@ -136,7 +136,6 @@ public class DbContext {
                 e.printStackTrace();
             }
         }
-        System.out.println();
     }
 
     private void importComments() {
@@ -160,7 +159,6 @@ public class DbContext {
                 e.printStackTrace();
             }
         }
-        System.out.println();
     }
 
     private void importMessages() {
@@ -185,7 +183,6 @@ public class DbContext {
                 e.printStackTrace();
             }
         }
-        System.out.println();
 
     }
 
@@ -208,7 +205,6 @@ public class DbContext {
                 e.printStackTrace();
             }
         }
-        System.out.println();
     }
 
     private void importRecipes() { // WORKS NOW
@@ -234,7 +230,6 @@ public class DbContext {
                 e.printStackTrace();
             }
         }
-        System.out.println();
     }
 
     private void importUsers() {
@@ -259,7 +254,6 @@ public class DbContext {
                 e.printStackTrace();
             }
         }
-        System.out.println();
     }
 
     // ------------------- USER -------------------//
@@ -774,12 +768,12 @@ public class DbContext {
 
     }
 
-    public Recipe getRecipeById(UUID id) {
+    public Recipe getRecipeById(UUID recipeId) {
         Recipe recipe = null;
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeById);
-            ps.setString(1, id.toString());
+            ps.setString(1, recipeId.toString());
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -789,10 +783,10 @@ public class DbContext {
                 String description = rs.getString("recipe_description");
                 String instructions = rs.getString("instructions");
                 UUID authorId = UUID.fromString(rs.getString("author_id"));
-                Set<UUID> tags = getRecipeTagsById(id);
-                Dictionary<UUID, Integer> ingredients = getRecipeIngredientsById(id);
-                Set<UUID> comments = getRecipeCommentsById(id);
-                recipe = new Recipe(id, name, picture, description, instructions, authorId, tags, ingredients,
+                Set<Tag> tags = getRecipeTagsById(recipeId);
+                Map<Ingredient, Integer> ingredients = getRecipeIngredientsById(recipeId);
+                Set<UUID> comments = getRecipeCommentsById(recipeId);
+                recipe = new Recipe(recipeId, name, picture, description, instructions, authorId, tags, ingredients,
                         comments);
             }
         } catch (SQLException e) {
@@ -819,8 +813,8 @@ public class DbContext {
         return comments;
     }
 
-    private Dictionary<UUID, Integer> getRecipeIngredientsById(UUID id) {
-        Dictionary<UUID, Integer> ingredients = new Hashtable<>();
+    private Map<Ingredient, Integer> getRecipeIngredientsById(UUID id) {
+        Map<Ingredient, Integer> ingredients = new Hashtable<>();
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeIngredientsById);
@@ -828,10 +822,10 @@ public class DbContext {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                UUID ingredientId = UUID.fromString(rs.getString("ingredient_id"));
+                Ingredient ingredient = getIngredientById(UUID.fromString(rs.getString("ingredient_id")));
                 Integer quantity = rs.getInt("quantity");
 
-                ingredients.put(ingredientId, quantity);
+                ingredients.put(ingredient, quantity);
             }
 
         } catch (SQLException e) {
@@ -840,16 +834,17 @@ public class DbContext {
         return ingredients;
     }
 
-    private Set<UUID> getRecipeTagsById(UUID id) {
-        Set<UUID> tags = new HashSet<>();
+    private Set<Tag> getRecipeTagsById(UUID id) {
+        Set<Tag> tags = new HashSet<>();
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeTagsById);
             ps.setString(1, id.toString());
             ResultSet rs = ps.executeQuery();
-
+            
             while (rs.next()) {
-                tags.add(UUID.fromString(rs.getString("tag_id")));
+                Tag tag = getTagById(UUID.fromString(rs.getString("tag_id")));
+                tags.add(tag);
             }
 
         } catch (SQLException e) {
@@ -861,6 +856,23 @@ public class DbContext {
     public Recipe getRecipeByName(String name) {
         return null;
         // TODO: Implement
+    }
+
+    public List<Recipe> getRecipesByNameLike(String name) {
+        List<Recipe> recipes = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipesByNameLike);
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Recipe recipe = getRecipeById(UUID.fromString(rs.getString("id")));
+                recipes.add(recipe);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recipes;
     }
 
     public String addRecipe(UUID id, String name, Image picture, String description, String instructions,
@@ -878,8 +890,8 @@ public class DbContext {
             ps.executeUpdate();
             ps.close();
             useDatabase.close();
-        } catch (SQLException e8) {
-            e8.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return String.format(SuccessMessages.RECIPE_ADDED);
         // TODO: Implement

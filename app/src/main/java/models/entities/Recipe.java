@@ -1,6 +1,9 @@
 package models.entities;
 
 import java.util.Dictionary;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,35 +23,16 @@ public class Recipe extends BaseEntity {
     private String description;
     private String instructions;
     private UUID authorId;
-    private Set<UUID> tagsIds;
-    private Dictionary<UUID, Integer> ingredients;
+    private Set<Tag> tags = new HashSet<>();
+    private Map<Ingredient, Integer> ingredients = new Hashtable<>();
     private byte servingSize;
     private Set<UUID> commentsIds;
 
     public Recipe(){}
 
-    // Create new Recipe
-    // public Recipe(String name, Image picture, String description,
-    //         String instructions, UUID authorId, Set<UUID> tags,
-    //         Dictionary<UUID, Integer> ingredients, byte servingSize) {
-    //     super();
-    //     setName(name);
-    //     setPicture(picture);
-    //     setDescription(description);
-    //     setInstructions(instructions);
-    //     setAuthor(authorId);
-    //     setTags(tags);
-    //     setIngredients(ingredients);
-    //     setServingSize(servingSize);
-    //     // TODO: DbContext.addRecipe(String name, char[] picture, String description,
-    //     // String instructions, User author, Set<Tag> tags,
-    //     // Dictionary<Ingredient, Integer> ingredients, byte servingSize)
-    // }
-
-    // Import existing Recipe
     public Recipe(UUID id, String name, Image picture, String description,
-            String instructions, UUID authorId, Set<UUID> tags,
-            Dictionary<UUID, Integer> ingredients, Set<UUID> comments) {
+            String instructions, UUID authorId, Set<Tag> tags,
+            Map<Ingredient, Integer> ingredients, Set<UUID> comments) {
         super.id = id;
         setName(name);
         setPicture(picture);
@@ -59,12 +43,6 @@ public class Recipe extends BaseEntity {
         setIngredients(ingredients);
         setComments(comments);
     }
-
-
-
-    // OPERATIONS
-
-
 
     // GETTERS
     public String getName() {
@@ -87,11 +65,11 @@ public class Recipe extends BaseEntity {
         return authorId;
     }
 
-    public Set<UUID> getTags() {
-        return tagsIds;
+    public Set<Tag> getTags() {
+        return tags;
     }
 
-    public Dictionary<UUID, Integer> getIngredients() {
+    public Map<Ingredient, Integer> getIngredients() {
         return ingredients;
     }
 
@@ -118,7 +96,6 @@ public class Recipe extends BaseEntity {
 
     public void setPicture(Image picture) {
         this.picture = picture;
-        // TODO: DbContext.updateRecipePicture(picture);
     }
 
     public String setDescription(String description) {
@@ -141,17 +118,17 @@ public class Recipe extends BaseEntity {
         }
     }
 
-    public String setTags(Set<UUID> tags) {
+    public String setTags(Set<Tag> tags) {
         try {
             validateTags(tags);
-            this.tagsIds = tags;
+            this.tags = tags;
             return String.format(SuccessMessages.RECIPE_SET_TAGS);
         } catch (InvalidCountException e) {
             return String.format(FailMessages.RECIPE_INVALID_TAGS_COUNT);
         }
     }
 
-    public String setIngredients(Dictionary<UUID, Integer> ingredients) {
+    public String setIngredients(Map<Ingredient, Integer> ingredients) {
         try {
             validateIngredients(ingredients);
             this.ingredients = ingredients;
@@ -205,12 +182,12 @@ public class Recipe extends BaseEntity {
                 Variables.MAX_RECIPE_INSTRUCTIONS_LENGTH);
     }
 
-    private void validateTags(Set<UUID> tags) throws InvalidCountException {
+    private void validateTags(Set<Tag> tags) throws InvalidCountException {
         Validator.validateCount(tags.size(),
                 Variables.MIN_RECIPE_TAGS, Variables.MAX_RECIPE_TAGS);
     }
 
-    private void validateIngredients(Dictionary<UUID, Integer> ingredients)
+    private void validateIngredients(Map<Ingredient, Integer> ingredients)
             throws InvalidCountException {
         Validator.validateCount(ingredients.size(),
                 Variables.MIN_RECIPE_INGREDIENTS, Variables.MAX_RECIPE_INGREDIENTS);

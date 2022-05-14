@@ -80,6 +80,11 @@ public class RecipeServiceImpl implements RecipeService {
         return dbContext.getRecipeByName(name);
     }
 
+    @Override
+    public List<Recipe> getRecipesByNameLike(String name) {
+        return dbContext.getRecipesByNameLike(name);
+    }
+
 
     
 }

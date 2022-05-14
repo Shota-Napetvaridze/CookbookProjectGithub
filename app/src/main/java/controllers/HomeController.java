@@ -20,8 +20,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import models.entities.Ingredient;
 import models.entities.Message;
@@ -122,8 +126,8 @@ public class HomeController implements Initializable {
     private TagServiceImpl tagService = new TagServiceImpl();
 
     private User user = SceneContext.user;
-    private Recipe recipe;
     private Message message;
+    private Recipe recipe;
     private Image image;
     private MyListener myListener;
 
@@ -168,14 +172,12 @@ public class HomeController implements Initializable {
         recipeLbl.setText(recipe.getName());
     }
 
-
     private void initializeGrid() {
         int column = 0;
         int row = 1;
         try {
             for (int i = 0; i < recipeList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 RecipeController recipeController = fxmlLoader.getController();
@@ -188,23 +190,19 @@ public class HomeController implements Initializable {
                     Image empty = new Image(getClass().getResourceAsStream(imgFile));
                     recipeController.setData(recipeList.get(i), empty, myListener);
                 }
-
                 if (column == 3) {
                     column = 0;
                     row++;
                 }
-
                 grid.add(anchorPane, column++, row);
                 // Set grid width
                 grid.setMinWidth(Region.USE_COMPUTED_SIZE);
                 grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 grid.setMaxWidth(Region.USE_PREF_SIZE);
-
                 // Set grid height
                 grid.setMinHeight(Region.USE_COMPUTED_SIZE);
                 grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                 grid.setMaxHeight(Region.USE_PREF_SIZE);
-
                 grid.setVgap(2.0);
                 GridPane.setMargin(anchorPane, new Insets(10));
             }
@@ -227,8 +225,7 @@ public class HomeController implements Initializable {
         String messageCount = String.valueOf(msgList.size());
         msgCountLbl.setText(messageCount);
 
-
-        // -----------------------------------------MYLISTENER----------------------------------------------- //
+        // -----------------------------------------MYLISTENER----------------------------------------------- 
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
@@ -237,7 +234,6 @@ public class HomeController implements Initializable {
                 public void onClickListener(Recipe recipe) {
                     chosenRecipe(recipe);
                 }
-
                 // When the User clicks on the heart button
                 @Override
                 public void favClickListener(Recipe recipe, ImageView heartImage) {
@@ -246,19 +242,15 @@ public class HomeController implements Initializable {
                         favouriteRecipeList.remove(recipe);
                         String imgFile = "/img/heartEmpty.png";
                         Image empty = new Image(getClass().getResourceAsStream(imgFile));
-
                         heartImage.setImage(empty);
                     } else {
                         userService.addToFavorites(user.getId(), recipe.getId());
                         favouriteRecipeList.add(recipe);
                         String imgFile = "/img/heartFilled.png";
-
                         Image filled = new Image(getClass().getResourceAsStream(imgFile));
-
                         heartImage.setImage(filled);
                     }
                 }
-
                 // When the user clicks on a specific Ingredient
                 @Override
                 public void ingredientClickListener(Ingredient ingredient, ImageView ingredientButton) {
@@ -274,7 +266,6 @@ public class HomeController implements Initializable {
                         selectedIngredients.add(ingredient);
                     }
                 }
-
                 // When the user clicks on a specific Tag
                 @Override
                 public void tagClickListener(Tag tag, ImageView tagButton) {
@@ -289,7 +280,6 @@ public class HomeController implements Initializable {
                         tagButton.setImage(check);
                         selectedTags.add(tag);
                     }
-
                 }
 
                 @Override
@@ -301,6 +291,9 @@ public class HomeController implements Initializable {
                         shortDescription.append(descriptionWords[i] + " ");
                     }
                     textArea.setText(shortDescription.toString());
+                    textArea.setStyle("-fx-background-color: rgb(0, 0, 0)");
+                    // textArea.setStyle("-fx-font-color: #FFFFFF;");
+                    textArea.setOpacity(0.8);
                     textArea.setWrapText(true);
                 }
 
@@ -314,7 +307,10 @@ public class HomeController implements Initializable {
                     MsgController msgController = new MsgController();
                     msgController.setData(message, myListener);
                 }
+
             };
+
+            
         }
 
         // Initialize grid-----------------------------------------
@@ -327,7 +323,43 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 grid.getChildren().clear();
-                recipeService.getRecipeByName(searchField.getText());
+                recipeList = recipeService.getRecipesByNameLike(searchField.getText());
+                List<Recipe> filteredRecipes = new ArrayList<>();
+                for (Recipe recipe : recipeList) {
+                    boolean isValid = true;
+
+                    // Search tags
+                    Set<Tag> tags = recipe.getTags();
+                    Set<String> tagNames = new HashSet<>();
+                    for (Tag tag : tags) {
+                        tagNames.add(tag.getName());
+                    }
+                    for (Tag tag : selectedTags) {
+                        if (!tagNames.contains(tag.getName())) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+
+                    // Search ingredients
+                    Map<Ingredient, Integer> ingredients = recipe.getIngredients();
+                    Set<String> ingredientNames = new HashSet<>();
+                    for (Ingredient ingredient : ingredients.keySet()){
+                        ingredientNames.add(ingredient.getName());
+                    }
+                    for (Ingredient ingredient : selectedIngredients) {
+                        if (!ingredientNames.contains(ingredient.getName())) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+
+                    if (isValid) {
+                        filteredRecipes.add(recipe);
+                    }
+                }
+                recipeList = filteredRecipes;
+                initializeGrid();
             }
         });
 
@@ -337,6 +369,7 @@ public class HomeController implements Initializable {
             public void handle(ActionEvent event) {
                 scrollTag.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollIngredient.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
                 int column = 0;
                 int row = 1;
                 try {
@@ -406,12 +439,10 @@ public class HomeController implements Initializable {
                     AnchorPane anchorPane = fxmlLoader.load();
                     grid.add(anchorPane, 1, 1);
                     grid.setAlignment(Pos.CENTER);
-
                     // Set grid width
                     grid.setMinWidth(Region.USE_COMPUTED_SIZE);
                     grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
                     grid.setMaxWidth(Region.USE_PREF_SIZE);
-
                     // Set grid height
                     grid.setMinHeight(Region.USE_COMPUTED_SIZE);
                     grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -420,7 +451,6 @@ public class HomeController implements Initializable {
                     e.printStackTrace();
                 }
 
-                // TODO: implement method for this
             }
         });
 
@@ -501,6 +531,7 @@ public class HomeController implements Initializable {
                         RecipeController recipeController = fxmlLoader.getController();
                         String imgFile = "/img/heartFilled.png";
                         Image filled = new Image(getClass().getResourceAsStream(imgFile));
+
                         recipeController.setData(favouriteRecipeList.get(i), filled, myListener);
 
                         if (column == 3) {
@@ -545,14 +576,16 @@ public class HomeController implements Initializable {
                         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
                         AnchorPane anchorPane = fxmlLoader.load();
                         RecipeController recipeController = fxmlLoader.getController();
-                        if (favouriteRecipeList.contains(recipeList.get(i))) {
+                        if (favouriteRecipeList.contains(planList.get(i))) {
                             String imgFile = "/img/heartFilled.png";
                             Image filled = new Image(getClass().getResourceAsStream(imgFile));
-                            recipeController.setData(planList.get(i), filled, myListener);
+
+                            recipeController.setData(recipeList.get(i), filled, myListener);
                         } else {
                             String imgFile = "/img/heartEmpty.png";
                             Image empty = new Image(getClass().getResourceAsStream(imgFile));
-                            recipeController.setData(planList.get(i), empty, myListener);
+
+                            recipeController.setData(recipeList.get(i), empty, myListener);
                         }
                         if (column == 1) {
                             column = 0;

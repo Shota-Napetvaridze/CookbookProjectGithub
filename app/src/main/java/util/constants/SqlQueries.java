@@ -181,6 +181,8 @@ public class SqlQueries {
 
         public static final String getTagById = "SELECT * FROM tags WHERE id = ?";
 
+        public static final String getRecipesByNameLike = "SELECT * FROM recipes WHERE recipe_name LIKE ?";
+
         // UPDATE -------------
         public static final String updateNickname = "UPDATE users SET display_name = ? WHERE id = ?";
 

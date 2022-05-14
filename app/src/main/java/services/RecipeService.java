@@ -11,6 +11,7 @@ public interface RecipeService {
     public List<Recipe> getAllRecipes();
     public Recipe getRecipeById(UUID id);
     public Recipe getRecipeByName(String name);
+    public List<Recipe> getRecipesByNameLike(String name);
     public List<Recipe> getRecipesFiltered(Set<String> filters);
 
     public String addRecipe(UUID id, String name, Image picture, String description,
