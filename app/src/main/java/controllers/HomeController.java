@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javafx.util.Duration;
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
@@ -54,9 +56,6 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button favorites;
-
-    @FXML
-    private Button filter;
 
     @FXML
     private AnchorPane filterPane;
@@ -113,6 +112,15 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button search;
+
+    @FXML
+    private Label filter;
+
+    @FXML
+    private Label filterBack;
+
+    @FXML
+    private AnchorPane anchorPaneBelowFilter;
 
     @FXML
     private TextField searchField;
@@ -277,7 +285,7 @@ public class HomeController implements Initializable {
 
                     recipeController.setData(recipeList.get(i), empty, myListener);
                 }
-                if (column == 1) {
+                if (column == 3) {
                     column = 0;
                     row++;
                 }
@@ -447,6 +455,11 @@ public class HomeController implements Initializable {
     }
 
 
+    private void filterSlider(){
+
+    }
+
+
     // ----------------------------------------- INITIALIZE   ----------------------------------------------- //
 
     @Override
@@ -465,6 +478,64 @@ public class HomeController implements Initializable {
         // Set message count
         String messageCount = String.valueOf(msgList.size());
         msgCountLbl.setText(messageCount);
+
+        // Slider
+        filterPane.setVisible(false);
+        anchorPaneBelowFilter.setTranslateY(-176);
+        filter.setOnMousePressed(event -> {
+            gridTag.getChildren().clear();
+            gridIngredient.getChildren().clear();
+            //----------------------------------------------------//
+            TranslateTransition slide = new TranslateTransition();
+            slide.setDuration(Duration.seconds(0.7));
+            slide.setNode(filterPane);
+            slide.setToY(-176);
+            slide.play();
+            filterPane.setTranslateY(0);
+            //----------------------------------------------------//
+            TranslateTransition slide2 = new TranslateTransition();
+            slide2.setDuration(Duration.seconds(0.7));
+            slide2.setNode(anchorPaneBelowFilter);
+            slide2.setToY(-176);
+            slide2.play();
+            anchorPaneBelowFilter.setTranslateY(0);
+            //----------------------------------------------------//
+            slide.setOnFinished((ActionEvent e)-> {
+                filterPane.setVisible(false);
+                filter.setVisible(false);
+                filterBack.setVisible(true);
+            });
+        });
+
+        filterBack.setOnMousePressed(event -> {
+            scrollTag.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scrollIngredient.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            initializeTagGrid();
+            initializeIngredientGrind();
+            //----------------------------------------------------//
+            TranslateTransition slide = new TranslateTransition();
+            slide.setDuration(Duration.seconds(0.7));
+            slide.setNode(filterPane);
+            slide.setToY(0);
+            slide.play();
+            filterPane.setVisible(true);
+            filterPane.setTranslateY(-176);
+            //----------------------------------------------------//
+            TranslateTransition slide2 = new TranslateTransition();
+            slide2.setDuration(Duration.seconds(0.7));
+            slide2.setNode(anchorPaneBelowFilter);
+            slide2.setToY(0);
+            slide2.play();
+            anchorPaneBelowFilter.setTranslateY(-176);
+            //----------------------------------------------------//
+
+            slide.setOnFinished((ActionEvent e)-> {
+                filter.setVisible(true);
+                filterBack.setVisible(false);
+
+            });
+        });
+
 
         // ----------------------------------------- MYLISTENER ----------------------------------------------- //
         if (recipeList.size() > 0) {
@@ -609,16 +680,7 @@ public class HomeController implements Initializable {
         });
 
         // Filter Button-----------------------------------------
-        filter.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                scrollTag.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                scrollIngredient.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                initializeTagGrid();
-                initializeIngredientGrind();
 
-            }
-        });
 
         // Open for a detailed view Button-----------------------------------------
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
