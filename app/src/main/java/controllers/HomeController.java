@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -72,6 +73,20 @@ public class HomeController implements Initializable {
     @FXML
     private Button home;
 
+
+    @FXML
+    private Button openDetailed;
+
+    @FXML
+    private Button plan;
+
+    @FXML
+    private ImageView cart;
+
+    @FXML
+    private Label cartCount;
+
+
     @FXML
     private Button logout;
 
@@ -80,12 +95,6 @@ public class HomeController implements Initializable {
 
     @FXML
     private Label msgCountLbl;
-
-    @FXML
-    private Button openDetailed;
-
-    @FXML
-    private Button plan;
 
     @FXML
     private ImageView recipeImg;
@@ -138,7 +147,7 @@ public class HomeController implements Initializable {
             comboBox.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
+
                 }
             });
 
@@ -416,6 +425,26 @@ public class HomeController implements Initializable {
         }
 
     }
+    private void openDetailedGrid(){
+        grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            grid.add(anchorPane, 1, 1);
+            grid.setAlignment(Pos.CENTER);
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     // ----------------------------------------- INITIALIZE   ----------------------------------------------- //
@@ -595,25 +624,7 @@ public class HomeController implements Initializable {
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                grid.getChildren().clear();
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
-                try {
-                    AnchorPane anchorPane = fxmlLoader.load();
-                    grid.add(anchorPane, 1, 1);
-                    grid.setAlignment(Pos.CENTER);
-                    // Set grid width
-                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setMaxWidth(Region.USE_PREF_SIZE);
-                    // Set grid height
-                    grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-                    grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                    grid.setMaxHeight(Region.USE_PREF_SIZE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                openDetailedGrid();
             }
         });
 
@@ -673,6 +684,13 @@ public class HomeController implements Initializable {
             }
         });
 
+        // Cart --------------------------------------------------
+        cart.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+
+            }
+        });
         // Message Button-----------------------------------------
         msg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
