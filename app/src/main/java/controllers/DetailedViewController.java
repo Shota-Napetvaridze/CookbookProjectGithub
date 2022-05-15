@@ -7,13 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import models.entities.Recipe;
-import services.impl.IngredientServiceImpl;
 import util.common.SceneContext;
 
 import java.net.URL;
@@ -25,6 +24,23 @@ public class DetailedViewController implements Initializable {
     @FXML
     private Button close;
 
+    @FXML
+    private GridPane commentsGrid;
+
+    @FXML
+    private ScrollPane commentsScroll;
+
+    @FXML
+    private AnchorPane detailedAnchor;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private GridPane ingredientsGrid;
+
+    @FXML
+    private ScrollPane ingredietsScroll;
 
     @FXML
     private TextArea recipe_Description;
@@ -39,13 +55,16 @@ public class DetailedViewController implements Initializable {
     private Label recipe_Name;
 
     @FXML
-    private Button sendTheRecipe;
+    private Button shareTheRecipe;
+
+    @FXML
+    private TextArea tagstextArea;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sendTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
+        shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();

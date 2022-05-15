@@ -146,8 +146,7 @@ public class HomeController implements Initializable {
             comboBox.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    comboBox.setStyle("-fx-color: rgb(239, 242, 255)" +
-                            "-fx-background-color: rgb(15, 125, 242)");
+                    comboBox.setStyle("-fx-color: rgb(239, 242, 255)");
                 }
             });
 
@@ -172,7 +171,7 @@ public class HomeController implements Initializable {
         recipeLbl.setText(recipe.getName());
     }
 
-    private void initializeGrid() {
+    private void initializeHomeGrid() {
         int column = 0;
         int row = 1;
         try {
@@ -210,6 +209,216 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
+    private void initializeFavouritesGrid() {
+        grid.getChildren().clear();
+
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < favouriteRecipeList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                RecipeController recipeController = fxmlLoader.getController();
+                String imgFile = "/img/heartFilled.png";
+                Image filled = new Image(getClass().getResourceAsStream(imgFile));
+
+                recipeController.setData(favouriteRecipeList.get(i), filled, myListener);
+
+                if (column == 3) {
+                    column = 0;
+                    row++;
+                }
+                grid.add(anchorPane, column++, row);
+                // Set grid width
+                grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+                GridPane.setMargin(anchorPane, new Insets(10));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializePlanGrid(){
+        grid.getChildren().clear();
+
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < planList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                RecipeController recipeController = fxmlLoader.getController();
+                if (favouriteRecipeList.contains(planList.get(i))) {
+                    String imgFile = "/img/heartFilled.png";
+                    Image filled = new Image(getClass().getResourceAsStream(imgFile));
+
+                    recipeController.setData(recipeList.get(i), filled, myListener);
+                } else {
+                    String imgFile = "/img/heartEmpty.png";
+                    Image empty = new Image(getClass().getResourceAsStream(imgFile));
+
+                    recipeController.setData(recipeList.get(i), empty, myListener);
+                }
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                grid.add(anchorPane, column++, row);
+                // Set grid width
+                grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                grid.setMaxWidth(Region.USE_PREF_SIZE);
+                // Set grid height
+                grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                grid.setMaxHeight(Region.USE_PREF_SIZE);
+                GridPane.setMargin(anchorPane, new Insets(10));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializeMsgGrid(){
+        grid.getChildren().clear();
+        // msgCountLbl.setText("...");
+        grid.setStyle("-fx-background-color: #ffffff");
+
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < msgList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/messageItem.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                MsgController msgController = fxmlLoader.getController();
+                msgController.setData(msgList.get(i), myListener);
+
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                grid.add(anchorPane, column++, row);
+                // Set grid width
+                grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                grid.setMaxHeight(Region.USE_PREF_SIZE);
+
+                GridPane.setMargin(anchorPane, new Insets(10));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializeAddNewRecipeGrid(){
+        grid.getChildren().clear();
+        recipeImg.setVisible(false);
+        recipeLbl.setVisible(false);
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/addNewRecipe.fxml"));
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            grid.add(anchorPane, 1, 1);
+            grid.setAlignment(Pos.CENTER);
+            grid.setStyle("-fx-background-color: #ffa9a9");
+
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializeTagGrid(){
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < tagList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/tag.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                TagController tagController = fxmlLoader.getController();
+                tagController.setData(tagList.get(i), myListener);
+
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                gridTag.add(anchorPane, column++, row);
+                // Set grid width
+                gridTag.setMinWidth(Region.USE_COMPUTED_SIZE);
+                gridTag.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                gridTag.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                gridTag.setMinHeight(Region.USE_COMPUTED_SIZE);
+                gridTag.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                gridTag.setMaxHeight(Region.USE_PREF_SIZE);
+                GridPane.setMargin(anchorPane, new Insets(3));
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializeIngredientGrind(){
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < ingredientsList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredient.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                IngredientController ingredientController = fxmlLoader.getController();
+                ingredientController.setData(ingredientsList.get(i), myListener);
+
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                gridIngredient.add(anchorPane, column++, row);
+                // Set grid width
+                gridIngredient.setMinWidth(Region.USE_COMPUTED_SIZE);
+                gridIngredient.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                gridIngredient.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                gridIngredient.setMinHeight(Region.USE_COMPUTED_SIZE);
+                gridIngredient.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                gridIngredient.setMaxHeight(Region.USE_PREF_SIZE);
+
+                GridPane.setMargin(anchorPane, new Insets(3));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    // ----------------------------------------- INITIALIZE   ----------------------------------------------- //
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -228,7 +437,7 @@ public class HomeController implements Initializable {
         String messageCount = String.valueOf(msgList.size());
         msgCountLbl.setText(messageCount);
 
-        // -----------------------------------------MYLISTENER----------------------------------------------- 
+        // ----------------------------------------- MYLISTENER ----------------------------------------------- //
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
@@ -320,10 +529,10 @@ public class HomeController implements Initializable {
             
         }
 
-        // Initialize grid-----------------------------------------
-        initializeGrid();
+        // Initialize Home grid
+        initializeHomeGrid();
 
-        // -----------------------------------------BUTTONS-----------------------------------------------
+        // -----------------------------------------BUTTONS--------------------------------------------------- //
 
         // Search Button-----------------------------------------
         search.setOnAction(new EventHandler<ActionEvent>() {
@@ -366,7 +575,7 @@ public class HomeController implements Initializable {
                     }
                 }
                 recipeList = filteredRecipes;
-                initializeGrid();
+                initializeHomeGrid();
             }
         });
 
@@ -376,61 +585,8 @@ public class HomeController implements Initializable {
             public void handle(ActionEvent event) {
                 scrollTag.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollIngredient.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-                int column = 0;
-                int row = 1;
-                try {
-                    for (int i = 0; i < tagList.size(); i++) {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/tag.fxml"));
-                        AnchorPane anchorPane = fxmlLoader.load();
-                        TagController tagController = fxmlLoader.getController();
-                        tagController.setData(tagList.get(i), myListener);
-
-                        if (column == 1) {
-                            column = 0;
-                            row++;
-                        }
-                        gridTag.add(anchorPane, column++, row);
-                        // Set grid width
-                        gridTag.setMinWidth(Region.USE_COMPUTED_SIZE);
-                        gridTag.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        gridTag.setMaxWidth(Region.USE_PREF_SIZE);
-
-                        // Set grid height
-                        gridTag.setMinHeight(Region.USE_COMPUTED_SIZE);
-                        gridTag.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                        gridTag.setMaxHeight(Region.USE_PREF_SIZE);
-                        GridPane.setMargin(anchorPane, new Insets(3));
-                    }
-
-                    for (int i = 0; i < ingredientsList.size(); i++) {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredient.fxml"));
-                        AnchorPane anchorPane = fxmlLoader.load();
-                        IngredientController ingredientController = fxmlLoader.getController();
-                        ingredientController.setData(ingredientsList.get(i), myListener);
-
-                        if (column == 1) {
-                            column = 0;
-                            row++;
-                        }
-                        gridIngredient.add(anchorPane, column++, row);
-                        // Set grid width
-                        gridIngredient.setMinWidth(Region.USE_COMPUTED_SIZE);
-                        gridIngredient.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        gridIngredient.setMaxWidth(Region.USE_PREF_SIZE);
-
-                        // Set grid height
-                        gridIngredient.setMinHeight(Region.USE_COMPUTED_SIZE);
-                        gridIngredient.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                        gridIngredient.setMaxHeight(Region.USE_PREF_SIZE);
-
-                        GridPane.setMargin(anchorPane, new Insets(3));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                initializeTagGrid();
+                initializeIngredientGrind();
 
             }
         });
@@ -474,31 +630,7 @@ public class HomeController implements Initializable {
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                grid.getChildren().clear();
-                recipeImg.setVisible(false);
-                recipeLbl.setVisible(false);
-
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/addNewRecipe.fxml"));
-                try {
-                    AnchorPane anchorPane = fxmlLoader.load();
-                    grid.add(anchorPane, 1, 1);
-                    grid.setAlignment(Pos.CENTER);
-                    grid.setStyle("-fx-background-color: #ffa9a9");
-
-                    // Set grid width
-                    grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                    grid.setMaxWidth(Region.USE_PREF_SIZE);
-
-                    // Set grid height
-                    grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-                    grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                    grid.setMaxHeight(Region.USE_PREF_SIZE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                initializeAddNewRecipeGrid();
             }
         });
 
@@ -514,8 +646,7 @@ public class HomeController implements Initializable {
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
                 grid.setStyle("-fx-background-color: #ffffff");
-                initializeGrid();
-                // SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+                initializeHomeGrid();
             }
         });
 
@@ -526,43 +657,7 @@ public class HomeController implements Initializable {
                 favorites.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
-
-                grid.getChildren().clear();
-
-                int column = 0;
-                int row = 1;
-                try {
-                    for (int i = 0; i < favouriteRecipeList.size(); i++) {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
-                        AnchorPane anchorPane = fxmlLoader.load();
-                        RecipeController recipeController = fxmlLoader.getController();
-                        String imgFile = "/img/heartFilled.png";
-                        Image filled = new Image(getClass().getResourceAsStream(imgFile));
-
-                        recipeController.setData(favouriteRecipeList.get(i), filled, myListener);
-
-                        if (column == 3) {
-                            column = 0;
-                            row++;
-                        }
-                        grid.add(anchorPane, column++, row);
-                        // Set grid width
-                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        grid.setMaxWidth(Region.USE_PREF_SIZE);
-
-                        // Set grid height
-                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                        grid.setMaxHeight(Region.USE_PREF_SIZE);
-
-                        GridPane.setMargin(anchorPane, new Insets(10));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                initializeFavouritesGrid();
             }
         });
 
@@ -574,46 +669,7 @@ public class HomeController implements Initializable {
                 plan.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                grid.getChildren().clear();
-
-                int column = 0;
-                int row = 1;
-                try {
-                    for (int i = 0; i < planList.size(); i++) {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
-                        AnchorPane anchorPane = fxmlLoader.load();
-                        RecipeController recipeController = fxmlLoader.getController();
-                        if (favouriteRecipeList.contains(planList.get(i))) {
-                            String imgFile = "/img/heartFilled.png";
-                            Image filled = new Image(getClass().getResourceAsStream(imgFile));
-
-                            recipeController.setData(recipeList.get(i), filled, myListener);
-                        } else {
-                            String imgFile = "/img/heartEmpty.png";
-                            Image empty = new Image(getClass().getResourceAsStream(imgFile));
-
-                            recipeController.setData(recipeList.get(i), empty, myListener);
-                        }
-                        if (column == 1) {
-                            column = 0;
-                            row++;
-                        }
-                        grid.add(anchorPane, column++, row);
-                        // Set grid width
-                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        grid.setMaxWidth(Region.USE_PREF_SIZE);
-                        // Set grid height
-                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                        grid.setMaxHeight(Region.USE_PREF_SIZE);
-                        GridPane.setMargin(anchorPane, new Insets(10));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                initializePlanGrid();
             }
         });
 
@@ -624,41 +680,7 @@ public class HomeController implements Initializable {
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
-
-                grid.getChildren().clear();
-                // msgCountLbl.setText("...");
-                grid.setStyle("-fx-background-color: #ffffff");
-
-                int column = 0;
-                int row = 1;
-                try {
-                    for (int i = 0; i < msgList.size(); i++) {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/messageItem.fxml"));
-                        AnchorPane anchorPane = fxmlLoader.load();
-                        MsgController msgController = fxmlLoader.getController();
-                        msgController.setData(msgList.get(i), myListener);
-
-                        if (column == 1) {
-                            column = 0;
-                            row++;
-                        }
-                        grid.add(anchorPane, column++, row);
-                        // Set grid width
-                        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-                        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        grid.setMaxWidth(Region.USE_PREF_SIZE);
-
-                        // Set grid height
-                        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-                        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                        grid.setMaxHeight(Region.USE_PREF_SIZE);
-
-                        GridPane.setMargin(anchorPane, new Insets(10));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                initializeMsgGrid();
             }
         });
 
