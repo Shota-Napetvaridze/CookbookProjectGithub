@@ -28,17 +28,13 @@
                 <VBox fx:id="Vbox" prefHeight="810.0" prefWidth="416.0" style="-fx-background-color: #e4e1c8#e4e1c8;" BorderPane.alignment="CENTER">
                     <children>
                         <HBox alignment="CENTER" prefHeight="110.0" prefWidth="200.0">
-                            <children>
+                     <children>
                                 <Label fx:id="CookBookLbl" alignment="CENTER" prefHeight="62.0" prefWidth="195.0" style="-fx-background-color: FED700;" styleClass="recipeAnchorStyle" stylesheets="@style.css" text="Admin">
                                     <font>
                                         <Font name="System Bold Italic" size="37.0" />
                                     </font>
-                                    <HBox.margin>
-                                        <Insets left="70.0" />
-                                    </HBox.margin>
                                 </Label>
-                                <ImageView fx:id="sovietLogo" fitHeight="47.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                            </children>
+                     </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="65.0" prefWidth="200.0">
                             <VBox.margin>

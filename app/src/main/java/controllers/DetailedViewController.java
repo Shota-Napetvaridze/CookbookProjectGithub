@@ -4,7 +4,9 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -12,14 +14,23 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
+import models.entities.Ingredient;
+import models.entities.Tag;
+import services.impl.IngredientServiceImpl;
+import util.common.MyListener;
 import util.common.SceneContext;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
 public class DetailedViewController implements Initializable {
+    private MyListener myListener;
 
     @FXML
     private Button close;
@@ -61,9 +72,53 @@ public class DetailedViewController implements Initializable {
     private TextArea tagstextArea;
 
 
+    private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
+
+    private List<Ingredient> ingredientsList = ingredientService.getAllIngredients();
+    private List<Ingredient> selectedIngredients = new ArrayList<>();
+
+
+    private void initializeIngredientGrind(){
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < ingredientsList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredient.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                IngredientsNeededController ingredientsNeededController = fxmlLoader.getController();
+                ingredientsNeededController.setData(ingredientsList.get(i), myListener);
+
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                ingredientsGrid.add(anchorPane, column++, row);
+                // Set grid width
+                ingredientsGrid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                ingredientsGrid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                ingredientsGrid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                ingredientsGrid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                ingredientsGrid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                ingredientsGrid.setMaxHeight(Region.USE_PREF_SIZE);
+                GridPane.setMargin(anchorPane, new Insets(3));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeIngredientGrind();
+
+
         shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

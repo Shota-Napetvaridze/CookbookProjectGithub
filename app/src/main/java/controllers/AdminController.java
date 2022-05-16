@@ -57,8 +57,6 @@ public class AdminController implements Initializable {
     @FXML
     private TextField searchField;
 
-    @FXML
-    private ImageView sovietLogo;
 
 
 
