@@ -46,10 +46,10 @@
                      <children>
                         <AnchorPane prefHeight="72.0" prefWidth="366.0">
                            <children>
-                              <Button fx:id="search" layoutX="247.0" layoutY="16.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="58.0" style="-fx-background-color: FED700 FED700; -fx-border-color: #000000#000000;" text="Search" AnchorPane.rightAnchor="51.0" />
-                              <Label fx:id="filter" alignment="CENTER" layoutX="310.0" layoutY="16.0" prefHeight="40.0" prefWidth="57.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Filter" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="16.0" />
-                              <Label fx:id="filterBack" alignment="CENTER" contentDisplay="CENTER" layoutX="310.0" layoutY="16.0" prefHeight="40.0" prefWidth="57.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Filter" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="16.0" />
-                              <TextField fx:id="searchField" layoutX="20.0" layoutY="16.0" prefHeight="40.0" prefWidth="222.0" promptText="Type here to search " />
+                              <Button fx:id="search" layoutX="247.0" layoutY="12.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="58.0" style="-fx-background-color: FED700 FED700; -fx-border-color: #000000#000000;" text="Search" AnchorPane.rightAnchor="51.0" />
+                              <Label fx:id="filter" alignment="CENTER" layoutX="310.0" layoutY="12.0" prefHeight="40.0" prefWidth="57.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Filter" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="12.0" />
+                              <Label fx:id="filterBack" alignment="CENTER" contentDisplay="CENTER" layoutX="310.0" layoutY="12.0" prefHeight="40.0" prefWidth="57.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Filter" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="12.0" />
+                              <TextField fx:id="searchField" layoutX="20.0" layoutY="12.0" prefHeight="40.0" prefWidth="222.0" promptText="Type here to search " />
                            </children>
                         </AnchorPane>
                      </children>

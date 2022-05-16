@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HomeController">
+<AnchorPane prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AdminController">
     <children>
         <ImageView fitHeight="904.0" fitWidth="1135.0" layoutX="412.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="412.0" AnchorPane.rightAnchor="-232.0" AnchorPane.topAnchor="0.0">
             <image>
@@ -58,7 +58,7 @@
                         </HBox>
                   <VBox prefHeight="633.0" prefWidth="356.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="416.0">
                            <children>
                               <Button fx:id="addUser" mnemonicParsing="false" prefHeight="43.0" prefWidth="284.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Add user">
                                  <font>
@@ -70,14 +70,14 @@
                               </Button>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="416.0">
                            <children>
                               <Button fx:id="logout" mnemonicParsing="false" prefHeight="43.0" prefWidth="288.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Logout">
                                  <effect>
                                     <Blend />
                                  </effect>
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
                            </children>

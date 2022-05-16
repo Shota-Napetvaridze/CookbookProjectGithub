@@ -23,6 +23,7 @@ public interface UserService {
     
     public Set<User> getUsers();
     public User getUserById(UUID id);
+
     public User getUserByNickname(String nickname);
     public String addUser(String username, String email, String password) throws InvalidLengthException, TakenNicknameException, InvalidEmailException, TakenEmailException, TakenUsernameException, InvalidUserNameLengthException, InvalidNicknameLengthException, InvalidPasswordComplexityException, InvalidPasswordLengthException;
     public String removeUserById(UUID userId);

@@ -4,8 +4,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import models.entities.Message;
+import models.entities.User;
+import services.impl.UserServiceImpl;
+import util.common.MyListener;
 
 public class UserController {
+    private UserServiceImpl userService = new UserServiceImpl();
+    private MyListener myListener;
+    private User user;
 
     @FXML
     private Button editUser;
@@ -35,4 +42,8 @@ public class UserController {
 
     }
 
+    public void setData(User user, MyListener mylistener){
+        this.user = user;
+        this.myListener = myListener;
+    }
 }

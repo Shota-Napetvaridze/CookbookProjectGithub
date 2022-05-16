@@ -219,7 +219,6 @@ public class HomeController implements Initializable {
                 grid.setMinHeight(Region.USE_COMPUTED_SIZE);
                 grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                 grid.setMaxHeight(Region.USE_PREF_SIZE);
-                grid.setVgap(2.0);
                 GridPane.setMargin(anchorPane, new Insets(10));
             }
         } catch (IOException e) {
@@ -251,12 +250,10 @@ public class HomeController implements Initializable {
                 grid.setMinWidth(Region.USE_COMPUTED_SIZE);
                 grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 grid.setMaxWidth(Region.USE_PREF_SIZE);
-
                 // Set grid height
                 grid.setMinHeight(Region.USE_COMPUTED_SIZE);
                 grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                 grid.setMaxHeight(Region.USE_PREF_SIZE);
-
                 GridPane.setMargin(anchorPane, new Insets(10));
             }
         } catch (IOException e) {
@@ -455,10 +452,6 @@ public class HomeController implements Initializable {
     }
 
 
-    private void filterSlider(){
-
-    }
-
 
     // ----------------------------------------- INITIALIZE   ----------------------------------------------- //
 
@@ -537,7 +530,7 @@ public class HomeController implements Initializable {
         });
 
 
-        // ----------------------------------------- MYLISTENER ----------------------------------------------- //
+        // ----------------------------------------- MY LISTENER ----------------------------------------------- //
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             myListener = new MyListener() {
