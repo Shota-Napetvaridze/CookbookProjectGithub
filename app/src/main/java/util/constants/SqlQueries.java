@@ -188,7 +188,7 @@ public class SqlQueries {
 
         public static final String updateEmail = "UPDATE users SET email = ? WHERE id = ?";
 
-        public static final String removeMessage = "DELETE FROM messages WHERE id = ?";
+        public static final String removeMessageByID = "DELETE FROM messages WHERE id = ?";
 
         public static final String addRecipeFavorite = "INSERT INTO users_favorites (\n" +
                         "user_id, recipe_id) \n" +

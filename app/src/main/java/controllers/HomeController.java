@@ -4,6 +4,7 @@ import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +21,9 @@ import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,10 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button plan;
+
+    @FXML
+    private DatePicker datePicker;
+
 
     @FXML
     private ImageView cart;
@@ -396,7 +401,7 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializeIngredientGrind(){
+    private void initializeIngredientGrid(){
         int column = 0;
         int row = 1;
         try {
@@ -437,7 +442,27 @@ public class HomeController implements Initializable {
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             grid.add(anchorPane, 1, 1);
-            grid.setAlignment(Pos.CENTER);
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openReplyGrid(){
+        grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
+        try {
+
+            AnchorPane anchorPane = fxmlLoader.load();
+            grid.add(anchorPane, 1, 1);
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
             grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
@@ -504,7 +529,7 @@ public class HomeController implements Initializable {
             scrollTag.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scrollIngredient.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             initializeTagGrid();
-            initializeIngredientGrind();
+            initializeIngredientGrid();
             //----------------------------------------------------//
             TranslateTransition slide = new TranslateTransition();
             slide.setDuration(Duration.seconds(0.7));
@@ -613,8 +638,14 @@ public class HomeController implements Initializable {
 
                 @Override
                 public void replyMsgListener(Message message) {
-                    MsgController msgController = new MsgController();
-                    msgController.setData(message, myListener);
+                    openReplyGrid();
+                }
+
+                @Override
+                public void removeMsgListener(Message message) {
+                    userService.removeMessageById(message.getId());
+                    msgList.remove(message);
+                    initializeMsgGrid();
                 }
 
             };
@@ -691,6 +722,8 @@ public class HomeController implements Initializable {
 
             }
         });
+
+
 
         // Add New Recipe Button-----------------------------------------
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {

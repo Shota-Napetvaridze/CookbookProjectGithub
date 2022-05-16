@@ -80,16 +80,12 @@ public class LogInController implements Initializable {
         login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(username.getText().equals("admin") && password.getText().equals("admin")){
-                    SceneContext.changeScene(event, "/fxmlFiles/adminPage.fxml");
-                } else if (!username.getText().equals("admin") && !password.getText().equals("admin")) {
-                    User user = userService.loginUser(username.getText(), password.getText());
-                    if (user != null) {
-                        SceneContext.user = user;
-                        SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-                    }
-
-                } else {
+                User user = userService.loginUser(username.getText(), password.getText());
+                if (user != null) {
+                    SceneContext.user = user;
+                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+                }
+                else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Credentials are incorrect");
                     alert.show();

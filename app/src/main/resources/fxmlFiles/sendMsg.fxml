@@ -10,8 +10,8 @@
 
 <AnchorPane fx:id="newMsgAnchor" prefHeight="695.0" prefWidth="735.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HomeController">
     <children>
-        <TextField  layoutX="14.0" layoutY="53.0" prefHeight="43.0" prefWidth="445.0" promptText="Recipe name" />
-        <Button  layoutX="468.0" layoutY="523.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" text="Add Image">
+        <TextField layoutX="14.0" layoutY="53.0" prefHeight="43.0" prefWidth="445.0" promptText="Recipe name" />
+        <Button layoutX="468.0" layoutY="523.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" text="Add Image">
             <font>
                 <Font size="23.0" />
             </font>
@@ -21,13 +21,13 @@
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button  layoutX="469.0" layoutY="584.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" text="Add Recipe">
+        <Button layoutX="469.0" layoutY="584.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" text="Send">
             <font>
                 <Font size="23.0" />
             </font>
         </Button>
-        <ImageView  fitHeight="216.0" fitWidth="242.0" layoutX="470.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true" />
-        <TextField  layoutX="470.0" layoutY="482.0" prefHeight="26.0" prefWidth="223.0" promptText="filename" />
+        <ImageView fitHeight="216.0" fitWidth="242.0" layoutX="470.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true" />
+        <TextField layoutX="470.0" layoutY="482.0" prefHeight="26.0" prefWidth="223.0" promptText="filename" />
         <Label layoutX="14.0" layoutY="100.0" text="Description" textFill="WHITE">
             <font>
                 <Font size="24.0" />
@@ -38,7 +38,7 @@
                 <Font size="24.0" />
             </font>
         </Label>
-        <TextArea  layoutX="17.0" layoutY="133.0" prefHeight="276.0" prefWidth="445.0" promptText="Recipe description" />
-        <TextArea  layoutX="17.0" layoutY="466.0" prefHeight="166.0" prefWidth="445.0" promptText="Recipe instruction" />
+        <TextArea layoutX="17.0" layoutY="133.0" prefHeight="276.0" prefWidth="445.0" promptText="Recipe description" />
+        <TextArea layoutX="17.0" layoutY="466.0" prefHeight="166.0" prefWidth="445.0" promptText="Recipe instruction" />
     </children>
 </AnchorPane>

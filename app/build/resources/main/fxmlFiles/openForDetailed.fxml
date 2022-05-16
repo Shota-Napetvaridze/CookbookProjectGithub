@@ -12,41 +12,41 @@
 
 <AnchorPane fx:id="detailedAnchor" prefHeight="695.0" prefWidth="735.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DetailedViewController">
     <children>
-        <Label fx:id="recipe_Name" layoutX="36.0" layoutY="21.0" text="Name" AnchorPane.leftAnchor="30.0">
+        <Label fx:id="recipe_Name" layoutX="36.0" layoutY="21.0" text="Name" AnchorPane.leftAnchor="20.0">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="close" layoutX="441.0" layoutY="621.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="272.0" style="-fx-background-color: #efff78;" text="Close" AnchorPane.rightAnchor="25.0">
+        <Button fx:id="close" layoutX="441.0" layoutY="621.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: #efff78;" text="Close" AnchorPane.rightAnchor="74.0">
             <font>
                 <Font size="23.0" />
             </font>
         </Button>
         <ImageView fx:id="recipe_Img" fitHeight="145.0" fitWidth="205.0" layoutX="493.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
-        <Label layoutX="36.0" layoutY="79.0" text="Description" AnchorPane.leftAnchor="30.0">
+        <Label layoutX="36.0" layoutY="79.0" text="Description" AnchorPane.leftAnchor="20.0">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Label layoutX="34.0" layoutY="223.0" text="Instructions" AnchorPane.leftAnchor="30.0">
+        <Label layoutX="34.0" layoutY="223.0" text="Instructions" AnchorPane.leftAnchor="20.0">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <TextArea fx:id="recipe_Description" editable="false" layoutX="34.0" layoutY="112.0" prefHeight="103.0" prefWidth="363.0" promptText="Recipe description" styleClass="text-area" wrapText="true" AnchorPane.leftAnchor="30.0">
+        <TextArea fx:id="recipe_Description" editable="false" layoutX="34.0" layoutY="112.0" prefHeight="103.0" prefWidth="363.0" promptText="Recipe description" styleClass="text-area" wrapText="true" AnchorPane.leftAnchor="20.0">
          <font>
             <Font size="21.0" />
          </font></TextArea>
-        <TextArea fx:id="recipe_Instruction" editable="false" layoutX="35.0" layoutY="264.0" prefHeight="103.0" prefWidth="363.0" promptText="Recipe instruction" styleClass="text-area" wrapText="true" AnchorPane.leftAnchor="30.0">
+        <TextArea fx:id="recipe_Instruction" editable="false" layoutX="35.0" layoutY="264.0" prefHeight="103.0" prefWidth="363.0" promptText="Recipe instruction" styleClass="text-area" wrapText="true" AnchorPane.leftAnchor="20.0">
          <font>
             <Font size="21.0" />
          </font></TextArea>
-      <Button fx:id="shareTheRecipe" layoutX="442.0" layoutY="561.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="272.0" style="-fx-background-color: #efff78;" text="Share" AnchorPane.rightAnchor="25.0">
+      <Button fx:id="shareTheRecipe" layoutX="442.0" layoutY="561.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: #efff78;" text="Share" AnchorPane.rightAnchor="74.0">
          <font>
             <Font size="23.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="commentsScroll" layoutX="38.0" layoutY="435.0" prefHeight="234.0" prefWidth="363.0" AnchorPane.leftAnchor="30.0">
+      <ScrollPane fx:id="commentsScroll" layoutX="38.0" layoutY="435.0" prefHeight="234.0" prefWidth="363.0" AnchorPane.leftAnchor="20.0">
          <content>
             <GridPane fx:id="commentsGrid" prefHeight="10.0" prefWidth="31.0">
                <rowConstraints>
@@ -55,7 +55,7 @@
             </GridPane>
          </content>
       </ScrollPane>
-      <Button fx:id="editButton" layoutX="442.0" layoutY="498.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="272.0" style="-fx-background-color: #efff78;" text="Edit" visible="false" AnchorPane.rightAnchor="25.0">
+      <Button fx:id="editButton" layoutX="442.0" layoutY="498.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: #efff78;" text="Edit" visible="false" AnchorPane.rightAnchor="74.0">
          <font>
             <Font size="23.0" />
          </font>
@@ -70,17 +70,17 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TextArea fx:id="tagstextArea" editable="false" layoutX="442.0" layoutY="357.0" prefHeight="117.0" prefWidth="272.0" promptText="Recipe instruction" styleClass="text-area" text="&#10;" wrapText="true" AnchorPane.rightAnchor="25.0">
+      <TextArea fx:id="tagsTextArea" editable="false" layoutX="442.0" layoutY="357.0" prefHeight="117.0" prefWidth="223.0" promptText="Recipe instruction" styleClass="text-area" text="&#10;" wrapText="true" AnchorPane.rightAnchor="74.0">
          <font>
             <Font size="21.0" />
          </font>
       </TextArea>
-      <Label layoutX="43.0" layoutY="386.0" text="Comments" AnchorPane.leftAnchor="30.0">
+      <Label layoutX="43.0" layoutY="386.0" text="Comments" AnchorPane.leftAnchor="20.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <ScrollPane fx:id="ingredietsScroll" layoutX="438.0" layoutY="205.0" prefHeight="111.0" prefWidth="272.0" AnchorPane.rightAnchor="25.0">
+      <ScrollPane fx:id="ingredientScroll" layoutX="438.0" layoutY="205.0" prefHeight="111.0" prefWidth="241.0" AnchorPane.rightAnchor="56.0">
          <content>
             <GridPane fx:id="ingredientsGrid" prefHeight="10.0" prefWidth="31.0">
                <rowConstraints>

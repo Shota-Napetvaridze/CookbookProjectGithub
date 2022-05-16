@@ -5,7 +5,6 @@ import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
 import models.entities.Tag;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 
 
@@ -19,5 +18,7 @@ public interface MyListener {
     public void recipeEntered(Recipe recipe, TextArea textArea);
     public void recipeExited(Recipe recipe, TextArea textArea);
     public void replyMsgListener(Message message);
+
+    public void removeMsgListener(Message message);
 
 }

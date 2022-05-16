@@ -17,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import models.entities.Ingredient;
-import models.entities.Tag;
 import services.impl.IngredientServiceImpl;
 import util.common.MyListener;
 import util.common.SceneContext;
@@ -27,7 +26,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 public class DetailedViewController implements Initializable {
     private MyListener myListener;
@@ -51,7 +49,7 @@ public class DetailedViewController implements Initializable {
     private GridPane ingredientsGrid;
 
     @FXML
-    private ScrollPane ingredietsScroll;
+    private ScrollPane ingredientScroll;
 
     @FXML
     private TextArea recipe_Description;
@@ -69,7 +67,7 @@ public class DetailedViewController implements Initializable {
     private Button shareTheRecipe;
 
     @FXML
-    private TextArea tagstextArea;
+    private TextArea tagsTextArea;
 
 
     private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
@@ -78,15 +76,15 @@ public class DetailedViewController implements Initializable {
     private List<Ingredient> selectedIngredients = new ArrayList<>();
 
 
-    private void initializeIngredientGrind(){
+    private void initializeIngredientGrid(){
         int column = 0;
         int row = 1;
         try {
             for (int i = 0; i < ingredientsList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredient.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientsNeeded.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
-                IngredientsNeededController ingredientsNeededController = fxmlLoader.getController();
+                IngredientItemController ingredientsNeededController = fxmlLoader.getController();
                 ingredientsNeededController.setData(ingredientsList.get(i), myListener);
 
                 if (column == 1) {
@@ -116,13 +114,12 @@ public class DetailedViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeIngredientGrind();
+        initializeIngredientGrid();
 
 
         shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                FileChooser fileChooser = new FileChooser();
 
             }
         });

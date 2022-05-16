@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +22,7 @@ import models.entities.User;
 import services.impl.IngredientServiceImpl;
 import services.impl.UserServiceImpl;
 import util.common.MyListener;
+import util.common.SceneContext;
 
 import java.io.IOException;
 import java.net.URL;
@@ -71,7 +74,7 @@ public class AdminController implements Initializable {
                 AnchorPane anchorPane = fxmlLoader.load();
                 UserController userController = fxmlLoader.getController();
                 userController.setData(usersList.get(i), myListener);
-                if (column == 3) {
+                if (column == 1) {
                     column = 0;
                     row++;
                 }
@@ -94,6 +97,23 @@ public class AdminController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
+        addUser.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
+            }
+
+        });
+
+        logout.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
+            }
+
+        });
 
     }
 }

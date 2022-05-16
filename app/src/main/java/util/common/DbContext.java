@@ -904,6 +904,7 @@ public class DbContext {
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> ingredients = new ArrayList<>();
         try {
+            useDatabase();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(SqlQueries.getAllIngredients);
 
@@ -946,7 +947,8 @@ public class DbContext {
     // ------------------- MESSAGE -------------------//
     public String removeMessageById(UUID messageId) {
         try {
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeMessage);
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeMessageByID);
             ps.setString(1, messageId.toString());
 
             int result = ps.executeUpdate();
