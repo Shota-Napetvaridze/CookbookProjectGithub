@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
+import models.entities.Comment;
 import models.entities.Ingredient;
 import services.impl.IngredientServiceImpl;
 import util.common.MyListener;
@@ -74,6 +75,8 @@ public class DetailedViewController implements Initializable {
 
     private List<Ingredient> ingredientsList = ingredientService.getAllIngredients();
     private List<Ingredient> selectedIngredients = new ArrayList<>();
+//    private List<Ingredient> commentsList = ingredientService.getAllComments(); //TODO: add getAllComments
+    private List<Comment> commentsList = new ArrayList<>();
 
 
     private void initializeIngredientGrid(){
@@ -110,13 +113,47 @@ public class DetailedViewController implements Initializable {
         }
 
     }
+    private void initializeCommentsGrid(){
+        commentsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        int column = 0;
+        int row = 1;
+        try {
+            for (int i = 0; i < commentsList.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientsNeeded.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                CommentController commentController = fxmlLoader.getController();
+                commentController.setData(commentsList.get(i), myListener);
+
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                commentsGrid.add(anchorPane, column++, row);
+                // Set grid width
+                commentsGrid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                commentsGrid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                commentsGrid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                commentsGrid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                commentsGrid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                commentsGrid.setMaxHeight(Region.USE_PREF_SIZE);
+                GridPane.setMargin(anchorPane, new Insets(3));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeIngredientGrid();
-
+        initializeCommentsGrid();
 
         shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override

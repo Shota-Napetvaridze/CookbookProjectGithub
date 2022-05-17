@@ -35,7 +35,7 @@
                   <Image url="@../img/ic_cart.png" />
                </image>
             </ImageView>
-            <Button mnemonicParsing="false" onMousePressed="#addToCartClick" prefHeight="9.0" prefWidth="18.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="+">
+            <Button mnemonicParsing="false" onMousePressed="#addToCartClick" prefHeight="9.0" prefWidth="18.0" style="-fx-background-color: FED700;" styleClass="recipeAnchorStyle" stylesheets="@style.css" text="+">
                <font>
                   <Font name="System Bold" size="10.0" />
                </font></Button>

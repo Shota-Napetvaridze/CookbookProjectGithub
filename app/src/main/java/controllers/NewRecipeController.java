@@ -5,12 +5,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,6 +23,20 @@ import services.impl.RecipeServiceImpl;
 import util.common.SceneContext;
 
 public class NewRecipeController implements Initializable {
+
+
+    @FXML
+    private GridPane ingredientGrid;
+
+    @FXML
+    private ScrollPane ingredientScroll;
+
+    @FXML
+    private TextField ingredientSearch;
+
+
+    @FXML
+    private Button searchButton;
 
     @FXML
     private Button add_image;
@@ -64,6 +76,7 @@ public class NewRecipeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         add_image.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -85,9 +98,7 @@ public class NewRecipeController implements Initializable {
         add_recipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
                 recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), user.getId());
-                
                 SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
             }
 
