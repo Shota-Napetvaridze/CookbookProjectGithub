@@ -14,15 +14,22 @@ import java.util.ResourceBundle;
 import models.entities.Recipe;
 import util.common.UserListener;
 
-public class RecipeController implements Initializable{
+public class RecipeController{
     private Recipe recipe;
     private UserListener userListener;
+
+    public RecipeController(){}
+
+
+    @FXML
+    private Label dateLbl;
+
+    @FXML
+    private ImageView image;
 
     @FXML
     private Label recipeName;
 
-    @FXML
-    private ImageView image;
 
     @FXML
     private ImageView heartImage;
@@ -54,6 +61,8 @@ public class RecipeController implements Initializable{
     void clickDescription(MouseEvent event) {
         userListener.descriptionListener(recipe);
     }
+
+    HomeController homeController = new HomeController();
     
     public void setData(Recipe recipe, Image heartImage, UserListener userListener) {
         this.recipe = recipe;
@@ -62,10 +71,9 @@ public class RecipeController implements Initializable{
         image.setImage(recipe.getPicture());
         this.heartImage.setImage(heartImage);
     }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        ScrollBar scrollBar = (ScrollBar)ta.lookup(".scroll-bar:vertical");
-//        scrollBar.setDisable(true); 
+    public void setDate(String date) {
+        dateLbl.setText(date);
+        dateLbl.setVisible(true);
     }
+
 }

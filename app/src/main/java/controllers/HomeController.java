@@ -20,6 +20,8 @@ import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import java.util.HashSet;
@@ -147,7 +149,6 @@ public class HomeController implements Initializable {
     private TagServiceImpl tagService = new TagServiceImpl();
 
     private User user = SceneContext.user;
-    // private Message message;
     private Recipe recipe;
     private Image image;
     private UserListener userListener;
@@ -159,20 +160,19 @@ public class HomeController implements Initializable {
             comboBox.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-
-                }
-            });
-
-        } else if (s.startsWith("P")) {
-            comboBox.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    comboBox.setStyle("-fx-color: rgb(239, 242, 255)");
+                    initializeSettingsGrid();
                 }
             });
 
         }
     }
+    public String getDate(){
+        LocalDate myDate = datePicker.getValue();
+        String myFormattedDate = myDate.format(DateTimeFormatter.ofPattern("MMM-dd-yyyy"));
+        System.out.println(myFormattedDate);
+        return myFormattedDate;
+    }
+
 
     // Lists ----------------------------
     private List<Recipe> recipeList = recipeService.getAllRecipes();
@@ -191,6 +191,7 @@ public class HomeController implements Initializable {
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
     }
+
 
     private void initializeHomeGrid() {
         int column = 0;
@@ -310,7 +311,6 @@ public class HomeController implements Initializable {
 
     private void initializeMsgGrid() {
         grid.getChildren().clear();
-        grid.setStyle("-fx-background-color: #ffffff");
 
         int column = 0;
         int row = 1;
@@ -337,7 +337,7 @@ public class HomeController implements Initializable {
                 grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                 grid.setMaxHeight(Region.USE_PREF_SIZE);
 
-                GridPane.setMargin(anchorPane, new Insets(10));
+                GridPane.setMargin(anchorPane, new Insets(5));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -459,18 +459,43 @@ public class HomeController implements Initializable {
         }
     }
 
-    private void openReplyGrid(UUID receiverId) {
+    private void openReplyGrid(UUID senderId) {
         grid.getChildren().clear();
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
-        try {
 
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
+            ReplyController replyController = fxmlLoader.getController();
+            replyController.setData(senderId);
             AnchorPane anchorPane = fxmlLoader.load();
             grid.add(anchorPane, 1, 1);
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
             grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
             grid.setMaxWidth(Region.USE_PREF_SIZE);
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializeSettingsGrid() {
+        grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/settings.fxml"));
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            grid.add(anchorPane, 1, 1);
+            grid.setAlignment(Pos.CENTER);
+            grid.setStyle("-fx-background-color: #ffa9a9");
+
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+
             // Set grid height
             grid.setMinHeight(Region.USE_COMPUTED_SIZE);
             grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -725,21 +750,20 @@ public class HomeController implements Initializable {
                 if (!planList.contains(recipe)){
                     planList.add(recipe);
                     removeFromPlan.setVisible(true);
-                    addToPlan.setVisible(false);
                 }else {
                     removeFromPlan.setVisible(false);
                 }
 
-
             }
         });
+
 
         removeFromPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (planList.contains(recipe)){
                     planList.remove(recipe);
-                    removeFromPlan.setVisible(true);
+                    addToPlan.setVisible(true);
                 }else {
                     removeFromPlan.setVisible(false);
                 }
