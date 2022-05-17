@@ -1,4 +1,4 @@
-module main.cookbookproject {
+module cookbook {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;

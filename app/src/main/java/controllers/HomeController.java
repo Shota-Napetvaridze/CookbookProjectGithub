@@ -138,6 +138,9 @@ public class HomeController implements Initializable {
     @FXML
     private TextField tagsSearchField;
 
+    @FXML
+    private Button removeFromPlan;
+
     private UserServiceImpl userService = new UserServiceImpl();
     private RecipeServiceImpl recipeService = new RecipeServiceImpl();
     private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
@@ -719,7 +722,28 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                planList.add(recipe);
+                if (!planList.contains(recipe)){
+                    planList.add(recipe);
+                    removeFromPlan.setVisible(true);
+                    addToPlan.setVisible(false);
+                }else {
+                    removeFromPlan.setVisible(false);
+                }
+
+
+            }
+        });
+
+        removeFromPlan.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (planList.contains(recipe)){
+                    planList.remove(recipe);
+                    removeFromPlan.setVisible(true);
+                }else {
+                    removeFromPlan.setVisible(false);
+                }
+
 
             }
         });

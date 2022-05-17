@@ -22,7 +22,6 @@ import util.exceptions.recipe.InvalidRecipeInstructionsLengthException;
 import util.exceptions.recipe.InvalidRecipeNameLengthException;
 import util.exceptions.recipe.InvalidRecipeServingSizeException;
 import util.exceptions.recipe.InvalidRecipeTagsCountException;
-import javafx.scene.image.Image;
 
 public class RecipeServiceImpl implements RecipeService {
 
@@ -71,22 +70,13 @@ public class RecipeServiceImpl implements RecipeService {
         validateName(name);
         validateDescription(description);
         validateInstructions(instructions);
-        // validateTags(tags);
-        validateIngredients(ingredients);
+        // validateIngredients(ingredients);
         validateServingSize(servingSize);
-        dbContext.addRecipe(recipeId, name, picturePath, description, instructions, authorId);
-        // for (Tag tag : tags) {
-        //     if (dbContext.getTagById(tag.getId()) == null) {
-        //         dbContext.addTag(tag.getId(), tag.getName());
-        //     }
-        //     dbContext.addRecipeTag(recipeId, tag.getId());
-        // }
+        dbContext.addRecipe(recipeId, name, picturePath, description, instructions, servingSize, authorId);
         Set<Ingredient> keys = ingredients.keySet();
         for (Ingredient ingredient : keys) {
             dbContext.addRecipeIngredient(recipeId, ingredient.getId(), ingredients.get(ingredient));
         }
-
-
         return String.format(SuccessMessages.RECIPE_ADDED);
     }
 
@@ -162,16 +152,6 @@ public class RecipeServiceImpl implements RecipeService {
             throw new InvalidRecipeServingSizeException();
         }
     }
-
-    // @Override
-    // public void validateTags(List<Tag> tags) throws InvalidRecipeTagsCountException {
-    //     try {
-    //         Validator.validateCount(tags.size(),
-    //                 Variables.MIN_RECIPE_TAGS, Variables.MAX_RECIPE_TAGS);
-    //     } catch (InvalidCountException e) {
-    //         throw new InvalidRecipeTagsCountException();
-    //     }
-    // }
 
     @Override
     public void validateIngredients(Map<Ingredient, Integer> ingredients) throws InvalidRecipeIngredientsCountException {

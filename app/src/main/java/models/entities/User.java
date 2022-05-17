@@ -17,11 +17,10 @@ public class User extends BaseEntity {
     private Map<UUID, Date> weeklyList;
     private Set<UUID> favorites;
     private Map<UUID, Integer> cart;
-    private Set<UUID> recipes;
 
     public User(UUID id, String username, String nickname, String email, String password,
             Map<UUID, Integer> cart, Set<UUID> messages, Map<UUID, Date> weeklyList,
-            Set<UUID> favorites, Set<UUID> recipes) {
+            Set<UUID> favorites) {
         super.id = id;
         setUsername(username);
         setNickname(nickname);
@@ -31,7 +30,6 @@ public class User extends BaseEntity {
         setWeeklyList(weeklyList);
         setFavorites(favorites);
         setMessages(messages);
-        setRecipes(recipes);
     }
 
     // OPERATIONS
@@ -62,10 +60,6 @@ public class User extends BaseEntity {
 
     public String getEmail() {
         return email;
-    }
-
-    public Set<UUID> getRecipes() {
-        return recipes;
     }
 
     public Map<UUID, Integer> getCart() {
@@ -106,10 +100,6 @@ public class User extends BaseEntity {
 
     private void setWeeklyList(Map<UUID, Date> weeklyList) {
         this.weeklyList = weeklyList;
-    }
-
-    private void setRecipes(Set<UUID> recipes) {
-        this.recipes = recipes;
     }
 
     private void setMessages(Set<UUID> messages) {

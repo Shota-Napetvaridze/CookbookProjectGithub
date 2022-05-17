@@ -1,5 +1,7 @@
 package util.common;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -192,30 +194,35 @@ public class DbContext {
         }
     }
 
-    private void importRecipes() { // WORKS NOW
+    private void importRecipes() {
         String recipesFile = "/src/main/resources/data/recipes.csv";
         String recipesPath = System.getProperty("user.dir") + recipesFile;
         ArrayList<String[]> recipes = FileIo.readFromFileSaveToArrayList(recipesPath);
         int counter = 0;
         for (String[] recipe : recipes) {
             counter++;
-            try {
-                useDatabase();
-                PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipe);
-                InputStream inputStream = getClass().getResourceAsStream(recipe[6]);
-                ps.setString(1, recipe[5]);
-                ps.setString(2, recipe[0]);
-                ps.setBlob(3, inputStream);
-                ps.setString(4, recipe[2]);
-                ps.setString(5, recipe[4]);
-                ps.setByte(6, Byte.parseByte(recipe[7]));
-                ps.setString(7, UUID.randomUUID().toString());
-                ps.execute();
-                ps.close();
-                System.out.println("RECIPE NO " + counter + " IMPORTED SUCCESSFULLY !!!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            UUID recipeId = UUID.fromString(recipe[0]);
+            String name = recipe[1];
+            String picturePath = recipe[2];
+            String description = recipe[3];
+            String instructions = recipe[4];
+            Byte servingSize = Byte.parseByte(recipe[5]);
+            UUID authorId = UUID.fromString(recipe[6]);
+
+            addRecipe(recipeId, name, picturePath, description, instructions, servingSize, authorId);
+            // useDatabase();
+            // PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipe);
+            // InputStream inputStream = getClass().getResourceAsStream(recipe[6]);
+            // ps.setString(1, recipe[5]);
+            // ps.setString(2, recipe[0]);
+            // ps.setBlob(3, inputStream);
+            // ps.setString(4, recipe[2]);
+            // ps.setString(5, recipe[4]);
+            // ps.setByte(6, Byte.parseByte(recipe[7]));
+            // ps.setString(7, UUID.randomUUID().toString());
+            // ps.execute();
+            // ps.close();
+            System.out.println("RECIPE NO " + counter + " IMPORTED SUCCESSFULLY !!!");
         }
     }
 
@@ -345,10 +352,8 @@ public class DbContext {
                 Set<UUID> messages = getUserMessageIds(id);
                 Map<UUID, Date> weeklyList = getUserWeeklyList(id);
                 Set<UUID> favorites = getUserFavorites(id);
-                Set<UUID> recipes = getUserRecipes(id);
 
-                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
-                        recipes);
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
             ps.close();
             rs.close();
@@ -379,8 +384,7 @@ public class DbContext {
                 Set<UUID> favorites = getUserFavorites(id);
                 Set<UUID> recipes = getUserRecipes(id);
 
-                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
-                        recipes);
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -408,8 +412,7 @@ public class DbContext {
                 Set<UUID> favorites = getUserFavorites(id);
                 Set<UUID> recipes = getUserRecipes(id);
 
-                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
-                        recipes);
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
 
         } catch (Exception e) {
@@ -439,8 +442,7 @@ public class DbContext {
                 Set<UUID> favorites = getUserFavorites(id);
                 Set<UUID> recipes = getUserRecipes(id);
 
-                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites,
-                        recipes);
+                user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
 
         } catch (Exception e) {
@@ -925,22 +927,28 @@ public class DbContext {
         return recipes;
     }
 
-    public String addRecipe(UUID id, String name, String picturePath, String description, String instructions,
+    public String addRecipe(UUID recipeId, String name, String picturePath, String description, String instructions,
+            byte servingSize,
             UUID authorId) {
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipe);
-            ps.setString(1, String.valueOf(id));
+            InputStream inputStream = getClass().getResourceAsStream(picturePath);
+            if (inputStream == null) {
+                inputStream = new FileInputStream(picturePath);
+            }
+            ps.setString(1, recipeId.toString());
             ps.setString(2, name);
-
-            ps.setString(3, String.valueOf(picturePath));
-            
+            ps.setBlob(3, inputStream);
             ps.setString(4, description);
             ps.setString(5, instructions);
-            ps.setString(6, String.valueOf(authorId));
-            ps.executeUpdate();
+            ps.setByte(6, servingSize);
+            ps.setString(7, authorId.toString());
+            ps.execute();
             ps.close();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return String.format(SuccessMessages.RECIPE_ADDED);

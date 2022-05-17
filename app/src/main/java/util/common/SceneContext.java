@@ -40,7 +40,7 @@ public class SceneContext {
         } else {
             stage.setScene(new Scene(root, 1315.0,810.0 ));
             stage.centerOnScreen();
-            String title = String.format("Welcome to Cookbook"); // TODO:  %s add userNickname here
+            String title = String.format("Welcome to Cookbook");
             stage.setTitle(title);
             stage.setResizable(false);
 

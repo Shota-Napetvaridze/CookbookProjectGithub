@@ -123,13 +123,14 @@ public class NewRecipeController implements Initializable {
                 UUID authorId = user.getId();
                 Map<Ingredient, Integer> ingredients = new HashMap<>();
                 byte servingSize = Byte.parseByte(serveSize.getText());
-
+                System.out.println(picturePath);
+                
                 try {
                     recipeService.addRecipe(recipeId, name, picturePath, description, instructions, authorId,
                             ingredients, servingSize);
                     SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
                 } catch (Exception e) {
-                    e.getMessage();
+                    showAlert(e.getMessage());
                 }
             }
         });

@@ -63,6 +63,7 @@ public class AdminController implements Initializable {
 
     private void initializeUsersGrid() {
         grid.getChildren().clear();
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         int column = 0;
         int row = 1;
         try {
