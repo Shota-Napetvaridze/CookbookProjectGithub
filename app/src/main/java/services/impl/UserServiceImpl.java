@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
 import models.entities.User;
@@ -86,8 +87,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String sendMessage(UUID senderId, UUID receiverId, String message) {
-        dbContext.sendMessage(senderId, receiverId, message);
+    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message) {
+        dbContext.sendMessage(messageId, senderId, receiverId, message);
         return null;
     }
 
@@ -174,7 +175,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Message> getUserMessagesById(UUID userId) {
-        return dbContext.getUserMessages(userId);
+        return dbContext.getMessagesByUserId(userId);
     }
 
     @Override
@@ -184,11 +185,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Recipe> getFavoriteRecipes(UUID userId) {
-        return dbContext.getFavoriteRecipes(userId);
+        return dbContext.getFavoritesByUserId(userId);
     }
 
-    public Map<UUID, Date> getWeeklyPlan(UUID userId) {
-        return dbContext.getUserWeeklyList(userId);
+    @Override
+    public Map<Recipe, Date> getWeeklyPlan(UUID userId) {
+        return dbContext.getWeeklyListByUserId(userId);
     }
 
     public List<Recipe> getPlanRecipes(UUID id) {
@@ -219,5 +221,10 @@ public class UserServiceImpl implements UserService {
     public void validatePassword(String password)
             throws InvalidPasswordLengthException, InvalidPasswordComplexityException {
         Validator.validatePassword(password);
+    }
+
+    @Override
+    public Map<Ingredient, Integer> getUserCartById(UUID id) {
+        return dbContext.getCartByUserId(id);
     }
 }

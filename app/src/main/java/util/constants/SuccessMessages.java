@@ -53,6 +53,7 @@ public class SuccessMessages {
     //
     public static final String INGREDIENT_SET_NAME = "Ingredient name set to %s.\n";
     public static final String INGREDIENT_SET_UNIT = "Ingredient unit set to %s.\n";
+    public static final String INGREDIENT_ADDED = "Added ingredient successfully.\n";
 
     //
     // COMMENT
@@ -60,6 +61,7 @@ public class SuccessMessages {
     public static final String COMMENT_SET_TEXT = "Comment posted successfully.\n";
     public static final String COMMENT_SET_USER = "Comment author set.\n";
     public static final String COMMENT_SET_RECIPE = "Comment recipe set.\n";
+    public static final String COMMENT_ADDED = "Added comment successfully.\n";
     //
     // MISC
     //

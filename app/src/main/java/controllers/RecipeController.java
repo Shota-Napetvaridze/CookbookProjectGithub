@@ -18,18 +18,11 @@ public class RecipeController{
     private Recipe recipe;
     private UserListener userListener;
 
-    public RecipeController(){}
-
-
-    @FXML
-    private Label dateLbl;
-
-    @FXML
-    private ImageView image;
-
     @FXML
     private Label recipeName;
 
+    @FXML
+    private ImageView image;
 
     @FXML
     private ImageView heartImage;
@@ -37,6 +30,8 @@ public class RecipeController{
     @FXML
     private TextArea recipeDescriptionHover;
 
+    @FXML
+    private Label dateLbl;
 
     @FXML
     void favoritesClick(MouseEvent event) {
@@ -61,9 +56,9 @@ public class RecipeController{
     void clickDescription(MouseEvent event) {
         userListener.descriptionListener(recipe);
     }
-
-    HomeController homeController = new HomeController();
     
+    HomeController homeController = new HomeController();
+
     public void setData(Recipe recipe, Image heartImage, UserListener userListener) {
         this.recipe = recipe;
         this.userListener = userListener;
@@ -71,6 +66,7 @@ public class RecipeController{
         image.setImage(recipe.getPicture());
         this.heartImage.setImage(heartImage);
     }
+
     public void setDate(String date) {
         dateLbl.setText(date);
         dateLbl.setVisible(true);

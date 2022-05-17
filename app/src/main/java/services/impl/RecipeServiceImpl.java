@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import models.entities.Comment;
 import models.entities.Ingredient;
 import models.entities.Recipe;
 import models.entities.Tag;
@@ -161,6 +162,11 @@ public class RecipeServiceImpl implements RecipeService {
         } catch (InvalidCountException e) {
             throw new InvalidRecipeIngredientsCountException();
         }        
+    }
+
+    @Override
+    public List<Comment> getCommentsByRecipeId(UUID recipeId) {
+        return dbContext.getCommentsByRecipeId(recipeId);
     }
 
 }

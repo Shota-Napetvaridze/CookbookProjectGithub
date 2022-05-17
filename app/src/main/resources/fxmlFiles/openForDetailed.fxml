@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="detailedAnchor" prefHeight="695.0" prefWidth="735.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DetailedViewController">
     <children>
-        <Label fx:id="recipe_Name" layoutX="36.0" layoutY="21.0" text="Name" AnchorPane.leftAnchor="20.0">
+        <Label fx:id="recipeName" layoutX="22.0" layoutY="17.0" text="Name" AnchorPane.leftAnchor="22.0">
             <font>
                 <Font size="24.0" />
             </font>
@@ -22,8 +22,8 @@
                 <Font size="23.0" />
             </font>
         </Button>
-        <ImageView fx:id="recipe_Img" fitHeight="145.0" fitWidth="205.0" layoutX="493.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
-        <Label layoutX="36.0" layoutY="79.0" text="Description" AnchorPane.leftAnchor="20.0">
+        <ImageView fx:id="recipeImg" fitHeight="145.0" fitWidth="205.0" layoutX="493.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+        <Label layoutX="21.0" layoutY="65.0" text="Description" AnchorPane.leftAnchor="21.0">
             <font>
                 <Font size="24.0" />
             </font>
@@ -81,7 +81,7 @@
             <Font size="12.0" />
          </font>
       </Label>
-      <TextArea fx:id="recipeDescription" layoutX="20.0" layoutY="105.0" prefHeight="111.0" prefWidth="363.0" style="-fx-border-color: #000000;" />
-      <TextArea fx:id="recipeInstruction" layoutX="20.0" layoutY="270.0" prefHeight="111.0" prefWidth="363.0" style="-fx-border-color: #000000;" />
+      <TextArea fx:id="recipeDescription" layoutX="20.0" layoutY="105.0" prefHeight="111.0" prefWidth="363.0" style="-fx-border-color: #000000;" wrapText="true" />
+      <TextArea fx:id="recipeInstruction" layoutX="20.0" layoutY="270.0" prefHeight="111.0" prefWidth="363.0" style="-fx-border-color: #000000;" wrapText="true" />
     </children>
 </AnchorPane>

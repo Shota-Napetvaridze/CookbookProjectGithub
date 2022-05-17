@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -114,20 +115,12 @@ public class DbContext {
         int counter = 0;
         for (String[] ingredient : ingredientUnits) {
             counter++;
-            try {
-                useDatabase();
-                PreparedStatement ps = conn.prepareStatement(SqlQueries.addIngredient);
-                ps.setString(1, ingredient[0]);
-                ps.setString(2, ingredient[1]);
-                ps.setString(3, ingredient[2]);
-
-                ps.execute();
-                ps.close();
-                System.out.println("INGREDIENT NO " + counter + " IMPORTED SUCCESSFULLY");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            UUID ingredientId = UUID.fromString(ingredient[0]);
+            String name = ingredient[1];
+            String unit = ingredient[2];
+            addIngredient(ingredientId, name, unit);
         }
+        System.out.println("Imported " + counter + " ingredients.");
     }
 
     private void importComments() {
@@ -137,21 +130,13 @@ public class DbContext {
         int counter = 0;
         for (String[] comment : comments) {
             counter++;
-            try {
-                useDatabase();
-                PreparedStatement ps = conn.prepareStatement(SqlQueries.addComment);
-                ps.setString(1, comment[0]);
-                ps.setString(2, comment[1]);
-                ps.setString(3, comment[2]);
-                ps.setString(4, comment[3]);
-
-                ps.execute();
-                ps.close();
-                System.out.println("COMMENT NO " + counter + " IMPORTED SUCCESSFULLY");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            UUID commentId = UUID.fromString(comment[0]);
+            UUID userId = UUID.fromString(comment[1]);
+            UUID recipeId = UUID.fromString(comment[2]);
+            String text = comment[3];
+            addComment(commentId, userId, recipeId, text);
         }
+        System.out.println("Imported " + counter + " comments.");
     }
 
     private void importMessages() {
@@ -161,22 +146,13 @@ public class DbContext {
         int counter = 0;
         for (String[] message : messages) {
             counter++;
-            try {
-                useDatabase();
-                PreparedStatement ps = conn.prepareStatement(SqlQueries.addMessage);
-                ps.setString(1, message[0]);
-                ps.setString(2, message[1]);
-                ps.setString(3, message[2]);
-                ps.setString(4, message[3]);
-                ps.setBoolean(5, Boolean.parseBoolean(message[4]));
-
-                ps.execute();
-                ps.close();
-                System.out.println("MESSAGE NO " + counter + " IMPORTED SUCCESSFULLY !!!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            UUID messageId = UUID.fromString(message[0]);
+            UUID senderId = UUID.fromString(message[1]);
+            UUID receiverId = UUID.fromString(message[2]);
+            String text = message[3];
+            sendMessage(messageId, senderId, receiverId, text);
         }
+        System.out.println("Imported " + counter + " messages.");
 
     }
 
@@ -190,8 +166,8 @@ public class DbContext {
             String name = tag[1];
 
             addTag(tagId, name);
-            System.out.println("TAG NO " + counter++ + " IMPORTED SUCCESSFULLY!");
         }
+        System.out.println("Imported " + counter + " tags.");
     }
 
     private void importRecipes() {
@@ -208,22 +184,9 @@ public class DbContext {
             String instructions = recipe[4];
             Byte servingSize = Byte.parseByte(recipe[5]);
             UUID authorId = UUID.fromString(recipe[6]);
-
             addRecipe(recipeId, name, picturePath, description, instructions, servingSize, authorId);
-            // useDatabase();
-            // PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipe);
-            // InputStream inputStream = getClass().getResourceAsStream(recipe[6]);
-            // ps.setString(1, recipe[5]);
-            // ps.setString(2, recipe[0]);
-            // ps.setBlob(3, inputStream);
-            // ps.setString(4, recipe[2]);
-            // ps.setString(5, recipe[4]);
-            // ps.setByte(6, Byte.parseByte(recipe[7]));
-            // ps.setString(7, UUID.randomUUID().toString());
-            // ps.execute();
-            // ps.close();
-            System.out.println("RECIPE NO " + counter + " IMPORTED SUCCESSFULLY !!!");
         }
+        System.out.println("Imported " + counter + " recipes.");
     }
 
     private void importUsers() {
@@ -233,22 +196,13 @@ public class DbContext {
         int counter = 0;
         for (String[] user : users) {
             counter++;
-            try {
-                useDatabase();
-                PreparedStatement ps = conn.prepareStatement(SqlQueries.addUser);
-                ps.setString(1, user[0]);
-                ps.setString(2, user[1]);
-                ps.setString(3, user[2]);
-                ps.setString(4, user[3]);
-                ps.setString(5, user[4]);
-
-                ps.execute();
-                ps.close();
-                System.out.println("USER NO" + counter + " IMPORTED SUCCESSFULLY");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            UUID userId = UUID.fromString(user[0]);
+            String username = user[1];
+            String email = user[2];
+            String hashedPassword = user[3];
+            addUser(userId, username, email, hashedPassword);
         }
+        System.out.println("Imported " + counter + " users.");
     }
 
     // ------------------- USER -------------------//
@@ -348,10 +302,10 @@ public class DbContext {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
 
-                Map<UUID, Integer> cart = getUserCart(id);
-                Set<UUID> messages = getUserMessageIds(id);
-                Map<UUID, Date> weeklyList = getUserWeeklyList(id);
-                Set<UUID> favorites = getUserFavorites(id);
+                Map<UUID, Integer> cart = getCartIdsByUserId(id);
+                List<UUID> messages = getMessageIdsByUserId(id);
+                Map<UUID, Date> weeklyList = getWeeklyListIdsByUserId(id);
+                List<UUID> favorites = getFavoriteIdsByUserId(id);
 
                 user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
@@ -374,15 +328,14 @@ public class DbContext {
 
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("id"));
-                String nickname = rs.getString("display_name");
                 String email = rs.getString("email");
+                String nickname = rs.getString("display_name");
                 String password = rs.getString("password");
 
-                Map<UUID, Integer> cart = getUserCart(id);
-                Set<UUID> messages = getUserMessageIds(id);
-                Map<UUID, Date> weeklyList = getUserWeeklyList(id);
-                Set<UUID> favorites = getUserFavorites(id);
-                Set<UUID> recipes = getUserRecipes(id);
+                Map<UUID, Integer> cart = getCartIdsByUserId(id);
+                List<UUID> messages = getMessageIdsByUserId(id);
+                Map<UUID, Date> weeklyList = getWeeklyListIdsByUserId(id);
+                List<UUID> favorites = getFavoriteIdsByUserId(id);
 
                 user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
@@ -406,11 +359,10 @@ public class DbContext {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
 
-                Map<UUID, Integer> cart = getUserCart(id);
-                Set<UUID> messages = getUserMessageIds(id);
-                Map<UUID, Date> weeklyList = getUserWeeklyList(id);
-                Set<UUID> favorites = getUserFavorites(id);
-                Set<UUID> recipes = getUserRecipes(id);
+                Map<UUID, Integer> cart = getCartIdsByUserId(id);
+                List<UUID> messages = getMessageIdsByUserId(id);
+                Map<UUID, Date> weeklyList = getWeeklyListIdsByUserId(id);
+                List<UUID> favorites = getFavoriteIdsByUserId(id);
 
                 user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
@@ -436,11 +388,10 @@ public class DbContext {
                 String nickname = rs.getString("display_name");
                 String password = rs.getString("password");
 
-                Map<UUID, Integer> cart = getUserCart(id);
-                Set<UUID> messages = getUserMessageIds(id);
-                Map<UUID, Date> weeklyList = getUserWeeklyList(id);
-                Set<UUID> favorites = getUserFavorites(id);
-                Set<UUID> recipes = getUserRecipes(id);
+                Map<UUID, Integer> cart = getCartIdsByUserId(id);
+                List<UUID> messages = getMessageIdsByUserId(id);
+                Map<UUID, Date> weeklyList = getWeeklyListIdsByUserId(id);
+                List<UUID> favorites = getUserFavoriteIdsByUserId(id);
 
                 user = new User(id, username, nickname, email, password, cart, messages, weeklyList, favorites);
             }
@@ -450,29 +401,6 @@ public class DbContext {
         }
 
         return user;
-    }
-
-    private Set<UUID> getUserMessageIds(UUID id) {
-        Set<UUID> messages = new HashSet<>();
-
-        try {
-            useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserMessages);
-            ps.setString(1, id.toString());
-            ps.setString(2, id.toString());
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                UUID messageId = UUID.fromString(rs.getString("id"));
-
-                messages.add(messageId);
-            }
-            ps.close();
-            rs.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return messages;
     }
 
     public List<User> getAllUsers() {
@@ -494,48 +422,35 @@ public class DbContext {
         return users;
     }
 
-    private Set<UUID> getUserRecipes(UUID id) {
-        Set<UUID> recipes = new HashSet<>();
-
-        try {
-            useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserRecipes);
-            ps.setString(1, id.toString());
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                UUID recipeId = UUID.fromString(rs.getString("id"));
-
-                recipes.add(recipeId);
-            }
-            ps.close();
-            rs.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public List<Recipe> getUserFavoritesById(UUID userId) {
+        List<Recipe> recipes = new ArrayList<>();
+        List<UUID> recipeIds = getUserFavoriteIdsByUserId(userId);
+        for (UUID recipeId : recipeIds) {
+            recipes.add(getRecipeById(recipeId));
         }
         return recipes;
     }
 
-    private Set<UUID> getUserFavorites(UUID id) {
-        Set<UUID> favorites = new HashSet<>();
+    private List<UUID> getUserFavoriteIdsByUserId(UUID userId) {
+        List<UUID> favoriteIds = new ArrayList<>();
 
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserFavorites);
-            ps.setString(1, id.toString());
+            ps.setString(1, userId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 UUID recipeId = UUID.fromString(rs.getString("recipe_id"));
 
-                favorites.add(recipeId);
+                favoriteIds.add(recipeId);
             }
             ps.close();
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return favorites;
+        return favoriteIds;
     }
 
     public boolean addRecipeToFavorites(UUID userId, UUID recipeId) {
@@ -566,53 +481,92 @@ public class DbContext {
         }
     }
 
-    public Map<UUID, Date> getUserWeeklyList(UUID id) {
-        Map<UUID, Date> weeklyList = new Hashtable<>();
+    public Map<Recipe, Date> getWeeklyListByUserId(UUID userId) {
+        Map<Recipe, Date> recipes = new HashMap<>();
+        Map<UUID, Date> recipeIds = getWeeklyListIdsByUserId(userId);
+        for (UUID recipeId : recipeIds.keySet()) {
+            Recipe recipe = getRecipeById(recipeId);
+            Date date = recipeIds.get(recipeId);
+
+            recipes.put(recipe, date);
+        }
+        return recipes;
+    }
+
+    public Map<UUID, Date> getWeeklyListIdsByUserId(UUID userId) {
+        Map<UUID, Date> weeklyListIds = new Hashtable<>();
 
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserWeeklyList);
-            ps.setString(1, id.toString());
+            ps.setString(1, userId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 UUID recipeId = UUID.fromString(rs.getString("recipe_id"));
                 Date date = rs.getDate("day");
 
-                weeklyList.put(recipeId, date);
+                weeklyListIds.put(recipeId, date);
             }
             ps.close();
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return weeklyList;
+        return weeklyListIds;
     }
 
-    public List<Message> getUserMessages(UUID id) {
-        List<Message> messages = new ArrayList<>();
-
+    public Message getMessageById(UUID messageId) {
+        Message message = null;
         try {
             useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserMessages);
-            ps.setString(1, id.toString());
-            ps.setString(2, id.toString());
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getMessageById);
+            ps.setString(1, messageId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                UUID messageId = UUID.fromString(rs.getString("id"));
                 UUID senderId = UUID.fromString(rs.getString("sender_id"));
                 UUID receiverId = UUID.fromString(rs.getString("receiver_id"));
                 String text = rs.getString("message_text");
                 Boolean isRead = rs.getBoolean("is_read");
 
-                Message message = new Message(messageId, senderId, receiverId, text, isRead);
-                messages.add(message);
+                message = new Message(messageId, senderId, receiverId, text, isRead);
             }
             ps.close();
             rs.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return message;
+    }
+
+    public List<UUID> getMessageIdsByUserId(UUID userId) {
+        List<UUID> messages = new ArrayList<>();
+
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserMessages);
+            ps.setString(1, userId.toString());
+            ps.setString(2, userId.toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                UUID messageId = UUID.fromString(rs.getString("id"));
+                messages.add(messageId);
+            }
+            ps.close();
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public List<Message> getMessagesByUserId(UUID userId) {
+        List<Message> messages = new ArrayList<>();
+        List<UUID> messageIds = getMessageIdsByUserId(userId);
+        for (UUID uuid : messageIds) {
+            messages.add(getMessageById(uuid));
         }
         return messages;
     }
@@ -632,26 +586,36 @@ public class DbContext {
         return false;
     }
 
-    public Map<UUID, Integer> getUserCart(UUID id) {
-        Map<UUID, Integer> cart = new Hashtable<>();
+    public Map<Ingredient, Integer> getCartByUserId(UUID userId) {
+        Map<Ingredient, Integer> cart = new HashMap<>();
+        Map<UUID, Integer> cartIds = getCartIdsByUserId(userId);
+        for (UUID ingredientId : cartIds.keySet()) {
+            Ingredient ingredient = getIngredientById(ingredientId);
+            Integer quantity = cartIds.get(ingredientId);
+            cart.put(ingredient, quantity);
+        }
+        return cart;
+    }
 
+    public Map<UUID, Integer> getCartIdsByUserId(UUID userId) {
+        Map<UUID, Integer> cartIds = new Hashtable<>();
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserCart);
-            ps.setString(1, id.toString());
+            ps.setString(1, userId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                UUID recipeId = UUID.fromString(rs.getString("recipe_id"));
+                UUID ingredientId = UUID.fromString(rs.getString("ingredient_id"));
                 Integer quantity = rs.getInt("quantity");
-                cart.put(recipeId, quantity);
+                cartIds.put(ingredientId, quantity);
             }
             ps.close();
             rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return cart;
+        return cartIds;
     }
 
     public String userChangeUsername(UUID userId, String username) {
@@ -734,11 +698,11 @@ public class DbContext {
         }
     }
 
-    public void sendMessage(UUID senderId, UUID receiverId, String message) {
+    public void sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message) {
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addMessage);
-            ps.setString(1, UUID.randomUUID().toString());
+            ps.setString(1, messageId.toString());
             ps.setString(2, senderId.toString());
             ps.setString(3, receiverId.toString());
             ps.setString(4, message);
@@ -770,15 +734,23 @@ public class DbContext {
             }
             ps.close();
             rs.close();
-            System.out.println("RECIPES RETRIEVED SUCCESSFULLY");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return allRecipes;
     }
 
-    public List<Recipe> getFavoriteRecipes(UUID userId) {
-        List<Recipe> recipes = new ArrayList<>();
+    public List<Recipe> getFavoritesByUserId(UUID userId) {
+        List<Recipe> favorites = new ArrayList<>();
+        List<UUID> favoriteIds = getFavoriteIdsByUserId(userId);
+        for (UUID favoriteId : favoriteIds) {
+            favorites.add(getRecipeById(favoriteId));
+        }
+        return favorites;
+    }
+
+    public List<UUID> getFavoriteIdsByUserId(UUID userId) {
+        List<UUID> recipes = new ArrayList<>();
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getFavoriteRecipes);
@@ -786,8 +758,7 @@ public class DbContext {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Recipe recipe = getRecipeById(UUID.fromString(rs.getString("recipe_id")));
-                recipes.add(recipe);
+                recipes.add(UUID.fromString(rs.getString("recipe_id")));
             }
 
         } catch (SQLException e) {
@@ -811,10 +782,10 @@ public class DbContext {
                 Image picture = new Image(inputStream);
                 String description = rs.getString("recipe_description");
                 String instructions = rs.getString("instructions");
-                User author = getUserById(UUID.fromString(rs.getString("author_id")));
-                List<Tag> tags = getRecipeTagsById(recipeId);
-                Map<Ingredient, Integer> ingredients = getRecipeIngredientsById(recipeId);
-                List<Comment> comments = getRecipeCommentsById(recipeId);
+                UUID author = UUID.fromString(rs.getString("author_id"));
+                List<UUID> tags = getTagIdsByRecipeId(recipeId);
+                Map<UUID, Integer> ingredients = getIngredientIdsByRecipeId(recipeId);
+                List<UUID> comments = getCommentIdsByRecipeId(recipeId);
                 byte servingSize = rs.getByte("serving_size");
                 recipe = new Recipe(recipeId, name, picture, description, instructions, author, tags, ingredients,
                         comments, servingSize);
@@ -825,24 +796,32 @@ public class DbContext {
         return recipe;
     }
 
-    private List<Comment> getRecipeCommentsById(UUID id) {
+    public List<Comment> getCommentsByRecipeId(UUID recipeId) {
         List<Comment> comments = new ArrayList<>();
+        List<UUID> commentIds = getCommentIdsByRecipeId(recipeId);
+        for (UUID commentId : commentIds) {
+            comments.add(getCommentById(commentId));
+        }
+        return comments;
+    }
+
+    public List<UUID> getCommentIdsByRecipeId(UUID recipeId) {
+        List<UUID> commentIds = new ArrayList<>();
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeCommentsById);
-            ps.setString(1, id.toString());
+            ps.setString(1, recipeId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 UUID commentId = UUID.fromString(rs.getString("id"));
-                Comment comment = getCommentById(commentId);
-                comments.add(comment);
+                commentIds.add(commentId);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return comments;
+        return commentIds;
     }
 
     private Comment getCommentById(UUID commentId) {
@@ -855,7 +834,7 @@ public class DbContext {
 
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("id"));
-                User user = getUserById(UUID.fromString(rs.getString("user_id")));
+                UUID user = UUID.fromString(rs.getString("user_id"));
                 UUID recipeId = UUID.fromString(rs.getString("recipe_id"));
                 String text = rs.getString("text");
 
@@ -867,45 +846,83 @@ public class DbContext {
         return comment;
     }
 
-    public Map<Ingredient, Integer> getRecipeIngredientsById(UUID id) {
-        Map<Ingredient, Integer> ingredients = new Hashtable<>();
+    public String addComment(UUID commentId, UUID userId, UUID recipeId, String text) {
         try {
             useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeIngredientsById);
-            ps.setString(1, id.toString());
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Ingredient ingredient = getIngredientById(UUID.fromString(rs.getString("ingredient_id")));
-                Integer quantity = rs.getInt("quantity");
-
-                ingredients.put(ingredient, quantity);
-            }
-
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.addComment);
+            ps.setString(1, commentId.toString());
+            ps.setString(2, userId.toString());
+            ps.setString(3, recipeId.toString());
+            ps.setString(4, text);
+            ps.execute();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return String.format(FailMessages.COMMENT_ADD_FAIL);
+        }
+        return String.format(SuccessMessages.COMMENT_ADDED);
+
+    }
+
+    public Map<Ingredient, Integer> getIngredientsByRecipeId(UUID recipeId) {
+        Map<Ingredient, Integer> ingredients = new HashMap<>();
+        Map<UUID, Integer> ingredientIds = getIngredientIdsByRecipeId(recipeId);
+        for (UUID ingredientId : ingredientIds.keySet()) {
+            Ingredient ingredient = getIngredientById(ingredientId);
+            Integer quantity = ingredientIds.get(ingredientId);
+
+            ingredients.put(ingredient, quantity);
         }
         return ingredients;
     }
 
-    private List<Tag> getRecipeTagsById(UUID id) {
-        List<Tag> tags = new ArrayList<>();
+    public Map<UUID, Integer> getIngredientIdsByRecipeId(UUID recipeId) {
+        Map<UUID, Integer> ingredientIds = new Hashtable<>();
         try {
             useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeTagsById);
-            ps.setString(1, id.toString());
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeIngredientsById);
+            ps.setString(1, recipeId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                UUID tagsId = UUID.fromString(rs.getString("tag_id"));
-                Tag tag = getTagById(tagsId);
+                UUID ingredientId = UUID.fromString(rs.getString("ingredient_id"));
+                Integer quantity = rs.getInt("quantity");
 
-                tags.add(tag);
+                ingredientIds.put(ingredientId, quantity);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ingredientIds;
+    }
+
+    public List<Tag> getTagsByRecipeId(UUID recipeId) {
+        List<Tag> tags = new ArrayList<>();
+        List<UUID> tagIds = getTagIdsByRecipeId(recipeId);
+        for (UUID tagId : tagIds) {
+            tags.add(getTagById(tagId));
+        }
+        return tags;
+    }
+
+    private List<UUID> getTagIdsByRecipeId(UUID recipeId) {
+        List<UUID> tagIds = new ArrayList<>();
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipeTagsById);
+            ps.setString(1, recipeId.toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                UUID tagId = UUID.fromString(rs.getString("tag_id"));
+
+                tagIds.add(tagId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return tags;
+        return tagIds;
     }
 
     public List<Recipe> getRecipesByNameLike(String name) {
@@ -1147,5 +1164,23 @@ public class DbContext {
         } catch (Exception e) {
             return String.format(FailMessages.RECIPE_INGREDIENT_ADD_FAIL);
         }
+    }
+
+    public String addIngredient(UUID ingredientId, String name, String unit) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.addIngredient);
+            ps.setString(1, ingredientId.toString());
+            ps.setString(2, name);
+            ps.setString(3, unit);
+
+            ps.execute();
+            ps.close();
+            return String.format(SuccessMessages.INGREDIENT_ADDED);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return String.format(FailMessages.INGREDIENT_ADD_FAIL);
+        }
+
     }
 }

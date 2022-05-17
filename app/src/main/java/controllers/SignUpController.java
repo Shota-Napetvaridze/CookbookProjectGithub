@@ -42,7 +42,13 @@ public class SignUpController implements Initializable {
                 if (!usernameNew.getText().trim().isEmpty() && !passwordNew.getText().trim().isEmpty()) {
                     try {
                         UUID userId = UUID.randomUUID();
-                        userService.addUser(userId, usernameNew.getText(), email.getText(), passwordNew.getText());
+                        String message = userService.addUser(userId, usernameNew.getText(), email.getText(),
+                                passwordNew.getText());
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(message);
+                        alert.setContentText("You can log in now.");
+                        alert.show();
+
                         SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
                     } catch (Exception e) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);

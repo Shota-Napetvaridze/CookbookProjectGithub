@@ -28,8 +28,8 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Map<Ingredient, Integer> getRecipeIngredients(UUID recipeId) {
-        return dbContext.getRecipeIngredientsById(recipeId);
+    public Map<Ingredient, Integer> getIngredientsByRecipeId(UUID recipeId) {
+        return dbContext.getIngredientsByRecipeId(recipeId);
     }
 
     @Override

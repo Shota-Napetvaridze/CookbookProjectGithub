@@ -23,7 +23,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -164,8 +163,9 @@ public class HomeController implements Initializable {
                 }
             });
 
-        }
+        } 
     }
+
     public String getDate(){
         LocalDate myDate = datePicker.getValue();
         String myFormattedDate = myDate.format(DateTimeFormatter.ofPattern("MMM-dd-yyyy"));
@@ -173,11 +173,11 @@ public class HomeController implements Initializable {
         return myFormattedDate;
     }
 
-
     // Lists ----------------------------
     private List<Recipe> recipeList = recipeService.getAllRecipes();
     private List<Message> msgList = userService.getUserMessagesById(user.getId());
-    public List<Recipe> favouriteRecipeList = userService.getFavoriteRecipes(user.getId());
+    private Map<Ingredient, Integer> cartList = userService.getUserCartById(user.getId());
+    private List<Recipe> favouriteRecipeList = userService.getFavoriteRecipes(user.getId());
     private List<Recipe> planList = new ArrayList<>();
 
     private List<Ingredient> ingredientsList = ingredientService.getAllIngredients();
@@ -191,7 +191,6 @@ public class HomeController implements Initializable {
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
     }
-
 
     private void initializeHomeGrid() {
         int column = 0;
@@ -445,6 +444,9 @@ public class HomeController implements Initializable {
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
         try {
             AnchorPane anchorPane = fxmlLoader.load();
+            DetailedViewController detailedViewController = fxmlLoader.getController();
+            detailedViewController.setData(recipe);
+
             grid.add(anchorPane, 1, 1);
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -461,7 +463,6 @@ public class HomeController implements Initializable {
 
     private void openReplyGrid(UUID senderId) {
         grid.getChildren().clear();
-
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
@@ -486,6 +487,7 @@ public class HomeController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/settings.fxml"));
         try {
+
             AnchorPane anchorPane = fxmlLoader.load();
             grid.add(anchorPane, 1, 1);
             grid.setAlignment(Pos.CENTER);
@@ -495,7 +497,6 @@ public class HomeController implements Initializable {
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
             grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
             grid.setMaxWidth(Region.USE_PREF_SIZE);
-
             // Set grid height
             grid.setMinHeight(Region.USE_COMPUTED_SIZE);
             grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -516,13 +517,16 @@ public class HomeController implements Initializable {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // ComboBox User
-        ObservableList<String> list = FXCollections.observableArrayList("Settings", "Profile");
+        ObservableList<String> list = FXCollections.observableArrayList("Settings");
         comboBox.setItems(list);
         comboBox.setPromptText(user.getNickname());
 
         // Set message count
         getMessages();
 
+        // Set cart count
+        getCart();
+        
         // Slider
         filterPane.setVisible(false);
         anchorPaneBelowFilter.setTranslateY(-176);
@@ -651,8 +655,14 @@ public class HomeController implements Initializable {
                     textArea.setVisible(true);
                     String[] descriptionWords = recipe.getDescription().split(" ");
                     StringBuilder shortDescription = new StringBuilder();
-                    for (int i = 0; i < 10; i++) {
-                        shortDescription.append(descriptionWords[i] + " ");
+                    if (descriptionWords.length < 10) {
+                        for (int i = 0; i < descriptionWords.length; i++) {
+                            shortDescription.append(descriptionWords[i] + " ");
+                        }
+                    } else {
+                        for (int i = 0; i < 10; i++) {
+                            shortDescription.append(descriptionWords[i] + " ");
+                        }
                     }
                     textArea.setText(shortDescription.toString());
                     textArea.setOpacity(0.8);
@@ -699,7 +709,7 @@ public class HomeController implements Initializable {
                     boolean isValid = true;
 
                     // Search tags
-                    List<Tag> tags = recipe.getTags();
+                    List<Tag> tags = tagService.getTagsByRecipeId(recipe.getId());
                     Set<String> tagNames = new HashSet<>();
                     for (Tag tag : tags) {
                         tagNames.add(tag.getName());
@@ -712,7 +722,7 @@ public class HomeController implements Initializable {
                     }
 
                     // Search ingredients
-                    Map<Ingredient, Integer> ingredients = recipe.getIngredients();
+                    Map<Ingredient, Integer> ingredients = ingredientService.getIngredientsByRecipeId(recipe.getId());
                     Set<String> ingredientNames = new HashSet<>();
                     for (Ingredient ingredient : ingredients.keySet()) {
                         ingredientNames.add(ingredient.getName());
@@ -747,27 +757,26 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (!planList.contains(recipe)){
+                if (!planList.contains(recipe)) {
                     planList.add(recipe);
                     removeFromPlan.setVisible(true);
-                }else {
+                    addToPlan.setVisible(false);
+                } else {
                     removeFromPlan.setVisible(false);
                 }
 
             }
         });
 
-
         removeFromPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (planList.contains(recipe)){
+                if (planList.contains(recipe)) {
                     planList.remove(recipe);
                     addToPlan.setVisible(true);
-                }else {
+                } else {
                     removeFromPlan.setVisible(false);
                 }
-
 
             }
         });
@@ -851,9 +860,13 @@ public class HomeController implements Initializable {
         });
     }
 
+    private void getCart() {
+        cartList = userService.getUserCartById(user.getId());
+        cartCount.setText(String.valueOf(cartList.size()));
+    }
+
     private void getMessages() {
         msgList = userService.getUserMessagesById(user.getId());
-        String messageCount = String.valueOf(msgList.size());
-        msgCountLbl.setText(messageCount);
+        msgCountLbl.setText(String.valueOf(msgList.size()));
     }
 }

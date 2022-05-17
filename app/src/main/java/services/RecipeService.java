@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import models.entities.Comment;
 import models.entities.Ingredient;
 import models.entities.Recipe;
 import models.entities.Tag;
@@ -28,6 +29,8 @@ public interface RecipeService {
     String instructions, UUID authorId,
     Map<Ingredient, Integer> ingredients, byte servingSize) throws InvalidRecipeNameLengthException, InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException, InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException;
 
+    public List<Comment> getCommentsByRecipeId(UUID recipeId);
+    
     public String editRecipeName(UUID recipeId, String name);
 
     public String editRecipeDescription(UUID recipeId, String description) throws InvalidRecipeDescriptionLengthException;
@@ -43,8 +46,6 @@ public interface RecipeService {
     public void validateDescription(String description) throws InvalidRecipeDescriptionLengthException;
 
     public void validateInstructions(String instructions) throws InvalidRecipeInstructionsLengthException;
-
-    // public void validateTags(List<Tag> tags) throws InvalidRecipeTagsCountException;
 
     public void validateIngredients(Map<Ingredient, Integer> ingredients) throws InvalidRecipeIngredientsCountException;
 

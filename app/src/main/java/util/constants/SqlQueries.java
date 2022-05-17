@@ -152,6 +152,8 @@ public class SqlQueries {
 
         public static final String getUserMessages = "SELECT * FROM messages WHERE sender_id = ? OR receiver_id = ?";
 
+        public static final String getMessageById = "SELECT * FROM messages WHERE id = ?";
+        
         public static final String getUserById = "SELECT * FROM users WHERE id = ?";
 
         public static final String getUserWeeklyList = "SELECT * FROM weekly_plans WHERE user_id = ?";

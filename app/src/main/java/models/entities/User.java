@@ -1,6 +1,7 @@
 package models.entities;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -13,14 +14,14 @@ public class User extends BaseEntity {
     private String nickname;
     private String email;
     private String password;
-    private Set<UUID> messages;
+    private List<UUID> messages;
     private Map<UUID, Date> weeklyList;
-    private Set<UUID> favorites;
+    private List<UUID> favorites;
     private Map<UUID, Integer> cart;
 
     public User(UUID id, String username, String nickname, String email, String password,
-            Map<UUID, Integer> cart, Set<UUID> messages, Map<UUID, Date> weeklyList,
-            Set<UUID> favorites) {
+            Map<UUID, Integer> cart, List<UUID> messages, Map<UUID, Date> weeklyList,
+            List<UUID> favorites) {
         super.id = id;
         setUsername(username);
         setNickname(nickname);
@@ -66,7 +67,7 @@ public class User extends BaseEntity {
         return cart;
     }
 
-    public Set<UUID> getFavorites() {
+    public List<UUID> getFavorites() {
         return favorites;
     }
 
@@ -74,7 +75,7 @@ public class User extends BaseEntity {
         return weeklyList;
     }
 
-    public Set<UUID> getMessages() {
+    public List<UUID> getMessages() {
         return messages;
     }
 
@@ -102,11 +103,11 @@ public class User extends BaseEntity {
         this.weeklyList = weeklyList;
     }
 
-    private void setMessages(Set<UUID> messages) {
+    private void setMessages(List<UUID> messages) {
         this.messages = messages;
     }
 
-    private void setFavorites(Set<UUID> favorites) {
+    private void setFavorites(List<UUID> favorites) {
         this.favorites = favorites;
     }
 

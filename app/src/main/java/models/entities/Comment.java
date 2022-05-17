@@ -4,11 +4,11 @@ import java.util.UUID;
 import util.constants.SuccessMessages;
 
 public class Comment extends BaseEntity {
-    private User user;
+    private UUID user;
     private String text;
     private UUID recipeId;
 
-    public Comment(UUID id, User user, UUID recipeId, String text) {
+    public Comment(UUID id, UUID user, UUID recipeId, String text) {
         super.id = id;
         setUser(user);
         setText(text);
@@ -16,7 +16,7 @@ public class Comment extends BaseEntity {
     }
 
     // GETTERS
-    public User getUser() {
+    public UUID getUser() {
         return user;
     }
 
@@ -34,7 +34,7 @@ public class Comment extends BaseEntity {
         return String.format(SuccessMessages.COMMENT_SET_TEXT);
     }
 
-    private String setUser(User user) {
+    private String setUser(UUID user) {
         this.user = user;
         return String.format(SuccessMessages.COMMENT_SET_USER);
     }

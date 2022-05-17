@@ -1,8 +1,6 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -10,11 +8,8 @@ import models.entities.Message;
 import services.impl.UserServiceImpl;
 import util.common.UserListener;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
-
-public class MsgController implements Initializable {
+public class MsgController{
     private UserServiceImpl userService = new UserServiceImpl();
     private Message message;
     private UserListener userListener;
@@ -42,9 +37,4 @@ public class MsgController implements Initializable {
         MsgUserLbl.setText(userService.getUserById(message.getSender()).getNickname());
     }
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 }

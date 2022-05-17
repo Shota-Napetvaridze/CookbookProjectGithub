@@ -30,10 +30,13 @@ public class IngredientItemController {
         userListener.ingredientClickListener(ingredient, ingredientButton);
     }
 
-    public void setData(Ingredient ingredient, UserListener userListener){
+    private Integer quantity;
+
+    public void setData(Ingredient ingredient, Integer quantity, UserListener userListener){
         this.ingredient = ingredient;
         this.userListener = userListener;
-        ingredientLbl.setText(ingredient.getName());
+        this.quantity = quantity;
+        ingredientLbl.setText(quantity + ingredient.getUnit() + ingredient.getName());
     }
 
 }

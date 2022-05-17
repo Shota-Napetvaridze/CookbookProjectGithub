@@ -13,16 +13,16 @@ public class Recipe extends BaseEntity {
     private Image picture;
     private String description;
     private String instructions;
-    private User author;
-    private List<Tag> tags;
-    private Map<Ingredient, Integer> ingredients;
+    private UUID author;
+    private List<UUID> tags;
+    private Map<UUID, Integer> ingredients;
     private byte servingSize;
-    private List<Comment> comments;
+    private List<UUID> comments;
 
 
     public Recipe(UUID id, String name, Image picture, String description,
-    String instructions, User author, List<Tag> tags,
-    Map<Ingredient, Integer> ingredients, List<Comment> comments, byte servingSize) {
+    String instructions, UUID author, List<UUID> tags,
+    Map<UUID, Integer> ingredients, List<UUID> comments, byte servingSize) {
         super.id = id;
         setName(name);
         setPicture(picture);
@@ -52,15 +52,15 @@ public class Recipe extends BaseEntity {
         return instructions;
     }
 
-    public User getAuthor() {
+    public UUID getAuthor() {
         return author;
     }
 
-    public List<Tag> getTags() {
+    public List<UUID> getTags() {
         return tags;
     }
 
-    public Map<Ingredient, Integer> getIngredients() {
+    public Map<UUID, Integer> getIngredients() {
         return ingredients;
     }
 
@@ -68,7 +68,7 @@ public class Recipe extends BaseEntity {
         return servingSize;
     }
 
-    public List<Comment> getComments() {
+    public List<UUID> getComments() {
         return comments;
     }
     
@@ -94,12 +94,12 @@ public class Recipe extends BaseEntity {
             return String.format(SuccessMessages.RECIPE_SET_INSTRUCTIONS);
     }
 
-    public String setTags(List<Tag> tags) {
+    public String setTags(List<UUID> tags) {
             this.tags = tags;
             return String.format(SuccessMessages.RECIPE_SET_TAGS);
     }
 
-    public String setIngredients(Map<Ingredient, Integer> ingredients) {
+    public String setIngredients(Map<UUID, Integer> ingredients) {
             this.ingredients = ingredients;
             return String.format(SuccessMessages.RECIPE_SET_INGREDIENTS);
     }
@@ -109,12 +109,12 @@ public class Recipe extends BaseEntity {
             return String.format(SuccessMessages.RECIPE_SET_SERVING_SIZE, servingSize);
     }
 
-    private String setAuthor(User author) {
+    private String setAuthor(UUID author) {
             this.author = author;
             return String.format(SuccessMessages.RECIPE_SET_AUTHOR);
     }
     
-    private void setComments(List<Comment> comments) {
+    private void setComments(List<UUID> comments) {
         this.comments = comments;
     }
 }

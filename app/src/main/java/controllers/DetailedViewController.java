@@ -10,21 +10,29 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import models.entities.Comment;
 import models.entities.Ingredient;
+import models.entities.Recipe;
+import services.IngredientService;
+import services.RecipeService;
 import services.impl.IngredientServiceImpl;
+import services.impl.RecipeServiceImpl;
 import util.common.SceneContext;
 import util.common.UserListener;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class DetailedViewController implements Initializable {
     private UserListener userListener;
@@ -51,16 +59,16 @@ public class DetailedViewController implements Initializable {
     private ScrollPane ingredientScroll;
 
     @FXML
-    private Label recipe_Description;
+    private TextArea recipeDescription;
 
     @FXML
-    private ImageView recipe_Img;
+    private ImageView recipeImg;
 
     @FXML
-    private Label recipe_Instruction;
+    private TextArea recipeInstruction;
 
     @FXML
-    private Label recipe_Name;
+    private Label recipeName;
 
     @FXML
     private Button shareTheRecipe;
@@ -69,25 +77,26 @@ public class DetailedViewController implements Initializable {
     private Label tagsTextArea;
 
 
-    private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
-
-    private List<Ingredient> ingredientsList = ingredientService.getAllIngredients();
-    private List<Ingredient> selectedIngredients = new ArrayList<>();
-//    private List<Ingredient> commentsList = ingredientService.getAllComments(); //TODO: add getAllComments
+    private Recipe recipe;
+    private IngredientService ingredientService = new IngredientServiceImpl();
+    private RecipeService recipeService = new RecipeServiceImpl();
+    private Map<Ingredient, Integer> ingredientsList = new HashMap<>();
     private List<Comment> commentsList = new ArrayList<>();
 
 
     private void initializeIngredientGrid(){
         ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Set<Ingredient> ingredients = ingredientsList.keySet();
         int column = 0;
         int row = 1;
         try {
-            for (int i = 0; i < ingredientsList.size(); i++) {
+            for (Ingredient ingredient : ingredients) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientItemController ingredientItemController = fxmlLoader.getController();
-                ingredientItemController.setData(ingredientsList.get(i), userListener);
+                Integer quantity = ingredientsList.get(ingredient);
+                ingredientItemController.setData(ingredient, quantity, userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -111,6 +120,7 @@ public class DetailedViewController implements Initializable {
         }
 
     }
+    
     private void initializeCommentsGrid(){
         commentsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         int column = 0;
@@ -118,7 +128,7 @@ public class DetailedViewController implements Initializable {
         try {
             for (int i = 0; i < commentsList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/comment.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 CommentController commentController = fxmlLoader.getController();
                 commentController.setData(commentsList.get(i), userListener);
@@ -147,6 +157,17 @@ public class DetailedViewController implements Initializable {
     }
 
 
+    public void setData(Recipe recipe){
+        this.recipe = recipe;
+        recipeName.setText(recipe.getName());
+        recipeDescription.setText(recipe.getDescription());
+        recipeImg.setImage(recipe.getPicture());
+        recipeInstruction.setText(recipe.getInstructions());
+        ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());
+        commentsList = recipeService.getCommentsByRecipeId(recipe.getId());
+        initializeIngredientGrid();
+        initializeCommentsGrid();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

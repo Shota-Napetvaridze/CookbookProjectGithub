@@ -98,6 +98,7 @@ public class FailMessages {
         public static final String INGREDIENT_NOT_EXIST = "Ingredient %s does not exist.\n";
         public static final String INGREDIENT_UNIT_NOT_EXIST = "Unit %s does not exist.\n";
         public static final String INGREDIENT_NAME_TAKEN = "Ingredient %s already exists.\n";
+        public static final String INGREDIENT_ADD_FAIL = "Could not add ingredient.\n";
 
         //
         // COMMENT
@@ -105,6 +106,7 @@ public class FailMessages {
         public static final String COMMENT_INVALID_TEXT_LENGTH = "Comment should be between "
                         + Variables.MIN_COMMENT_TEXT_LENGTH + " and "
                         + Variables.MAX_COMMENT_TEXT_LENGTH + " characters long.\n";
+        public static final String COMMENT_ADD_FAIL = "Could not add comment.\n";
         //
         // MISC
         //
