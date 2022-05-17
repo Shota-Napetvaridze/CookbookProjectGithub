@@ -308,8 +308,9 @@ public class HomeController implements Initializable {
         }
     }
 
-    private void initializeMsgGrid() {
+    public void initializeMsgGrid() {
         grid.getChildren().clear();
+
 
         int column = 0;
         int row = 1;
@@ -463,12 +464,12 @@ public class HomeController implements Initializable {
 
     private void openReplyGrid(UUID senderId) {
         grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
+            AnchorPane anchorPane = fxmlLoader.load();
             ReplyController replyController = fxmlLoader.getController();
             replyController.setData(senderId);
-            AnchorPane anchorPane = fxmlLoader.load();
             grid.add(anchorPane, 1, 1);
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -803,6 +804,8 @@ public class HomeController implements Initializable {
                 grid.getChildren().clear();
                 grid.setStyle("-fx-background-color: #ffffff");
                 initializeHomeGrid();
+
+
             }
         });
 

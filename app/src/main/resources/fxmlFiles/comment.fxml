@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="99.0" prefWidth="361.0" style="-fx-background-color: ffa9a9;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CommentController">
+<AnchorPane prefHeight="99.0" prefWidth="358.0" style="-fx-background-color: ffa9a9;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CommentController">
     <children>
         <Label fx:id="author" layoutX="29.0" layoutY="-2.0" prefHeight="32.0" prefWidth="211.0" styleClass="black" stylesheets="@style.css" text="username">
             <font>
@@ -28,7 +28,7 @@
             <String fx:value="black" />
             <String fx:value="recipeAnchorStyle" />
          </styleClass></Button>
-        <TextArea fx:id="commentArea" editable="false" layoutX="28.0" layoutY="32.0" opacity="0.67" prefHeight="65.0" prefWidth="211.0" wrapText="true">
+        <TextArea fx:id="commentArea" editable="false" layoutX="28.0" layoutY="32.0" opacity="0.67" prefHeight="65.0" prefWidth="211.0" styleClass="text-area" stylesheets="@style.css" wrapText="true">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
