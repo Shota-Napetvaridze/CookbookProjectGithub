@@ -2,21 +2,19 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Circle;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import models.entities.Ingredient;
-import util.common.MyListener;
+import util.common.UserListener;
 
 
 public class IngredientController implements Initializable{
     private Ingredient ingredient;
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     private Label ingredientLbl;
@@ -26,12 +24,12 @@ public class IngredientController implements Initializable{
 
     @FXML
     private void ingredientClick(MouseEvent event) {
-        myListener.ingredientClickListener(ingredient, ingredientButton);
+        userListener.ingredientClickListener(ingredient, ingredientButton);
     }
 
-    public void setData(Ingredient ingredient, MyListener myListener){
+    public void setData(Ingredient ingredient, UserListener userListener){
         this.ingredient = ingredient;
-        this.myListener = myListener;
+        this.userListener = userListener;
         ingredientLbl.setText(ingredient.getName());
     }
 

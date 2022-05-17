@@ -1,11 +1,7 @@
 package util.common;
 
 import java.io.IOException;
-import java.util.List;
-
-import models.entities.Recipe;
 import models.entities.User;
-import services.impl.RecipeServiceImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +19,7 @@ public class SceneContext {
                 FXMLLoader loader = new FXMLLoader(DbContext.class.getResource(fxmlFile));
                 root = loader.load();
             }catch (IOException e){
+                System.out.println("Error is here!!!!");
                 e.printStackTrace();
             }
         }else {
@@ -49,5 +46,13 @@ public class SceneContext {
 
             stage.show();
         }
+    }
+
+    public static void setUser(User newUser) {
+        user = newUser;
+    }
+
+    public static User getUser() {
+        return user;
     }
 }

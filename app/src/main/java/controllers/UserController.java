@@ -2,48 +2,55 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
-import models.entities.Message;
 import models.entities.User;
-import services.impl.UserServiceImpl;
-import util.common.MyListener;
+import util.common.AdminListener;
 
 public class UserController {
-    private UserServiceImpl userService = new UserServiceImpl();
-    private MyListener myListener;
+    private AdminListener adminListener;
     private User user;
-
+    
     @FXML
     private Button editUser;
 
     @FXML
-    private Label emailLbl;
+    private TextArea email;
 
     @FXML
-    private Label nicknameLbl;
+    private TextArea nickname;
 
     @FXML
-    private Label passwordLbl;
+    private TextArea password;
 
     @FXML
     private Button removeUser;
 
     @FXML
-    private Label userNameLbl;
+    private TextArea username;
 
     @FXML
     void edit(MouseEvent event) {
-
+        adminListener.editUser(user, username.getText(), nickname.getText(), email.getText(), password.getText());
+        username.setText("");
+        nickname.setText("");
+        email.setText("");
+        password.setText("");
     }
 
     @FXML
     void remove(MouseEvent event) {
-
+        adminListener.removeUser(user);
     }
 
-    public void setData(User user, MyListener mylistener){
+
+    public void setData(User user, AdminListener adminListener){
         this.user = user;
-        this.myListener = myListener;
+        this.adminListener = adminListener;   
+    
+        email.setPromptText(user.getEmail());
+        username.setPromptText(user.getUsername());
+        nickname.setPromptText(user.getNickname());
+        password.setPromptText("New password..");
     }
 }

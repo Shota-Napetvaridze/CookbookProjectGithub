@@ -1,7 +1,6 @@
 package models.entities;
 
 import java.util.UUID;
-import util.common.DbContext;
 import util.common.Validator;
 import util.constants.FailMessages;
 import util.constants.SuccessMessages;

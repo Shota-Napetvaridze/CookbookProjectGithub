@@ -5,11 +5,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import models.entities.Comment;
-import util.common.MyListener;
+import util.common.UserListener;
 
 public class CommentController {
     private Comment comment;
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     private Label MsgUserLbl;
@@ -27,9 +27,9 @@ public class CommentController {
 
     }
 
-    public void setData(Comment comment, MyListener myListener){
+    public void setData(Comment comment, UserListener userListener){
         this.comment = comment;
-        this.myListener = myListener;
+        this.userListener = userListener;
         commentArea.setText(comment.getText());
     }
 }

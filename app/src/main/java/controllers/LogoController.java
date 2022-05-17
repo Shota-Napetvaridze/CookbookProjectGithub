@@ -9,8 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
-import services.impl.UserServiceImpl;
-import util.common.SceneContext;
 
 import java.net.URL;
 import java.util.ResourceBundle;

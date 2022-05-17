@@ -1,23 +1,17 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Circle;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import models.entities.Tag;
-import util.common.MyListener;
+import util.common.UserListener;
 
 public class TagController{
 
     private Tag tag;
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     private Label tagLbl;
@@ -27,12 +21,12 @@ public class TagController{
 
     @FXML
     private void tagClick(MouseEvent event) {
-        myListener.tagClickListener(tag, tagButton);
+        userListener.tagClickListener(tag, tagButton);
     }
 
-    public void setData(Tag tag, MyListener myListener){
+    public void setData(Tag tag, UserListener userListener){
         this.tag = tag;
-        this.myListener = myListener;
+        this.userListener = userListener;
         tagLbl.setText(tag.getName());
     }
 

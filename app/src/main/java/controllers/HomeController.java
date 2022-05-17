@@ -4,7 +4,6 @@ import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +20,6 @@ import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import java.util.HashSet;
@@ -29,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.UUID;
 
 import javafx.util.Duration;
 import models.entities.Ingredient;
@@ -41,8 +40,8 @@ import services.impl.IngredientServiceImpl;
 import services.impl.RecipeServiceImpl;
 import services.impl.TagServiceImpl;
 import services.impl.UserServiceImpl;
-import util.common.MyListener;
 import util.common.SceneContext;
+import util.common.UserListener;
 
 public class HomeController implements Initializable {
 
@@ -73,7 +72,6 @@ public class HomeController implements Initializable {
     @FXML
     private Button home;
 
-
     @FXML
     private Button openDetailed;
 
@@ -83,13 +81,11 @@ public class HomeController implements Initializable {
     @FXML
     private DatePicker datePicker;
 
-
     @FXML
     private ImageView cart;
 
     @FXML
     private Label cartCount;
-
 
     @FXML
     private Button logout;
@@ -148,10 +144,10 @@ public class HomeController implements Initializable {
     private TagServiceImpl tagService = new TagServiceImpl();
 
     private User user = SceneContext.user;
-    private Message message;
+    // private Message message;
     private Recipe recipe;
     private Image image;
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     void select(ActionEvent event) {
@@ -202,14 +198,14 @@ public class HomeController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 RecipeController recipeController = fxmlLoader.getController();
-                if (favouriteRecipeList.contains(recipeList.get(i))) {
+                if (user.getFavorites().contains(recipeList.get(i).getId())) {
                     String imgFile = "/img/heartFilled.png";
                     Image filled = new Image(getClass().getResourceAsStream(imgFile));
-                    recipeController.setData(recipeList.get(i), filled, myListener);
+                    recipeController.setData(recipeList.get(i), filled, userListener);
                 } else {
                     String imgFile = "/img/heartEmpty.png";
                     Image empty = new Image(getClass().getResourceAsStream(imgFile));
-                    recipeController.setData(recipeList.get(i), empty, myListener);
+                    recipeController.setData(recipeList.get(i), empty, userListener);
                 }
                 if (column == 3) {
                     column = 0;
@@ -230,6 +226,7 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void initializeFavouritesGrid() {
         grid.getChildren().clear();
 
@@ -244,7 +241,7 @@ public class HomeController implements Initializable {
                 String imgFile = "/img/heartFilled.png";
                 Image filled = new Image(getClass().getResourceAsStream(imgFile));
 
-                recipeController.setData(favouriteRecipeList.get(i), filled, myListener);
+                recipeController.setData(favouriteRecipeList.get(i), filled, userListener);
 
                 if (column == 3) {
                     column = 0;
@@ -265,7 +262,8 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializePlanGrid(){
+
+    private void initializePlanGrid() {
         grid.getChildren().clear();
 
         int column = 0;
@@ -276,16 +274,16 @@ public class HomeController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 RecipeController recipeController = fxmlLoader.getController();
-                if (favouriteRecipeList.contains(planList.get(i))) {
+                if (user.getFavorites().contains(planList.get(i).getId())) {
                     String imgFile = "/img/heartFilled.png";
                     Image filled = new Image(getClass().getResourceAsStream(imgFile));
 
-                    recipeController.setData(recipeList.get(i), filled, myListener);
+                    recipeController.setData(recipeList.get(i), filled, userListener);
                 } else {
                     String imgFile = "/img/heartEmpty.png";
                     Image empty = new Image(getClass().getResourceAsStream(imgFile));
 
-                    recipeController.setData(recipeList.get(i), empty, myListener);
+                    recipeController.setData(recipeList.get(i), empty, userListener);
                 }
                 if (column == 3) {
                     column = 0;
@@ -306,9 +304,9 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializeMsgGrid(){
+
+    private void initializeMsgGrid() {
         grid.getChildren().clear();
-        // msgCountLbl.setText("...");
         grid.setStyle("-fx-background-color: #ffffff");
 
         int column = 0;
@@ -319,7 +317,7 @@ public class HomeController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/messageItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 MsgController msgController = fxmlLoader.getController();
-                msgController.setData(msgList.get(i), myListener);
+                msgController.setData(msgList.get(i), userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -342,7 +340,8 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializeAddNewRecipeGrid(){
+
+    private void initializeAddNewRecipeGrid() {
         grid.getChildren().clear();
         recipeImg.setVisible(false);
         recipeLbl.setVisible(false);
@@ -368,7 +367,8 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializeTagGrid(){
+
+    private void initializeTagGrid() {
         int column = 0;
         int row = 1;
         try {
@@ -377,7 +377,7 @@ public class HomeController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/tag.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 TagController tagController = fxmlLoader.getController();
-                tagController.setData(tagList.get(i), myListener);
+                tagController.setData(tagList.get(i), userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -396,12 +396,12 @@ public class HomeController implements Initializable {
                 GridPane.setMargin(anchorPane, new Insets(3));
             }
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private void initializeIngredientGrid(){
+
+    private void initializeIngredientGrid() {
         int column = 0;
         int row = 1;
         try {
@@ -410,7 +410,7 @@ public class HomeController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredient.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientController ingredientController = fxmlLoader.getController();
-                ingredientController.setData(ingredientsList.get(i), myListener);
+                ingredientController.setData(ingredientsList.get(i), userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -435,7 +435,8 @@ public class HomeController implements Initializable {
         }
 
     }
-    private void openDetailedGrid(){
+
+    private void openDetailedGrid() {
         grid.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
@@ -455,7 +456,7 @@ public class HomeController implements Initializable {
         }
     }
 
-    private void openReplyGrid(){
+    private void openReplyGrid(UUID receiverId) {
         grid.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
@@ -476,15 +477,13 @@ public class HomeController implements Initializable {
         }
     }
 
-
-
-    // ----------------------------------------- INITIALIZE   ----------------------------------------------- //
+    // ----------------------------------------- INITIALIZE
+    // ----------------------------------------------- //
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         home.setStyle("-fx-color: rgb(239, 242, 255)");
         home.setStyle("-fx-border-color: #000000");
-
 
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -494,8 +493,7 @@ public class HomeController implements Initializable {
         comboBox.setPromptText(user.getNickname());
 
         // Set message count
-        String messageCount = String.valueOf(msgList.size());
-        msgCountLbl.setText(messageCount);
+        getMessages();
 
         // Slider
         filterPane.setVisible(false);
@@ -503,22 +501,22 @@ public class HomeController implements Initializable {
         filter.setOnMousePressed(event -> {
             gridTag.getChildren().clear();
             gridIngredient.getChildren().clear();
-            //----------------------------------------------------//
+            // ----------------------------------------------------//
             TranslateTransition slide = new TranslateTransition();
             slide.setDuration(Duration.seconds(0.7));
             slide.setNode(filterPane);
             slide.setToY(-176);
             slide.play();
             filterPane.setTranslateY(0);
-            //----------------------------------------------------//
+            // ----------------------------------------------------//
             TranslateTransition slide2 = new TranslateTransition();
             slide2.setDuration(Duration.seconds(0.7));
             slide2.setNode(anchorPaneBelowFilter);
             slide2.setToY(-176);
             slide2.play();
             anchorPaneBelowFilter.setTranslateY(0);
-            //----------------------------------------------------//
-            slide.setOnFinished((ActionEvent e)-> {
+            // ----------------------------------------------------//
+            slide.setOnFinished((ActionEvent e) -> {
                 filterPane.setVisible(false);
                 filter.setVisible(false);
                 filterBack.setVisible(true);
@@ -530,7 +528,7 @@ public class HomeController implements Initializable {
             scrollIngredient.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             initializeTagGrid();
             initializeIngredientGrid();
-            //----------------------------------------------------//
+            // ----------------------------------------------------//
             TranslateTransition slide = new TranslateTransition();
             slide.setDuration(Duration.seconds(0.7));
             slide.setNode(filterPane);
@@ -538,27 +536,27 @@ public class HomeController implements Initializable {
             slide.play();
             filterPane.setVisible(true);
             filterPane.setTranslateY(-176);
-            //----------------------------------------------------//
+            // ----------------------------------------------------//
             TranslateTransition slide2 = new TranslateTransition();
             slide2.setDuration(Duration.seconds(0.7));
             slide2.setNode(anchorPaneBelowFilter);
             slide2.setToY(0);
             slide2.play();
             anchorPaneBelowFilter.setTranslateY(-176);
-            //----------------------------------------------------//
+            // ----------------------------------------------------//
 
-            slide.setOnFinished((ActionEvent e)-> {
+            slide.setOnFinished((ActionEvent e) -> {
                 filter.setVisible(true);
                 filterBack.setVisible(false);
 
             });
         });
 
-
-        // ----------------------------------------- MY LISTENER ----------------------------------------------- //
+        // ----------------------------------------- MY LISTENER
+        // ----------------------------------------------- //
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
-            myListener = new MyListener() {
+            userListener = new UserListener() {
                 // When the user clicks on a specific recipe
                 @Override
                 public void onClickListener(Recipe recipe) {
@@ -573,7 +571,7 @@ public class HomeController implements Initializable {
                 // When the User clicks on the heart button
                 @Override
                 public void favClickListener(Recipe recipe, ImageView heartImage) {
-                    if (favouriteRecipeList.contains(recipe)) {
+                    if (user.getFavorites().contains(recipe.getId())) {
                         userService.removeFromFavorites(user.getId(), recipe.getId());
                         favouriteRecipeList.remove(recipe);
                         String imgFile = "/img/heartEmpty.png";
@@ -587,6 +585,7 @@ public class HomeController implements Initializable {
                         heartImage.setImage(filled);
                     }
                 }
+
                 // When the user clicks on a specific Ingredient
                 @Override
                 public void ingredientClickListener(Ingredient ingredient, ImageView ingredientButton) {
@@ -602,6 +601,7 @@ public class HomeController implements Initializable {
                         selectedIngredients.add(ingredient);
                     }
                 }
+
                 // When the user clicks on a specific Tag
                 @Override
                 public void tagClickListener(Tag tag, ImageView tagButton) {
@@ -638,25 +638,27 @@ public class HomeController implements Initializable {
 
                 @Override
                 public void replyMsgListener(Message message) {
-                    openReplyGrid();
+                    openReplyGrid(message.getSender());
                 }
 
                 @Override
                 public void removeMsgListener(Message message) {
                     userService.removeMessageById(message.getId());
                     msgList.remove(message);
+                    String messageCount = String.valueOf(msgList.size());
+                    msgCountLbl.setText(messageCount);
                     initializeMsgGrid();
                 }
 
             };
 
-            
         }
 
         // Initialize Home grid
         initializeHomeGrid();
 
-        // -----------------------------------------BUTTONS--------------------------------------------------- //
+        // -----------------------------------------BUTTONS---------------------------------------------------
+        // //
 
         // Search Button-----------------------------------------
         search.setOnAction(new EventHandler<ActionEvent>() {
@@ -669,7 +671,7 @@ public class HomeController implements Initializable {
                     boolean isValid = true;
 
                     // Search tags
-                    Set<Tag> tags = recipe.getTags();
+                    List<Tag> tags = recipe.getTags();
                     Set<String> tagNames = new HashSet<>();
                     for (Tag tag : tags) {
                         tagNames.add(tag.getName());
@@ -684,7 +686,7 @@ public class HomeController implements Initializable {
                     // Search ingredients
                     Map<Ingredient, Integer> ingredients = recipe.getIngredients();
                     Set<String> ingredientNames = new HashSet<>();
-                    for (Ingredient ingredient : ingredients.keySet()){
+                    for (Ingredient ingredient : ingredients.keySet()) {
                         ingredientNames.add(ingredient.getName());
                     }
                     for (Ingredient ingredient : selectedIngredients) {
@@ -705,7 +707,6 @@ public class HomeController implements Initializable {
 
         // Filter Button-----------------------------------------
 
-
         // Open for a detailed view Button-----------------------------------------
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -723,8 +724,6 @@ public class HomeController implements Initializable {
             }
         });
 
-
-
         // Add New Recipe Button-----------------------------------------
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -738,6 +737,7 @@ public class HomeController implements Initializable {
         home.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                getMessages();
                 recipeImg.setVisible(true);
                 recipeLbl.setVisible(true);
                 home.setStyle("-fx-color: rgb(239, 242, 255)");
@@ -753,6 +753,7 @@ public class HomeController implements Initializable {
         favorites.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                getMessages();
                 favorites.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
@@ -765,6 +766,7 @@ public class HomeController implements Initializable {
         plan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                getMessages();
                 plan.setStyle("-fx-color: rgb(239, 242, 255)");
                 home.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
@@ -799,5 +801,11 @@ public class HomeController implements Initializable {
                 SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
             }
         });
+    }
+
+    private void getMessages() {
+        msgList = userService.getUserMessagesById(user.getId());
+        String messageCount = String.valueOf(msgList.size());
+        msgCountLbl.setText(messageCount);
     }
 }

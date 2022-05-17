@@ -1,6 +1,7 @@
 package services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import models.entities.Tag;
 import services.TagService;
@@ -17,8 +18,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public String addTag(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return dbContext.addTag(UUID.randomUUID(), name);
     }
 
     @Override

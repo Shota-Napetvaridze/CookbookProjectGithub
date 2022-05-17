@@ -1,9 +1,9 @@
 package services.impl;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 
 import models.entities.Message;
@@ -11,9 +11,10 @@ import models.entities.Recipe;
 import models.entities.User;
 import services.UserService;
 import util.common.DbContext;
-import util.constants.FailMessages;
+import util.common.Hasher;
+import util.common.SceneContext;
+import util.common.Validator;
 import util.constants.Variables;
-import util.exceptions.common.InvalidLengthException;
 import util.exceptions.user.InvalidEmailException;
 import util.exceptions.user.InvalidNicknameLengthException;
 import util.exceptions.user.InvalidPasswordComplexityException;
@@ -32,20 +33,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return dbContext.getAllUsers();
     }
 
     @Override
-    public String addUser(String username, String email, String password)
-            throws TakenUsernameException, InvalidUserNameLengthException, TakenNicknameException,
-            InvalidNicknameLengthException, InvalidPasswordComplexityException, InvalidPasswordLengthException,
-            InvalidEmailException, TakenEmailException {
-        boolean isUnique = dbContext.validateUniqueCredentials(username, email);
-        if (isUnique) {
-            return dbContext.addUser(username, email, password);
-        }
-        return String.format(FailMessages.USER_ADD_FAIL);
+    public String addUser(UUID userId, String username, String email, String password) throws TakenUsernameException, InvalidUserNameLengthException, TakenEmailException, InvalidEmailException, InvalidPasswordLengthException, InvalidPasswordComplexityException, NoSuchAlgorithmException {
+            validateUsername(username);
+            validateEmail(email);
+            validatePassword(password);
+            String hashedPassword = Hasher.hashString(password);
+            return dbContext.addUser(userId, username, email, hashedPassword);
     }
 
     @Override
@@ -54,26 +52,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changeNickname(UUID userId, String nickname)
-            throws TakenNicknameException, InvalidNicknameLengthException {
-        User user = dbContext.getUserById(userId);
-
-        user.setNickname(nickname);
-        return dbContext.userChangeNickname(userId, nickname);
+    public String changeUsername(UUID userId, String username) throws TakenUsernameException, InvalidUserNameLengthException {
+            validateUsername(username);
+            User user = dbContext.getUserById(userId);
+            user.setUsername(username);
+            return dbContext.userChangeUsername(userId, username);
     }
 
     @Override
-    public String changeEmail(UUID userId, String email) {
-        User user = dbContext.getUserById(userId);
+    public String changeNickname(UUID userId, String nickname) throws InvalidNicknameLengthException, TakenNicknameException {
+            validateNickname(nickname);
+            User user = dbContext.getUserById(userId);
+            user.setNickname(nickname);
+            return dbContext.userChangeNickname(userId, nickname);
+    }
 
-        try {
+    @Override
+    public String changeEmail(UUID userId, String email) throws TakenEmailException, InvalidEmailException {
+            validateEmail(email);
+            User user = dbContext.getUserById(userId);
             user.setEmail(email);
             return dbContext.userChangeEmail(userId, email);
-        } catch (InvalidEmailException e) {
-            return String.format(FailMessages.USER_INVALID_EMAIL);
-        } catch (TakenEmailException e) {
-            return String.format(FailMessages.USER_EMAIL_TAKEN);
-        }
+    }
+
+    @Override
+    public String changePassword(UUID userId, String password) throws InvalidPasswordLengthException, InvalidPasswordComplexityException, NoSuchAlgorithmException {
+            validatePassword(password);
+            User user = dbContext.getUserById(userId);
+            String hashedPassword = Hasher.hashString(password);
+            user.setPassword(hashedPassword);
+            return dbContext.userChangePassword(userId, hashedPassword);
+        
     }
 
     @Override
@@ -108,11 +117,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addToFavorites(UUID userId, UUID recipeId) {
+        SceneContext.getUser().addRecipeToFavorites(recipeId);
         return dbContext.addRecipeToFavorites(userId, recipeId);
     }
 
     @Override
     public boolean removeFromFavorites(UUID userId, UUID recipeId) {
+        SceneContext.getUser().removeRecipeFromFavorite(recipeId);
         return dbContext.removeRecipeFromFavorites(userId, recipeId);
     }
 
@@ -176,7 +187,7 @@ public class UserServiceImpl implements UserService {
         return dbContext.getFavoriteRecipes(userId);
     }
 
-    public Dictionary<UUID, Date> getWeeklyPlan(UUID userId) {
+    public Map<UUID, Date> getWeeklyPlan(UUID userId) {
         return dbContext.getUserWeeklyList(userId);
     }
 
@@ -184,4 +195,29 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public List<User> getUsersLike(String text) {
+        return dbContext.getUsersLike(text);
+    }
+
+    @Override
+    public void validateUsername(String username) throws TakenUsernameException, InvalidUserNameLengthException {
+        Validator.validateUsername(username);
+    }
+
+    @Override
+    public void validateNickname(String nickname) throws InvalidNicknameLengthException, TakenNicknameException {
+        Validator.validateNickname(nickname);
+    }
+
+    @Override
+    public void validateEmail(String email) throws TakenEmailException, InvalidEmailException {
+        Validator.validateEmail(email);
+    }
+
+    @Override
+    public void validatePassword(String password)
+            throws InvalidPasswordLengthException, InvalidPasswordComplexityException {
+        Validator.validatePassword(password);
+    }
 }

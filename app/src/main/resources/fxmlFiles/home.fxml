@@ -179,12 +179,18 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
                                        <children>
-                                          <Button fx:id="openDetailed" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Open for detailed view" />
+                                          <Button fx:id="openDetailed" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Open for detailed view">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font></Button>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
                                        <children>
-                                          <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703; -fx-border-color: #000000#000000;" text="Add a new recipe" />
+                                          <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703; -fx-border-color: #000000#000000;" text="Add a new recipe">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font></Button>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
@@ -193,6 +199,15 @@
                                              <graphic>
                                                 <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: FED703; -fx-border-color: #000000;" />
                                              </graphic>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
+                                       <children>
+                                          <Button fx:id="removeFromPlan" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703; -fx-border-color: #000000#000000;" text="Remove From Plan" visible="false">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
                                           </Button>
                                        </children>
                                     </HBox>

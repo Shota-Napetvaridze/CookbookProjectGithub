@@ -1,13 +1,21 @@
 package util.common;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import util.constants.Variables;
 import util.exceptions.common.InvalidCountException;
 import util.exceptions.common.InvalidInstanceException;
 import util.exceptions.common.InvalidLengthException;
+import util.exceptions.user.InvalidEmailException;
+import util.exceptions.user.InvalidNicknameLengthException;
 import util.exceptions.user.InvalidPasswordComplexityException;
 import util.exceptions.user.InvalidPasswordLengthException;
+import util.exceptions.user.InvalidUserNameLengthException;
+import util.exceptions.user.TakenEmailException;
+import util.exceptions.user.TakenNicknameException;
+import util.exceptions.user.TakenUsernameException;
 
 public class Validator {
     private static DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
@@ -61,6 +69,44 @@ public class Validator {
         }
     }
 
+    public static void validateUsername(String username) throws TakenUsernameException, InvalidUserNameLengthException {
+        try {
+            Validator.validateStringLength(username, Variables.MIN_USER_NAME_LENGTH, Variables.MAX_USER_NAME_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidUserNameLengthException();
+        }
+
+        if (dbContext.getUserByUsername(username) != null) {
+            throw new TakenUsernameException(username);
+        }
+    }
+
+    public static void validateNickname(String nickname) throws InvalidNicknameLengthException, TakenNicknameException {
+        try {
+            Validator.validateStringLength(nickname, Variables.MIN_USER_NICK_LENGTH, Variables.MAX_USER_NICK_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidNicknameLengthException();
+        }
+
+        if (dbContext.getUserByNickname(nickname) != null) {
+            throw new TakenNicknameException(nickname);
+        }
+
+    }
+
+    public static void validateEmail(String email) throws TakenEmailException, InvalidEmailException {
+        Pattern pattern = Pattern.compile(Variables.USER_EMAIL_REGEX,
+                Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.find() || email == null) {
+            throw new InvalidEmailException();
+        }
+
+        if (dbContext.getUserByEmail(email) != null) {
+            throw new TakenEmailException();
+        }
+    }
+
     public static void validatePassword(String password) throws InvalidPasswordLengthException, InvalidPasswordComplexityException {
         try {
             validateStringLength(password, Variables.MIN_PASSWORD_LENGTH, Variables.MAX_PASSWORD_LENGTH);
@@ -98,4 +144,5 @@ public class Validator {
         throw new InvalidPasswordComplexityException();
         }
     }
+
 }

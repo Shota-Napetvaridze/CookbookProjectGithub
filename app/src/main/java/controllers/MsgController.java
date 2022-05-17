@@ -1,29 +1,18 @@
 package controllers;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 import models.entities.Message;
 import services.impl.UserServiceImpl;
-import util.common.MyListener;
-import util.common.SceneContext;
+import util.common.UserListener;
 
 
 public class MsgController{
     private UserServiceImpl userService = new UserServiceImpl();
     private Message message;
-    private MyListener myListener;
-
+    private UserListener userListener;
 
     @FXML
     private Label MsgUserLbl;
@@ -37,17 +26,17 @@ public class MsgController{
 
     @FXML
     void reply(MouseEvent event) {
-
-        myListener.replyMsgListener(message);
+        userListener.replyMsgListener(message);
     }
+
     @FXML
     void removeMsg(MouseEvent event) {
-        myListener.removeMsgListener(message);
+        userListener.removeMsgListener(message);
     }
 
-    public void setData(Message message, MyListener mylistener){
+    public void setData(Message message, UserListener userListener){
         this.message = message;
-        this.myListener = mylistener;
+        this.userListener = userListener;
         messageReceivedArea.setText(message.getText());
         MsgUserLbl.setText(userService.getUserById(message.getSender()).getNickname());
     }

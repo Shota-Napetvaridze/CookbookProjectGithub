@@ -51,7 +51,7 @@ public class SqlQueries {
                         + "picture LONGBLOB NOT NULL,"
                         + "recipe_description VARCHAR(1500) NOT NULL,"
                         + "instructions VARCHAR(4000) NOT NULL,"
-                        // + "serving_size BIT NOT NULL,"
+                        + "serving_size TINYINT NOT NULL,"
                         + "author_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id)"
                         + ");";
@@ -111,8 +111,8 @@ public class SqlQueries {
 
         // INSERT------------------------------------------------------
         public static final String addRecipe = "INSERT INTO recipes (\n" +
-                        "id, recipe_name, picture, recipe_description, instructions, author_id) \n" +
-                        "VALUES (?, ?, ?, ?, ?, ?)";
+                        "id, recipe_name, picture, recipe_description, instructions, serving_size, author_id) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         public static final String addUser = "INSERT INTO users (\n" +
                         "id, username, display_name, email, password) \n" +
@@ -134,6 +134,9 @@ public class SqlQueries {
                         "id, ingredient_name, unit) \n" +
                         "VALUES (?, ?, ?)";
 
+        public static final String addRecipeTag = "INSERT INTO recipes_tags (recipe_id, tag_id) VALUES (?, ?)";
+
+        public static final String addRecipeIngredient = "INSERT INTO recipes_ingredients (recipe_id, ingredient_id, quantity) VALUES (?, ?, ?)";
         // SELECT -------------
         public static final String getUserByCredentials = "SELECT * FROM users WHERE username = ? AND password = ?";
 
@@ -177,18 +180,30 @@ public class SqlQueries {
 
         public static final String removeUserWithId = "DELETE FROM users WHERE id = ?";
 
+        public static final String removeRecipeWithId = "DELETE FROM recipes WHERE id = ?";
+
         public static final String getAllTags = "SELECT * FROM tags";
 
         public static final String getTagById = "SELECT * FROM tags WHERE id = ?";
 
+        public static final String getCommentById = "SELECT * FROM comments WHERE id = ?";
+
         public static final String getRecipesByNameLike = "SELECT * FROM recipes WHERE recipe_name LIKE ?";
 
+        public static final String getUsersLike = "SELECT * FROM users WHERE username LIKE ? OR display_name LIKE ? OR email LIKE ?";
+
+        public static final String getIngredientsByNameLike = "SELECT * FROM ingredients WHERE ingredient_name LIKE ?";
+
         // UPDATE -------------
+        public static final String updateUsername = "UPDATE users SET username = ? WHERE id = ?";
+
         public static final String updateNickname = "UPDATE users SET display_name = ? WHERE id = ?";
 
         public static final String updateEmail = "UPDATE users SET email = ? WHERE id = ?";
 
-        public static final String removeMessageByID = "DELETE FROM messages WHERE id = ?";
+        public static final String updatePassword = "UPDATE users SET password = ? WHERE id = ?";
+
+        public static final String removeMessageById = "DELETE FROM messages WHERE id = ?";
 
         public static final String addRecipeFavorite = "INSERT INTO users_favorites (\n" +
                         "user_id, recipe_id) \n" +
@@ -197,4 +212,5 @@ public class SqlQueries {
         public static final String validateUniqueCredentials = "SELECT * FROM users WHERE username = ? OR email = ?";
 
         public static final String removeRecipeFavorite = "DELETE FROM users_favorites WHERE user_id = ? AND recipe_id = ?";
+
 }

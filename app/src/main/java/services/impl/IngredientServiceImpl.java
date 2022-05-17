@@ -1,6 +1,8 @@
 package services.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import models.entities.Ingredient;
 import services.IngredientService;
@@ -16,13 +18,23 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient getIngredientByName(String name) {
-        return dbContext.getIngredientByName(name);
+    public List<Ingredient> getIngredientByNameLike(String name) {
+        return dbContext.getIngredientsByNameLike(name);
     }
 
     @Override
     public List<Ingredient> getAllIngredients() {
         return dbContext.getAllIngredients();
+    }
+
+    @Override
+    public Map<Ingredient, Integer> getRecipeIngredients(UUID recipeId) {
+        return dbContext.getRecipeIngredientsById(recipeId);
+    }
+
+    @Override
+    public Ingredient getIngredientById(UUID id) {
+        return dbContext.getIngredientById(id);
     }
     
 }

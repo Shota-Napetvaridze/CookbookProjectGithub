@@ -10,17 +10,15 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.stage.FileChooser;
 import models.entities.Comment;
 import models.entities.Ingredient;
 import services.impl.IngredientServiceImpl;
-import util.common.MyListener;
 import util.common.SceneContext;
+import util.common.UserListener;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +27,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class DetailedViewController implements Initializable {
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     private Button close;
@@ -86,10 +84,10 @@ public class DetailedViewController implements Initializable {
         try {
             for (int i = 0; i < ingredientsList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientsNeeded.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
-                IngredientItemController ingredientsNeededController = fxmlLoader.getController();
-                ingredientsNeededController.setData(ingredientsList.get(i), myListener);
+                IngredientItemController ingredientItemController = fxmlLoader.getController();
+                ingredientItemController.setData(ingredientsList.get(i), userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -120,10 +118,10 @@ public class DetailedViewController implements Initializable {
         try {
             for (int i = 0; i < commentsList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientsNeeded.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 CommentController commentController = fxmlLoader.getController();
-                commentController.setData(commentsList.get(i), myListener);
+                commentController.setData(commentsList.get(i), userListener);
 
                 if (column == 1) {
                     column = 0;

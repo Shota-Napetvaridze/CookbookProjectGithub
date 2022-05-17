@@ -5,11 +5,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import models.entities.Ingredient;
-import util.common.MyListener;
+import util.common.UserListener;
 
 public class IngredientItemController {
     private Ingredient ingredient;
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     private Label amount;
@@ -22,17 +22,17 @@ public class IngredientItemController {
 
     @FXML
     void addToCartClick(MouseEvent event) {
-        myListener.ingredientClickListener(ingredient, ingredientButton);
+        userListener.ingredientClickListener(ingredient, ingredientButton);
     }
 
     @FXML
     private void ingredientClick(MouseEvent event) {
-        myListener.ingredientClickListener(ingredient, ingredientButton);
+        userListener.ingredientClickListener(ingredient, ingredientButton);
     }
 
-    public void setData(Ingredient ingredient, MyListener myListener){
+    public void setData(Ingredient ingredient, UserListener userListener){
         this.ingredient = ingredient;
-        this.myListener = myListener;
+        this.userListener = userListener;
         ingredientLbl.setText(ingredient.getName());
     }
 

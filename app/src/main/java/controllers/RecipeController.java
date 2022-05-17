@@ -2,8 +2,6 @@ package controllers;
 
 import javafx.fxml.FXML;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,15 +11,12 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
 import models.entities.Recipe;
-import util.common.MyListener;
-import util.common.SceneContext;
+import util.common.UserListener;
 
 public class RecipeController implements Initializable{
     private Recipe recipe;
-    private MyListener myListener;
+    private UserListener userListener;
 
     @FXML
     private Label recipeName;
@@ -38,31 +33,31 @@ public class RecipeController implements Initializable{
 
     @FXML
     void favoritesClick(MouseEvent event) {
-        myListener.favClickListener(recipe, heartImage);
+        userListener.favClickListener(recipe, heartImage);
     }
 
     @FXML
     void click(MouseEvent mouseEvent) {
-        myListener.onClickListener(recipe);
-    }
-
-    @FXML
-    void clickDescription(MouseEvent event) {
-        myListener.descriptionListener(recipe);
+        userListener.onClickListener(recipe);
     }
 
     @FXML
     void descriptionEntered(MouseEvent event) {
-        myListener.recipeEntered(recipe, recipeDescriptionHover);
+        userListener.recipeEntered(recipe, recipeDescriptionHover);
     }
     @FXML
     void descriptionExited(MouseEvent event) {
-        myListener.recipeExited(recipe, recipeDescriptionHover);
+        userListener.recipeExited(recipe, recipeDescriptionHover);
     }
 
-    public void setData(Recipe recipe, Image heartImage, MyListener myListener) {
+    @FXML
+    void clickDescription(MouseEvent event) {
+        userListener.descriptionListener(recipe);
+    }
+    
+    public void setData(Recipe recipe, Image heartImage, UserListener userListener) {
         this.recipe = recipe;
-        this.myListener = myListener;
+        this.userListener = userListener;
         recipeName.setText(recipe.getName());
         image.setImage(recipe.getPicture());
         this.heartImage.setImage(heartImage);

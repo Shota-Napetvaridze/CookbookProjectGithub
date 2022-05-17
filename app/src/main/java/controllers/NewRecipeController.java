@@ -15,15 +15,23 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import models.entities.Ingredient;
 import models.entities.User;
 import services.impl.RecipeServiceImpl;
 import util.common.SceneContext;
+import util.exceptions.recipe.InvalidRecipeDescriptionLengthException;
+import util.exceptions.recipe.InvalidRecipeIngredientsCountException;
+import util.exceptions.recipe.InvalidRecipeInstructionsLengthException;
+import util.exceptions.recipe.InvalidRecipeNameLengthException;
+import util.exceptions.recipe.InvalidRecipeServingSizeException;
+import util.exceptions.recipe.InvalidRecipeTagsCountException;
 
 public class NewRecipeController implements Initializable {
-
 
     @FXML
     private GridPane ingredientGrid;
@@ -34,30 +42,32 @@ public class NewRecipeController implements Initializable {
     @FXML
     private TextField ingredientSearch;
 
-
     @FXML
     private Button searchButton;
 
     @FXML
-    private Button add_image;
+    private Button addImage;
 
     @FXML
-    private Button add_recipe;
+    private Button addRecipe;
 
     @FXML
     private ImageView newRecipeImg;
 
     @FXML
-    private TextArea recipe_description;
+    private TextArea recipeDescription;
 
     @FXML
-    private TextArea recipe_instruction;
+    private TextArea recipeInstruction;
 
     @FXML
-    private TextField recipe_name;
+    private TextField recipeName;
 
     @FXML
-    private TextField txt_filename;
+    private TextField txtFilename;
+
+    @FXML
+    private TextField serveSize;
 
     private RecipeServiceImpl recipeService = new RecipeServiceImpl();
 
@@ -74,10 +84,16 @@ public class NewRecipeController implements Initializable {
         return stage;
     }
 
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message);
+        alert.show();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        add_image.setOnAction(new EventHandler<ActionEvent>() {
+        addImage.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
@@ -86,8 +102,9 @@ public class NewRecipeController implements Initializable {
                 fileChooser.getExtensionFilters().add(extFilter);
                 file = fileChooser.showOpenDialog(createStage());
                 if (file != null) {
-                    txt_filename.setText(file.getAbsoluteFile().toString());
-                    image = new Image(file.toURI().toString(), 100, 150, true, true);//path, prefWidth, prefHeight, preserveRatio, smooth
+                    txtFilename.setText(file.getAbsoluteFile().toString());
+                    image = new Image(file.toURI().toString(), 100, 150, true, true);// path, prefWidth, prefHeight,
+                                                                                     // preserveRatio, smooth
                     newRecipeImg.setImage(image);
                     newRecipeImg.setPreserveRatio(true);
 
@@ -95,15 +112,27 @@ public class NewRecipeController implements Initializable {
             }
         });
 
-        add_recipe.setOnAction(new EventHandler<ActionEvent>() {
+        addRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                recipeService.addRecipe(UUID.randomUUID(), recipe_name.getText(), image, recipe_description.getText(), recipe_instruction.getText(), user.getId());
-                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-            }
+                UUID recipeId = UUID.randomUUID();
+                String name = recipeName.getText();
+                String picturePath = txtFilename.getText();
+                String description = recipeDescription.getText();
+                String instructions = recipeInstruction.getText();
+                UUID authorId = user.getId();
+                Map<Ingredient, Integer> ingredients = new HashMap<>();
+                byte servingSize = Byte.parseByte(serveSize.getText());
 
+                try {
+                    recipeService.addRecipe(recipeId, name, picturePath, description, instructions, authorId,
+                            ingredients, servingSize);
+                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+            }
         });
     }
-
 
 }

@@ -1,6 +1,5 @@
 package controllers;
 
-
 import javafx.animation.Interpolator;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
@@ -39,7 +38,6 @@ public class LogInController implements Initializable {
     @FXML
     private TextField password;
 
-
     @FXML
     private ImageView logo;
 
@@ -61,31 +59,28 @@ public class LogInController implements Initializable {
         rotate.play();
 
         PauseTransition visiblePause = new PauseTransition(
-                Duration.seconds(3)
-        );
+                Duration.seconds(3));
         visiblePause.setOnFinished(
-                event -> logo.setVisible(false)
-        );
+                event -> logo.setVisible(false));
         visiblePause.play();
         PauseTransition visiblePause1 = new PauseTransition(
-                Duration.seconds(3)
-        );
+                Duration.seconds(3));
         visiblePause1.setOnFinished(
-                event -> anchorVisible.setVisible(true)
-        );
+                event -> anchorVisible.setVisible(true));
         visiblePause1.play();
-        //          ----------- ----------- -----------
-
+        // ----------- ----------- -----------
 
         login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 User user = userService.loginUser(username.getText(), password.getText());
                 if (user != null) {
-                    SceneContext.user = user;
+                    SceneContext.setUser(user);
+                    if (user.getUsername().toLowerCase().equals("admin")) {
+                        SceneContext.changeScene(event, "/fxmlFiles/adminPage.fxml");
+                    }
                     SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-                }
-                else {
+                } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Credentials are incorrect");
                     alert.show();
