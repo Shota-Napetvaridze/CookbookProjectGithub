@@ -20,6 +20,9 @@
 .black{
     -fx-text-fill: black;
 }
+.jfx-text-field {
+-fx-prompt-text-fill: #000000;
+}
 
 .text-area {
     -fx-background-color: transparent;

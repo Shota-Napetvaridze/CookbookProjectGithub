@@ -52,13 +52,13 @@ public class DetailedViewController implements Initializable {
     private ScrollPane ingredientScroll;
 
     @FXML
-    private TextArea recipe_Description;
+    private Label recipe_Description;
 
     @FXML
     private ImageView recipe_Img;
 
     @FXML
-    private TextArea recipe_Instruction;
+    private Label recipe_Instruction;
 
     @FXML
     private Label recipe_Name;
@@ -67,7 +67,7 @@ public class DetailedViewController implements Initializable {
     private Button shareTheRecipe;
 
     @FXML
-    private TextArea tagsTextArea;
+    private Label tagsTextArea;
 
 
     private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
@@ -77,6 +77,7 @@ public class DetailedViewController implements Initializable {
 
 
     private void initializeIngredientGrid(){
+        ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         int column = 0;
         int row = 1;
         try {
