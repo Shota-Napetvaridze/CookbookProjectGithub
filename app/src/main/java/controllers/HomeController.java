@@ -336,6 +336,7 @@ public class HomeController implements Initializable {
                     column = 0;
                     row++;
                 }
+                grid.setStyle("-fx-background-color: #ffffff");
                 grid.add(anchorPane, column++, row);
                 // Set grid width
                 grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -480,7 +481,8 @@ public class HomeController implements Initializable {
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             ReplyController replyController = fxmlLoader.getController();
-            replyController.setData(senderId);
+            replyController.setData(senderId, userListener);
+            grid.setStyle("-fx-background-color: #ffa9a9");
             grid.add(anchorPane, 1, 1);
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -698,6 +700,11 @@ public class HomeController implements Initializable {
                     msgList.remove(message);
                     String messageCount = String.valueOf(msgList.size());
                     msgCountLbl.setText(messageCount);
+                    initializeMsgGrid();
+                }
+
+                @Override
+                public void closeMsgListener() {
                     initializeMsgGrid();
                 }
 

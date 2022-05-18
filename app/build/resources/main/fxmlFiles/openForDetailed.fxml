@@ -22,7 +22,7 @@
                 <Font size="23.0" />
             </font>
         </Button>
-        <ImageView fx:id="recipeImg" fitHeight="145.0" fitWidth="205.0" layoutX="493.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="recipeImg" fitHeight="145.0" fitWidth="205.0" layoutX="448.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
         <Label layoutX="21.0" layoutY="65.0" text="Description" AnchorPane.leftAnchor="21.0">
             <font>
                 <Font size="24.0" />
