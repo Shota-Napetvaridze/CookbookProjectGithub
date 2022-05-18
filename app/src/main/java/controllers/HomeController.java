@@ -363,8 +363,7 @@ public class HomeController implements Initializable {
 
     private void initializeAddNewRecipeGrid() {
         grid.getChildren().clear();
-//        recipeImg.setVisible(false);
-//        recipeLbl.setVisible(false);
+
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/addNewRecipe.fxml"));
@@ -786,6 +785,7 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                getDate();
                 if (!planList.contains(recipe)) {
                     planList.add(recipe);
                     removeFromPlan.setVisible(true);

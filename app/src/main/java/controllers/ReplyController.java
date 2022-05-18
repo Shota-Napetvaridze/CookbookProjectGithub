@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -62,7 +63,10 @@ public class ReplyController implements Initializable {
         send.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                userService.sendMessage(message.getId(), message.getSender(), message.getReceiver(), replyMsgArea.getText());
+                userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(), replyMsgArea.getText());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("Message sent successfully");
+                alert.show();
             }
         });
     }
