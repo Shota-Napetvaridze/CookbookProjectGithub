@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="690.0" prefWidth="736.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CartController">
     <children>
-        <Button layoutX="441.0" layoutY="621.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="238.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Close" AnchorPane.rightAnchor="59.0">
+        <Button fx:id="close" layoutX="441.0" layoutY="621.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="238.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Close" AnchorPane.rightAnchor="59.0">
             <font>
                 <Font size="23.0" />
             </font>
@@ -22,20 +22,15 @@
                 <Font size="23.0" />
             </font>
         </Button>
-        <ScrollPane layoutX="14.0" layoutY="71.0" prefHeight="594.0" prefWidth="363.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="14.0">
+        <ScrollPane fx:id="ingredientsScroll" layoutX="14.0" layoutY="71.0" prefHeight="594.0" prefWidth="363.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="14.0">
             <content>
-                <GridPane prefHeight="9.0" prefWidth="30.0">
+                <GridPane fx:id="ingredientsGrid" prefHeight="9.0" prefWidth="30.0">
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" />
                     </rowConstraints>
                 </GridPane>
             </content>
         </ScrollPane>
-        <Button layoutX="442.0" layoutY="498.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: #efff78;" text="Edit" visible="false" AnchorPane.rightAnchor="74.0">
-            <font>
-                <Font size="23.0" />
-            </font>
-        </Button>
         <Label layoutX="15.0" layoutY="26.0" text="Ingredients:" AnchorPane.leftAnchor="15.0">
             <font>
                 <Font size="24.0" />

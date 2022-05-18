@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="34.0" prefWidth="352.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CartController">
+<AnchorPane prefHeight="34.0" prefWidth="352.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.IngredientCartController">
     <children>
         <HBox alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="34.0" prefWidth="345.0" spacing="15.0">
             <children>
@@ -14,7 +14,7 @@
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin></Label>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="18.0" text="0" />
+            <Label fx:id="countLbl" alignment="CENTER" prefHeight="17.0" prefWidth="18.0" text="0" />
             <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="67.0" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="Remove">
                <HBox.margin>
                   <Insets right="5.0" />
