@@ -153,6 +153,7 @@ public class HomeController implements Initializable {
     private Message message;
     private Image image;
     private UserListener userListener;
+    private String date;
 
     @FXML
     void select(ActionEvent event) {
@@ -168,11 +169,11 @@ public class HomeController implements Initializable {
         } 
     }
 
-    public String getDate(){
+    public void getTheDate(){
         LocalDate myDate = datePicker.getValue();
         String myFormattedDate = myDate.format(DateTimeFormatter.ofPattern("MMM-dd-yyyy"));
         System.out.println(myFormattedDate);
-        return myFormattedDate;
+        this.date = myFormattedDate;
     }
 
     // Lists ----------------------------
@@ -296,11 +297,13 @@ public class HomeController implements Initializable {
                 if (user.getFavorites().contains(planList.get(i).getId())) {
                     String imgFile = "/img/heartFilled.png";
                     Image filled = new Image(getClass().getResourceAsStream(imgFile));
+                    recipeController.setTheDate(date);
 
                     recipeController.setData(recipeList.get(i), filled, userListener);
                 } else {
                     String imgFile = "/img/heartEmpty.png";
                     Image empty = new Image(getClass().getResourceAsStream(imgFile));
+                    recipeController.setTheDate(date);
 
                     recipeController.setData(recipeList.get(i), empty, userListener);
                 }
@@ -785,11 +788,12 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getDate();
+                getTheDate();
                 if (!planList.contains(recipe)) {
                     planList.add(recipe);
                     removeFromPlan.setVisible(true);
                     addToPlan.setVisible(true);
+                    initializePlanGrid();
                 } else {
                     removeFromPlan.setVisible(false);
                 }
@@ -824,8 +828,6 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 getMessages();
-                recipeImg.setVisible(true);
-                recipeLbl.setVisible(true);
                 home.setStyle("-fx-color: rgb(239, 242, 255)");
                 favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-background-color: rgb(254, 215, 0)");

@@ -17,6 +17,7 @@ import util.common.UserListener;
 public class RecipeController{
     private Recipe recipe;
     private UserListener userListener;
+    public  RecipeController(){}
 
     @FXML
     private Label recipeName;
@@ -57,7 +58,6 @@ public class RecipeController{
         userListener.descriptionListener(recipe);
     }
     
-    HomeController homeController = new HomeController();
 
     public void setData(Recipe recipe, Image heartImage, UserListener userListener) {
         this.recipe = recipe;
@@ -66,10 +66,9 @@ public class RecipeController{
         image.setImage(recipe.getPicture());
         this.heartImage.setImage(heartImage);
     }
-
-    public void setDate(String date) {
-        dateLbl.setText(date);
+    public void setTheDate(String date) {
         dateLbl.setVisible(true);
+        dateLbl.setText(date);
     }
 
 }

@@ -11,9 +11,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -69,6 +72,13 @@ public class LogInController implements Initializable {
                 event -> anchorVisible.setVisible(true));
         visiblePause1.play();
         // ----------- ----------- -----------
+
+        login.setOnKeyPressed(event -> {
+                    if (event.getCode().equals(KeyCode.ENTER)) {
+                        login.fire();
+                    }
+                }
+        );
 
         login.setOnAction(new EventHandler<ActionEvent>() {
             @Override

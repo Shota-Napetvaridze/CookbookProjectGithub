@@ -301,7 +301,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane fx:id="scroll" prefHeight="819.0" prefWidth="740.0" style="-fx-background-color: FFA9A9; -fx-border-color: #000000;">
+                        <ScrollPane fx:id="scroll" prefHeight="819.0" prefWidth="740.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;">
                            <content>
                               <GridPane fx:id="grid" prefHeight="10.0" prefWidth="31.0">
                                  <rowConstraints>
