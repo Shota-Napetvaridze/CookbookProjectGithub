@@ -84,7 +84,9 @@ public class HomeController implements Initializable {
     private DatePicker datePicker;
 
     @FXML
-    private ImageView cart;
+    private Button cart;
+    @FXML
+    private Button sendMsg;
 
     @FXML
     private Label cartCount;
@@ -526,6 +528,52 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
+    private void initializeCartGrid() {
+        grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/cart.fxml"));
+        try {
+
+            AnchorPane anchorPane = fxmlLoader.load();
+            grid.add(anchorPane, 1, 1);
+            grid.setAlignment(Pos.CENTER);
+            grid.setStyle("-fx-background-color: #ffa9a9");
+
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initializeSendMsgGrid() {
+        grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/sendMsg.fxml"));
+        try {
+
+            AnchorPane anchorPane = fxmlLoader.load();
+            grid.add(anchorPane, 1, 1);
+            grid.setAlignment(Pos.CENTER);
+            grid.setStyle("-fx-background-color: #ffa9a9");
+
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // ----------------------------------------- INITIALIZE
     // ----------------------------------------------- //
@@ -865,12 +913,22 @@ public class HomeController implements Initializable {
         });
 
         // Cart --------------------------------------------------
-        cart.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        cart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(KeyEvent event) {
+            public void handle(ActionEvent event) {
 
             }
         });
+
+        // Send Message --------------------------------------------------
+        sendMsg.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                initializeSendMsgGrid();
+
+            }
+        });
+
         // Message Button-----------------------------------------
         msg.setOnAction(new EventHandler<ActionEvent>() {
             @Override

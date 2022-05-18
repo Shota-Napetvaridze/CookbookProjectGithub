@@ -269,13 +269,26 @@
                                     <Blend />
                                  </effect>
                               </Button>
-                              <ImageView fx:id="cart" fitHeight="43.0" fitWidth="70.0" layoutX="335.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/ic_cart.png" />
-                                 </image>
-                              </ImageView>
                               <Circle fill="#d0dce8" layoutX="385.0" layoutY="18.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
                               <Label fx:id="cartCount" alignment="CENTER" layoutX="374.0" layoutY="6.0" prefHeight="24.0" prefWidth="21.0" text="2" />
+                              <Button fx:id="cart" layoutX="332.0" layoutY="11.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="31.0" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="35.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/ic_cart.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="sendMsg" layoutX="497.0" layoutY="14.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="47.0" style="-fx-background-color: ebe7e7;" AnchorPane.topAnchor="14.0">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/paperPlane.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                            </children>
                            <opaqueInsets>
                               <Insets />

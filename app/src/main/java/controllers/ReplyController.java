@@ -14,6 +14,7 @@ import models.entities.User;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 import util.common.UserListener;
+import util.constants.FailMessages;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -63,10 +64,18 @@ public class ReplyController implements Initializable {
         send.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(), replyMsgArea.getText());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Message sent successfully");
-                alert.show();
+                if (replyMsgArea.getText().equals("")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText(String.format(FailMessages.MESSAGE_INVALID_TEXT_LENGTH));
+                    alert.show();
+
+                } else {
+                    userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(), replyMsgArea.getText());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("Message sent successfully");
+                    alert.show();
+                }
+
             }
         });
     }
