@@ -22,6 +22,7 @@ import services.IngredientService;
 import services.RecipeService;
 import services.impl.IngredientServiceImpl;
 import services.impl.RecipeServiceImpl;
+import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 import util.common.UserListener;
 
@@ -76,6 +77,12 @@ public class DetailedViewController implements Initializable {
     @FXML
     private Label tagsTextArea;
 
+    @FXML
+    private Button addComment;
+
+    @FXML
+    private TextArea addCommentArea;
+
 
     private Recipe recipe;
     private IngredientService ingredientService = new IngredientServiceImpl();
@@ -85,6 +92,7 @@ public class DetailedViewController implements Initializable {
 
 
     private void initializeIngredientGrid(){
+        ingredientScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Set<Ingredient> ingredients = ingredientsList.keySet();
         int column = 0;
@@ -122,6 +130,7 @@ public class DetailedViewController implements Initializable {
     }
     
     private void initializeCommentsGrid(){
+        commentsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         commentsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         int column = 0;
         int row = 1;
@@ -173,6 +182,15 @@ public class DetailedViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeIngredientGrid();
         initializeCommentsGrid();
+
+
+
+        addComment.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
 
         shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override

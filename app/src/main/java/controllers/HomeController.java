@@ -268,6 +268,7 @@ public class HomeController implements Initializable {
                     column = 0;
                     row++;
                 }
+                grid.setStyle("-fx-background-color: #ffffff");
                 grid.add(anchorPane, column++, row);
                 // Set grid width
                 grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -916,7 +917,7 @@ public class HomeController implements Initializable {
         cart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                initializeCartGrid();
             }
         });
 

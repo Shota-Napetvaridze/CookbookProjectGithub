@@ -38,7 +38,7 @@
             <Font size="23.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="commentsScroll" layoutX="38.0" layoutY="435.0" prefHeight="234.0" prefWidth="363.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="20.0">
+      <ScrollPane fx:id="commentsScroll" layoutX="20.0" layoutY="431.0" prefHeight="154.0" prefWidth="363.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="20.0">
          <content>
             <GridPane fx:id="commentsGrid" prefHeight="10.0" prefWidth="31.0">
                <rowConstraints>
@@ -83,5 +83,11 @@
       </Label>
       <TextArea fx:id="recipeDescription" editable="false" layoutX="20.0" layoutY="105.0" prefHeight="111.0" prefWidth="363.0" style="-fx-border-color: #000000;" wrapText="true" />
       <TextArea fx:id="recipeInstruction" editable="false" layoutX="20.0" layoutY="270.0" prefHeight="111.0" prefWidth="363.0" style="-fx-border-color: #000000;" wrapText="true" />
+      <TextArea fx:id="addCommentArea" layoutX="20.0" layoutY="613.0" prefHeight="53.0" prefWidth="269.0" promptText="Type here" style="-fx-border-color: #000000;" wrapText="true" />
+      <Button fx:id="addComment" layoutX="302.0" layoutY="613.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="81.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Add">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
