@@ -150,6 +150,7 @@ public class HomeController implements Initializable {
 
     private User user = SceneContext.user;
     private Recipe recipe;
+    private Message message;
     private Image image;
     private UserListener userListener;
 
@@ -192,6 +193,10 @@ public class HomeController implements Initializable {
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
     }
+    private void chosenMsg(Message message) {
+        this.message = message;
+
+    }
     private void getCart() {
         cartList = userService.getUserCartById(user.getId());
         cartCount.setText(String.valueOf(cartList.size()));
@@ -224,6 +229,7 @@ public class HomeController implements Initializable {
                     column = 0;
                     row++;
                 }
+                grid.setStyle("-fx-background-color: #ffffff");
                 grid.add(anchorPane, column++, row);
                 // Set grid width
                 grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -357,8 +363,8 @@ public class HomeController implements Initializable {
 
     private void initializeAddNewRecipeGrid() {
         grid.getChildren().clear();
-        recipeImg.setVisible(false);
-        recipeLbl.setVisible(false);
+//        recipeImg.setVisible(false);
+//        recipeLbl.setVisible(false);
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/addNewRecipe.fxml"));
@@ -481,7 +487,7 @@ public class HomeController implements Initializable {
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             ReplyController replyController = fxmlLoader.getController();
-            replyController.setData(senderId, userListener);
+            replyController.setData(message, senderId, userListener);
             grid.setStyle("-fx-background-color: #ffa9a9");
             grid.add(anchorPane, 1, 1);
             // Set grid width
@@ -691,6 +697,7 @@ public class HomeController implements Initializable {
 
                 @Override
                 public void replyMsgListener(Message message) {
+                    chosenMsg(message);
                     openReplyGrid(message.getSender());
                 }
 

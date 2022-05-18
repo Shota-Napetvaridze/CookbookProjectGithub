@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="36.0" prefWidth="141.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TagController">
+<AnchorPane prefHeight="36.0" prefWidth="150.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TagController">
    <children>
       <HBox alignment="CENTER" prefHeight="34.0" prefWidth="140.0" spacing="5.0">
          <children>
@@ -23,7 +23,7 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <Label fx:id="tagLbl" prefHeight="24.0" prefWidth="80.0" styleClass="jfx-text-field" stylesheets="@style.css" text="Vegan" />
+            <Label fx:id="tagLbl" prefHeight="24.0" prefWidth="80.0" styleClass="black" stylesheets="@style.css" text="Vegan" />
          </children>
       </HBox>
    </children>

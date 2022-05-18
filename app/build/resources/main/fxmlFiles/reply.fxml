@@ -9,17 +9,17 @@
 
 <AnchorPane prefHeight="690.0" prefWidth="736.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ReplyController">
     <children>
-        <Label fx:id="sender" layoutX="19.0" layoutY="41.0" prefHeight="45.0" prefWidth="323.0" text="Name">
+        <Label fx:id="sender" layoutX="20.0" layoutY="14.0" prefHeight="45.0" prefWidth="185.0" text="Name">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button fx:id="send" layoutX="489.0" layoutY="468.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Send">
+        <Button fx:id="send" layoutX="489.0" layoutY="537.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Send">
             <font>
                 <Font size="23.0" />
             </font>
         </Button>
-        <TextArea fx:id="replyMsgArea" layoutX="17.0" layoutY="104.0" prefHeight="332.0" prefWidth="701.0" promptText="Type here" style="-fx-border-color: #000000;" stylesheets="@style.css" wrapText="true">
+        <TextArea fx:id="replyMsgArea" layoutX="17.0" layoutY="173.0" prefHeight="332.0" prefWidth="701.0" promptText="Type here" style="-fx-border-color: #000000;" stylesheets="@style.css" wrapText="true" AnchorPane.leftAnchor="17.0">
          <font>
             <Font size="22.0" />
          </font>
@@ -27,10 +27,14 @@
             <String fx:value="transparent" />
             <String fx:value="jfx-text-field" />
          </styleClass></TextArea>
-      <Button fx:id="close" layoutX="489.0" layoutY="531.0" mnemonicParsing="false" onMousePressed="#closeMsgReply" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Close">
+      <Button fx:id="close" layoutX="489.0" layoutY="600.0" mnemonicParsing="false" onMousePressed="#closeMsgReply" prefHeight="43.0" prefWidth="223.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Close">
          <font>
             <Font size="23.0" />
          </font>
       </Button>
+      <TextArea fx:id="receivedMsgArea" editable="false" layoutX="19.0" layoutY="67.0" prefHeight="89.0" prefWidth="701.0" styleClass="borderStyle" stylesheets="@style.css" AnchorPane.leftAnchor="17.0">
+         <font>
+            <Font size="18.0" />
+         </font></TextArea>
     </children>
 </AnchorPane>

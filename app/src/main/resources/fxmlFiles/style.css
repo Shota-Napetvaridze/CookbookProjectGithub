@@ -5,6 +5,12 @@
     -fx-border-color: black;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
+.borderStyle {
+    -fx-background-radius: 20px;
+
+    -fx-border-radius: 20px;
+    -fx-border-color: black;
+}
 .recipeImageStyle {
     -fx-padding: 10;
     -fx-background-color: firebrick;

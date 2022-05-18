@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="89.0" prefWidth="715.0" style="-fx-background-color: ffa9a9;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MsgController">
+<AnchorPane prefHeight="89.0" prefWidth="725.0" style="-fx-background-color: ffa9a9;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MsgController">
    <children>
       <Label fx:id="MsgUserLbl" layoutX="29.0" layoutY="-2.0" prefHeight="32.0" prefWidth="129.0" styleClass="black" stylesheets="@style.css" text="TestUserLabel">
          <font>

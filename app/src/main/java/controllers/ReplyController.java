@@ -21,6 +21,8 @@ import java.util.UUID;
 public class ReplyController implements Initializable {
     private UserServiceImpl userService = new UserServiceImpl();
     private UserListener userListener;
+    private Message message;
+    private UUID senderId;
 
 
     @FXML
@@ -28,6 +30,8 @@ public class ReplyController implements Initializable {
 
     @FXML
     private TextArea replyMsgArea;
+    @FXML
+    private TextArea receivedMsgArea;
 
     @FXML
     private Button send;
@@ -41,11 +45,14 @@ public class ReplyController implements Initializable {
     }
 
 
-    public void setData(UUID senderId, UserListener userListener){
+    public void setData(Message message, UUID senderId, UserListener userListener){
         this.userListener = userListener;
+        this.message = message;
+        this.senderId = senderId;
         String senderNickname = userService.getUserById(senderId).getNickname();
         sender.setText(senderNickname);
-        replyMsgArea.setPromptText("");
+        receivedMsgArea.setText(message.getText());
+
     }
 
 
@@ -55,22 +62,8 @@ public class ReplyController implements Initializable {
         send.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-
-
+                userService.sendMessage(message.getId(), message.getSender(), message.getReceiver(), replyMsgArea.getText());
             }
         });
-
-        close.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                HomeController homeController = new HomeController();
-                homeController.initializeMsgGrid();
-//                SceneContext.changeScene(event, "/fxmlFiles/login.fxml");
-
-
-            }
-        });
-
     }
 }
