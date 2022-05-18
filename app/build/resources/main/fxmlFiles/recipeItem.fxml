@@ -17,7 +17,10 @@
    <children>
       <VBox alignment="TOP_CENTER" layoutX="63.0" layoutY="8.0" prefHeight="200.0" prefWidth="205.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="dateLbl" alignment="CENTER" prefHeight="17.0" prefWidth="137.0" styleClass="black" stylesheets="@style.css" text="Label" visible="false" />
+            <Label fx:id="dateLbl" alignment="CENTER" prefHeight="17.0" prefWidth="137.0" styleClass="black" stylesheets="@style.css" text="Label" visible="false">
+               <font>
+                  <Font size="17.0" />
+               </font></Label>
             <ImageView fx:id="image" fitHeight="143.0" fitWidth="175.0" pickOnBounds="true" styleClass="recipeImageStyle" VBox.vgrow="NEVER">
                <VBox.margin>
                   <Insets bottom="10.0" top="20.0" />

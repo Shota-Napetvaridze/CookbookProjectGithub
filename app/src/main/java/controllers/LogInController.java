@@ -98,6 +98,23 @@ public class LogInController implements Initializable {
             }
         });
 
+        login.setOnAction(event -> {
+            User user = userService.loginUser(username.getText(), password.getText());
+            if (user != null) {
+                SceneContext.setUser(user);
+                if (user.getUsername().toLowerCase().equals("admin")) {
+                    SceneContext.changeScene(event, "/fxmlFiles/adminPage.fxml");
+                }
+                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Credentials are incorrect");
+                alert.show();
+            }
+
+                }
+        );
+
         signup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

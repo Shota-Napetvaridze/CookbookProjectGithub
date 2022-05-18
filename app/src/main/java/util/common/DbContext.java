@@ -547,7 +547,6 @@ public class DbContext {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserMessages);
             ps.setString(1, userId.toString());
-            ps.setString(2, userId.toString());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

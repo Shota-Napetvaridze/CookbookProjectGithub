@@ -150,7 +150,7 @@ public class SqlQueries {
 
         public static final String getIngredientById = "SELECT * FROM ingredients WHERE id = ?";
 
-        public static final String getUserMessages = "SELECT * FROM messages WHERE sender_id = ? OR receiver_id = ?";
+        public static final String getUserMessages = "SELECT * FROM messages WHERE receiver_id = ?";
 
         public static final String getMessageById = "SELECT * FROM messages WHERE id = ?";
         

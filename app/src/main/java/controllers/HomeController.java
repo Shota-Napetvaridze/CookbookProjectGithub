@@ -172,7 +172,6 @@ public class HomeController implements Initializable {
     public void getTheDate(){
         LocalDate myDate = datePicker.getValue();
         String myFormattedDate = myDate.format(DateTimeFormatter.ofPattern("MMM-dd-yyyy"));
-        System.out.println(myFormattedDate);
         this.date = myFormattedDate;
     }
 
@@ -807,6 +806,7 @@ public class HomeController implements Initializable {
                 if (planList.contains(recipe)) {
                     planList.remove(recipe);
                     addToPlan.setVisible(true);
+                    initializePlanGrid();
                 } else {
                     removeFromPlan.setVisible(false);
                 }
