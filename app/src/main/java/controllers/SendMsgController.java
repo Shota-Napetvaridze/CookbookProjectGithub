@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import models.entities.Recipe;
 import models.entities.User;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class SendMsgController implements Initializable {
     private UserServiceImpl userService = new UserServiceImpl();
     private User user = SceneContext.getUser();
+    private Recipe recipe;
 
     @FXML
     private Button close;
@@ -34,6 +36,11 @@ public class SendMsgController implements Initializable {
 
     @FXML
     private TextArea msgArea;
+
+
+    public void setData(Recipe recipe){
+
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

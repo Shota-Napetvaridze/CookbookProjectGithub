@@ -557,6 +557,8 @@ public class HomeController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/sendMsg.fxml"));
         try {
+            SendMsgController sendMsgController = fxmlLoader.getController();
+            sendMsgController.setData(recipe);
 
             AnchorPane anchorPane = fxmlLoader.load();
             grid.add(anchorPane, 1, 1);
