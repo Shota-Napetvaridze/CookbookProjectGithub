@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -190,6 +191,15 @@ public class HomeController implements Initializable {
         image = recipe.getPicture();
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
+    }
+    private void getCart() {
+        cartList = userService.getUserCartById(user.getId());
+        cartCount.setText(String.valueOf(cartList.size()));
+    }
+
+    private void getMessages() {
+        msgList = userService.getUserMessagesById(user.getId());
+        msgCountLbl.setText(String.valueOf(msgList.size()));
     }
 
     private void initializeHomeGrid() {
@@ -441,13 +451,14 @@ public class HomeController implements Initializable {
 
     private void openDetailedGrid() {
         grid.getChildren().clear();
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             DetailedViewController detailedViewController = fxmlLoader.getController();
             detailedViewController.setData(recipe);
-
+            grid.setStyle("-fx-background-color: #ffa9a9");
             grid.add(anchorPane, 1, 1);
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -527,6 +538,7 @@ public class HomeController implements Initializable {
 
         // Set cart count
         getCart();
+
         
         // Slider
         filterPane.setVisible(false);
@@ -693,8 +705,10 @@ public class HomeController implements Initializable {
 
         }
 
+
         // Initialize Home grid
         initializeHomeGrid();
+
 
         // -----------------------------------------BUTTONS---------------------------------------------------
         // //
@@ -761,7 +775,7 @@ public class HomeController implements Initializable {
                 if (!planList.contains(recipe)) {
                     planList.add(recipe);
                     removeFromPlan.setVisible(true);
-                    addToPlan.setVisible(false);
+                    addToPlan.setVisible(true);
                 } else {
                     removeFromPlan.setVisible(false);
                 }
@@ -863,13 +877,4 @@ public class HomeController implements Initializable {
         });
     }
 
-    private void getCart() {
-        cartList = userService.getUserCartById(user.getId());
-        cartCount.setText(String.valueOf(cartList.size()));
-    }
-
-    private void getMessages() {
-        msgList = userService.getUserMessagesById(user.getId());
-        msgCountLbl.setText(String.valueOf(msgList.size()));
-    }
 }

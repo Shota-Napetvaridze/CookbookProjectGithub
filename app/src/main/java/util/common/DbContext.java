@@ -719,8 +719,6 @@ public class DbContext {
 
     public List<Recipe> getAllRecipes() {
         List<Recipe> allRecipes = new ArrayList<>();
-        // Recipe recipe = new Recipe();
-
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getAllRecipes);

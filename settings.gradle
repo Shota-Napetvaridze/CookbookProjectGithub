@@ -9,5 +9,4 @@
 
 rootProject.name = 'cookbook'
 include('app')
-include 'coookbook'
 

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="695.0" prefWidth="735.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewRecipeController">
+<AnchorPane prefHeight="690.0" prefWidth="736.0" style="-fx-background-color: ffa9a9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewRecipeController">
    <children>
       <TextField fx:id="recipeName" layoutX="14.0" layoutY="53.0" prefHeight="43.0" prefWidth="239.0" promptText="Recipe name" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="20.0">
          <font>
