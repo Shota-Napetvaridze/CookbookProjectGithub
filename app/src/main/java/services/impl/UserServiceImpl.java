@@ -2,8 +2,11 @@ package services.impl;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import models.entities.Ingredient;
@@ -87,14 +90,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message) {
+    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, UUID recipeId) {
+        // TODO: validateMessageText(message)
         dbContext.sendMessage(messageId, senderId, receiverId, message);
-        return null;
-    }
-
-    @Override
-    public String sendRecipe(UUID senderId, UUID receiverId, UUID recipeId, String message) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -129,15 +127,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addToPlan(UUID recipeId, Date date) {
-        // TODO Auto-generated method stub
-        return null;
+    public String addToPlan(UUID userId, UUID recipeId, Date date) {
+        return dbContext.addRecipeToPlan(userId, recipeId, date);
     }
 
     @Override
-    public String removeFromPlan(UUID recipeId, Date date) {
-        // TODO Auto-generated method stub
-        return null;
+    public String removeFromPlan(UUID userId, UUID recipeId) {
+        return dbContext.removeRecipeFromPlan(userId, recipeId);
     }
 
     @Override
@@ -193,9 +189,15 @@ public class UserServiceImpl implements UserService {
         return dbContext.getWeeklyListByUserId(userId);
     }
 
-    public List<Recipe> getPlanRecipes(UUID id) {
-        return null;
-    }
+    // @Override
+    // public Map<Recipe, LocalDate> getPlanRecipes(UUID userId) {
+    //     Set<Recipe> recipeSet = getWeeklyPlan(userId).keySet();
+    //     List<Recipe> recipes = new ArrayList<>();
+    //     for (Recipe recipe : recipeSet) {
+    //         recipes.add(recipe);
+    //     }
+    //     return recipes;
+    // }
 
     @Override
     public List<User> getUsersLike(String text) {

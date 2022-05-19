@@ -82,8 +82,9 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public String editRecipeName(UUID userId, String name) {
-        // TODO Auto-generated method stub
+    public String editRecipeName(UUID recipeId, String name) throws InvalidRecipeNameLengthException {
+        validateName(name);
+        // TODO: dbContext.editRecipeName(recipeId, name);
         return null;
     }
 
@@ -100,18 +101,21 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public String editRecipeDescription(UUID recipeId, String description) throws InvalidRecipeDescriptionLengthException {
         validateDescription(description);
+        // TODO: dbContext.editRecipeDescription(recipeId, description);
         return null;
     }
 
     @Override
-    public String editRecipeInstructions(UUID recipeId, String instructions) {
-        // TODO Auto-generated method stub
+    public String editRecipeInstructions(UUID recipeId, String instructions) throws InvalidRecipeInstructionsLengthException {
+        validateInstructions(instructions);
+        // TODO: dbContext.editRecipeInstructions(recipeId, instructions);
         return null;
     }
 
     @Override
-    public String editRecipeServingSize(UUID recipeId, byte servingSize) {
-        // TODO Auto-generated method stub
+    public String editRecipeServingSize(UUID recipeId, byte servingSize) throws InvalidRecipeServingSizeException {
+        validateServingSize(servingSize);
+        // TODO: dbContext.editRecipeServingSize(recipeId, servingSize);
         return null;
     }
 

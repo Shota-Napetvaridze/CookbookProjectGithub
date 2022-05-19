@@ -3,14 +3,15 @@ package util.common;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javafx.scene.image.Image;
@@ -106,6 +107,7 @@ public class DbContext {
         importMessages();
         importComments();
         importIngredients();
+        importRecipeIngredients();
     }
 
     private void importIngredients() {
@@ -166,6 +168,7 @@ public class DbContext {
             String name = tag[1];
 
             addTag(tagId, name);
+            counter++;
         }
         System.out.println("Imported " + counter + " tags.");
     }
@@ -203,6 +206,19 @@ public class DbContext {
             addUser(userId, username, email, hashedPassword);
         }
         System.out.println("Imported " + counter + " users.");
+    }
+
+    private void importRecipeIngredients() {
+        String recipesIngredientsFile = "/src/main/resources/data/ingredients.csv";
+        String recipesIngredientsPath = System.getProperty("user.dir") + recipesIngredientsFile;
+        ArrayList<String[]> recipesIngredients = FileIo.readFromFileSaveToArrayList(recipesIngredientsPath);
+        for (String[] recipeIngredients : recipesIngredients) {
+            UUID recipeId = UUID.fromString(recipeIngredients[0]);
+            UUID ingredientId = UUID.fromString(recipeIngredients[1]);
+            Integer quantity = Integer.parseInt(recipeIngredients[2]);
+
+            addRecipeIngredient(recipeId, ingredientId, quantity);
+        }
     }
 
     // ------------------- USER -------------------//
@@ -504,7 +520,7 @@ public class DbContext {
 
             while (rs.next()) {
                 UUID recipeId = UUID.fromString(rs.getString("recipe_id"));
-                Date date = rs.getDate("day");
+                Date date = rs.getDate("date");
 
                 weeklyListIds.put(recipeId, date);
             }
@@ -718,6 +734,8 @@ public class DbContext {
 
     public List<Recipe> getAllRecipes() {
         List<Recipe> allRecipes = new ArrayList<>();
+        // Recipe recipe = new Recipe();
+
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getAllRecipes);
@@ -1179,5 +1197,48 @@ public class DbContext {
             return String.format(FailMessages.INGREDIENT_ADD_FAIL);
         }
 
+    }
+
+    public String addRecipeToPlan(UUID userId, UUID recipeId, Date date) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipeToPlan);
+            ps.setString(1, userId.toString());
+            ps.setString(2, recipeId.toString());
+            ps.setDate(3, date);
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.PLAN_ADDED_RECIPE);
+            } else {
+                return String.format(FailMessages.PLAN_ADD_RECIPE_FAIL);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();    
+            return String.format(FailMessages.PLAN_ADD_RECIPE_FAIL);
+        }
+    }
+
+    public String removeRecipeFromPlan(UUID userId, UUID recipeId) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeRecipeFromPlan);
+            ps.setString(1, userId.toString());
+            ps.setString(2, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+            if (result != 0) {
+                return String.format(SuccessMessages.PLAN_REMOVED_RECIPE);
+            } else {
+                return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
+            }
+
+        } catch (Exception e) {
+            return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
+        }
     }
 }

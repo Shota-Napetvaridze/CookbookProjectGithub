@@ -39,7 +39,17 @@ public class SignUpController implements Initializable {
         signupNew.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (!usernameNew.getText().trim().isEmpty() && !passwordNew.getText().trim().isEmpty()) {
+                if (passwordNew.getText().equals("123456")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("What is this? You're asking to be hacked.. Try a better password");
+                    alert.show();
+                }
+                else if (passwordNew.getText().equals("1234567")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Password is already taken by user \"John\".");
+                    alert.show();
+                }
+                else if (!usernameNew.getText().trim().isEmpty() && !passwordNew.getText().trim().isEmpty()) {
                     try {
                         UUID userId = UUID.randomUUID();
                         String message = userService.addUser(userId, usernameNew.getText(), email.getText(),

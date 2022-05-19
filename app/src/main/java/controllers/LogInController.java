@@ -11,12 +11,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
-import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -73,13 +70,6 @@ public class LogInController implements Initializable {
         visiblePause1.play();
         // ----------- ----------- -----------
 
-        login.setOnKeyPressed(event -> {
-                    if (event.getCode().equals(KeyCode.ENTER)) {
-                        login.fire();
-                    }
-                }
-        );
-
         login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -97,23 +87,6 @@ public class LogInController implements Initializable {
                 }
             }
         });
-
-        login.setOnAction(event -> {
-            User user = userService.loginUser(username.getText(), password.getText());
-            if (user != null) {
-                SceneContext.setUser(user);
-                if (user.getUsername().toLowerCase().equals("admin")) {
-                    SceneContext.changeScene(event, "/fxmlFiles/adminPage.fxml");
-                }
-                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Credentials are incorrect");
-                alert.show();
-            }
-
-                }
-        );
 
         signup.setOnAction(new EventHandler<ActionEvent>() {
             @Override

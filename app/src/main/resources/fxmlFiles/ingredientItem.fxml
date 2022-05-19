@@ -13,23 +13,20 @@
     <children>
         <HBox alignment="CENTER" prefHeight="34.0" prefWidth="219.0" spacing="3.0">
             <children>
-                <Label fx:id="ingredientLbl" prefHeight="24.0" prefWidth="166.0" styleClass="jfx-text-field" stylesheets="@style.css" text="Beef">
+                <Label fx:id="ingredientLbl" prefHeight="24.0" prefWidth="117.0" text="Beef">
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </HBox.margin></Label>
+            <Label fx:id="amount" prefHeight="17.0" prefWidth="28.0" />
             <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/ic_cart.png" />
                </image>
             </ImageView>
-            <Label fx:id="amount" prefHeight="17.0" prefWidth="28.0" />
             <Button mnemonicParsing="false" onMousePressed="#addToCartClick" prefHeight="9.0" prefWidth="18.0" style="-fx-background-color: FED700;" styleClass="recipeAnchorStyle" stylesheets="@style.css" text="+">
                <font>
                   <Font name="System Bold" size="10.0" />
-               </font>
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin></Button>
+               </font></Button>
             </children>
         </HBox>
     </children>

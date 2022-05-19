@@ -54,7 +54,7 @@ public class Validator {
     /**
      * Checks if a user exists in the database.
      *
-     * @param id user
+     * @param entity user
      * @throws InvalidInstanceException not in database
      */
     public static void validateUser(UUID id) throws InvalidInstanceException {

@@ -10,11 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import models.entities.Message;
-import models.entities.User;
 import services.impl.UserServiceImpl;
-import util.common.SceneContext;
 import util.common.UserListener;
-import util.constants.FailMessages;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,10 +44,10 @@ public class ReplyController implements Initializable {
     }
 
 
-    public void setData(Message message, UUID senderId, UserListener userListener){
+    public void setData(Message message, UserListener userListener){
         this.userListener = userListener;
         this.message = message;
-        this.senderId = senderId;
+        this.senderId = message.getSender();
         String senderNickname = userService.getUserById(senderId).getNickname();
         sender.setText(senderNickname);
         receivedMsgArea.setText(message.getText());
@@ -64,19 +61,17 @@ public class ReplyController implements Initializable {
         send.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (replyMsgArea.getText().equals("")) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText(String.format(FailMessages.MESSAGE_INVALID_TEXT_LENGTH));
-                    alert.show();
-
-                } else {
-                    userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(), replyMsgArea.getText());
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("Message sent successfully");
-                    alert.show();
-                }
-
+                userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(), replyMsgArea.getText(), null);
+                showAlert("", "");
             }
+
         });
+    }
+
+    private void showAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
     }
 }

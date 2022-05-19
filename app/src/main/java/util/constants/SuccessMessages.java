@@ -62,6 +62,13 @@ public class SuccessMessages {
     public static final String COMMENT_SET_USER = "Comment author set.\n";
     public static final String COMMENT_SET_RECIPE = "Comment recipe set.\n";
     public static final String COMMENT_ADDED = "Added comment successfully.\n";
+
+    //
+    // PLAN
+    //
+    public static final String PLAN_ADDED_RECIPE = "Successfully added recipe to plan.\n";
+    public static final String PLAN_REMOVED_RECIPE = "Successfully removed recipe from plan.\n";
+
     //
     // MISC
     //

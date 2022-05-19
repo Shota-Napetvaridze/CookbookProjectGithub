@@ -19,12 +19,12 @@
                   <Image url="@../img/BackgroundSmall.png" />
                </image>
             </ImageView>
-            <TextField fx:id="email" layoutX="202.0" layoutY="127.0" prefHeight="30.0" prefWidth="195.0" promptText="email">
+            <TextField fx:id="email" layoutX="202.0" layoutY="127.0" prefHeight="30.0" prefWidth="195.0" promptText="email" style="-fx-border-color: #000000;">
                <font>
                   <Font size="16.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="passwordNew" layoutX="202.0" layoutY="170.0" prefHeight="30.0" prefWidth="195.0" promptText="password">
+            <PasswordField fx:id="passwordNew" layoutX="202.0" layoutY="170.0" prefHeight="30.0" prefWidth="195.0" promptText="password" style="-fx-border-color: #000000;">
                <font>
                   <Font size="16.0" />
                </font>
@@ -34,7 +34,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <TextField fx:id="usernameNew" layoutX="202.0" layoutY="84.0" prefHeight="30.0" prefWidth="195.0" promptText="username">
+            <TextField fx:id="usernameNew" layoutX="202.0" layoutY="84.0" prefHeight="30.0" prefWidth="195.0" promptText="username" style="-fx-border-color: #000000;">
                <font>
                   <Font size="16.0" />
                </font>

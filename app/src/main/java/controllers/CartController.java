@@ -6,13 +6,16 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import models.entities.Ingredient;
+import models.entities.Recipe;
 import services.IngredientService;
 import services.impl.IngredientServiceImpl;
 import util.common.UserListener;
+import util.exceptions.recipe.InvalidRecipeIngredientsCountException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,16 +26,19 @@ import java.util.Set;
 
 public class CartController implements Initializable {
     private UserListener userListener;
+    private Ingredient ingredient;
 
-
-    @FXML
-    private Button close;
 
     @FXML
     private GridPane ingredientsGrid;
 
     @FXML
     private ScrollPane ingredientsScroll;
+
+    @FXML
+    void close(MouseEvent event) {
+        userListener.closeCartListener();
+    }
 
     private IngredientService ingredientService = new IngredientServiceImpl();
     private Map<Ingredient, Integer> ingredientsList = new HashMap<>();
@@ -78,10 +84,14 @@ public class CartController implements Initializable {
 
     }
 
+    public void setData(UserListener userListener) {
+        this.userListener = userListener;
+    }
+
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+//        initializeIngredientGrid();
     }
 }

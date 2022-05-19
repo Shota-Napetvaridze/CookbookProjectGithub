@@ -14,6 +14,7 @@ import models.entities.Recipe;
 import models.entities.User;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
+import util.common.UserListener;
 import util.constants.FailMessages;
 
 import java.net.URL;
@@ -24,9 +25,7 @@ public class SendMsgController implements Initializable {
     private UserServiceImpl userService = new UserServiceImpl();
     private User user = SceneContext.getUser();
     private Recipe recipe;
-
-    @FXML
-    private Button close;
+    private UserListener userListener;
 
     @FXML
     private TextField nicknameTxtField;
@@ -38,8 +37,15 @@ public class SendMsgController implements Initializable {
     private TextArea msgArea;
 
 
-    public void setData(Recipe recipe){
+    @FXML
+    void close(MouseEvent event) {
+        userListener.closeSendMsgListener();
+    }
 
+
+    public void setData(Recipe recipe, UserListener userListener){
+        this.recipe = recipe;
+        this.userListener = userListener;
     }
 
     @Override
@@ -54,20 +60,19 @@ public class SendMsgController implements Initializable {
                     alert.show();
 
                 } else {
-                    userService.sendMessage(UUID.randomUUID(), user.getId(), userService.getUserByNickname(nicknameTxtField.getText()).getId(),  msgArea.getText());
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("Message sent successfully");
-                    alert.show();
+                    userService.sendMessage(UUID.randomUUID(), user.getId(), userService.getUserByNickname(nicknameTxtField.getText()).getId(), msgArea.getText(), recipe != null ? recipe.getId() : null);
+                    showInformation("", "");
                 }
-
             }
+
         });
 
-        close.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-            }
-        });
+    }
+
+    private void showInformation(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
     }
 }

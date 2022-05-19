@@ -1,6 +1,7 @@
 package models.entities;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class User extends BaseEntity {
 
     // OPERATIONS
     public String addRecipeToFavorites(UUID recipeId) {
-            this.favorites.add(recipeId);
+            favorites.add(recipeId);
             return String.format(SuccessMessages.USER_ADDED_FAVORITE_RECIPE);
     }
 
@@ -45,6 +46,19 @@ public class User extends BaseEntity {
         }
         return String.format(FailMessages.USER_RECIPE_NOT_FAVORITE);
     }
+
+    public String addRecipeToPlan(UUID recipeId, Date date) {
+        weeklyList.put(recipeId, date);
+        return String.format(SuccessMessages.PLAN_ADDED_RECIPE);
+    }
+
+    public String removeRecipeFromPlan(UUID recipeId) {
+        if (weeklyList.remove(recipeId) != null) {
+            return String.format(SuccessMessages.PLAN_REMOVED_RECIPE);
+        }
+        return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
+    }
+
 
     // GETTERS
     public String getNickname() {
@@ -114,4 +128,5 @@ public class User extends BaseEntity {
     private void setCart(Map<UUID, Integer> cart) {
         this.cart = cart;
     }
+
 }

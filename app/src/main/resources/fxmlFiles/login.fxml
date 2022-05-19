@@ -26,12 +26,12 @@
                         <Font size="26.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="username" layoutX="44.0" layoutY="102.0" promptText="username">
+                  <TextField fx:id="username" layoutX="44.0" layoutY="102.0" promptText="username" style="-fx-border-color: #000000;">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </TextField>
-                  <PasswordField fx:id="password" layoutX="44.0" layoutY="146.0" prefHeight="31.0" prefWidth="197.0" promptText="password">
+                  <PasswordField fx:id="password" layoutX="44.0" layoutY="146.0" prefHeight="33.0" prefWidth="198.5" promptText="password" style="-fx-border-color: #000000;">
                      <font>
                         <Font size="10.0" />
                      </font>

@@ -51,9 +51,7 @@ public interface UserService {
 
     public List<Message> getUserMessagesById(UUID userId);
 
-    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message);
-
-    public String sendRecipe(UUID senderId, UUID receiverId, UUID recipeId, String message);
+    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, UUID recipeId);
 
     public String removeMessageById(UUID messageId);
 
@@ -71,9 +69,9 @@ public interface UserService {
 
     public Map<Recipe, Date> getWeeklyPlan(UUID userId);
 
-    public String addToPlan(UUID recipeId, Date date);
+    public String addToPlan(UUID userId, UUID recipeId, Date date);
 
-    public String removeFromPlan(UUID recipeId, Date date);
+    public String removeFromPlan(UUID userId, UUID recipeId);
 
     public String addComment(UUID commentId);
 

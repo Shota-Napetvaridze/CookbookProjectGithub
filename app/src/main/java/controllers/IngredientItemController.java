@@ -36,7 +36,7 @@ public class IngredientItemController {
         this.ingredient = ingredient;
         this.userListener = userListener;
         this.quantity = quantity;
-        ingredientLbl.setText(quantity + ingredient.getUnit() + ingredient.getName());
+        ingredientLbl.setText(quantity + ingredient.getUnit() + " " + ingredient.getName());
     }
 
 }

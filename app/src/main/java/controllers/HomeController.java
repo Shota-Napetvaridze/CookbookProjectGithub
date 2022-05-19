@@ -21,7 +21,9 @@ import javafx.scene.layout.Region;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +32,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import javafx.util.Duration;
 import models.entities.Ingredient;
@@ -44,6 +47,7 @@ import services.impl.TagServiceImpl;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 import util.common.UserListener;
+import util.exceptions.common.InvalidDateException;
 
 public class HomeController implements Initializable {
 
@@ -82,11 +86,6 @@ public class HomeController implements Initializable {
 
     @FXML
     private DatePicker datePicker;
-
-    @FXML
-    private Button cart;
-    @FXML
-    private Button sendMsg;
 
     @FXML
     private Label cartCount;
@@ -145,6 +144,12 @@ public class HomeController implements Initializable {
     @FXML
     private Button removeFromPlan;
 
+    @FXML
+    private Button cart;
+
+    @FXML
+    private Button sendMsg;
+
     private UserServiceImpl userService = new UserServiceImpl();
     private RecipeServiceImpl recipeService = new RecipeServiceImpl();
     private IngredientServiceImpl ingredientService = new IngredientServiceImpl();
@@ -155,7 +160,7 @@ public class HomeController implements Initializable {
     private Message message;
     private Image image;
     private UserListener userListener;
-    private String date;
+    private LocalDate date;
 
     @FXML
     void select(ActionEvent event) {
@@ -168,13 +173,7 @@ public class HomeController implements Initializable {
                 }
             });
 
-        } 
-    }
-
-    public void getTheDate(){
-        LocalDate myDate = datePicker.getValue();
-        String myFormattedDate = myDate.format(DateTimeFormatter.ofPattern("MMM-dd-yyyy"));
-        this.date = myFormattedDate;
+        }
     }
 
     // Lists ----------------------------
@@ -182,7 +181,7 @@ public class HomeController implements Initializable {
     private List<Message> msgList = userService.getUserMessagesById(user.getId());
     private Map<Ingredient, Integer> cartList = userService.getUserCartById(user.getId());
     private List<Recipe> favouriteRecipeList = userService.getFavoriteRecipes(user.getId());
-    private List<Recipe> planList = new ArrayList<>();
+    private Map<Recipe, Date> planList = userService.getWeeklyPlan(user.getId());
 
     private List<Ingredient> ingredientsList = ingredientService.getAllIngredients();
     private List<Ingredient> selectedIngredients = new ArrayList<>();
@@ -194,22 +193,22 @@ public class HomeController implements Initializable {
         image = recipe.getPicture();
         recipeImg.setImage(image);
         recipeLbl.setText(recipe.getName());
+        if (user.getWeeklyList().keySet().contains(recipe.getId())) {
+            removeFromPlan.setVisible(true);
+            addToPlan.setVisible(false);
+        } else {
+            removeFromPlan.setVisible(false);
+            addToPlan.setVisible(true);
+        }
     }
+
     private void chosenMsg(Message message) {
         this.message = message;
 
     }
-    private void getCart() {
-        cartList = userService.getUserCartById(user.getId());
-        cartCount.setText(String.valueOf(cartList.size()));
-    }
-
-    private void getMessages() {
-        msgList = userService.getUserMessagesById(user.getId());
-        msgCountLbl.setText(String.valueOf(msgList.size()));
-    }
 
     private void initializeHomeGrid() {
+        grid.getChildren().clear();
         int column = 0;
         int row = 1;
         try {
@@ -268,6 +267,7 @@ public class HomeController implements Initializable {
                     column = 0;
                     row++;
                 }
+
                 grid.setStyle("-fx-background-color: #ffffff");
                 grid.add(anchorPane, column++, row);
                 // Set grid width
@@ -288,31 +288,43 @@ public class HomeController implements Initializable {
     private void initializePlanGrid() {
         grid.getChildren().clear();
 
+        LocalDate todayLocalDate = LocalDate.now();
+        Date today = java.sql.Date.valueOf(todayLocalDate);
+
         int column = 0;
         int row = 1;
         try {
-            for (int i = 0; i < planList.size(); i++) {
+            List<Entry<Recipe, Date>> recipes = new ArrayList<>(planList.entrySet());
+            recipes.sort(Entry.comparingByValue());
+
+            for (Entry<Recipe, Date> recipe : recipes) {
+                if (recipe.getValue().compareTo(today) < 0) {
+                    userService.removeFromPlan(user.getId(), recipe.getKey().getId());
+                    user.removeRecipeFromPlan(recipe.getKey().getId());
+                    planList.remove(recipe.getKey());
+                    continue;
+                }
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 RecipeController recipeController = fxmlLoader.getController();
-                if (user.getFavorites().contains(planList.get(i).getId())) {
+
+                if (user.getFavorites().contains(recipe.getKey().getId())) {
                     String imgFile = "/img/heartFilled.png";
                     Image filled = new Image(getClass().getResourceAsStream(imgFile));
-                    recipeController.setTheDate(date);
-
-                    recipeController.setData(recipeList.get(i), filled, userListener);
+                    recipeController.setDate(recipe.getValue());
+                    recipeController.setData(recipe.getKey(), filled, userListener);
                 } else {
                     String imgFile = "/img/heartEmpty.png";
                     Image empty = new Image(getClass().getResourceAsStream(imgFile));
-                    recipeController.setTheDate(date);
-
-                    recipeController.setData(recipeList.get(i), empty, userListener);
+                    recipeController.setDate(recipe.getValue());
+                    recipeController.setData(recipe.getKey(), empty, userListener);
                 }
                 if (column == 3) {
                     column = 0;
                     row++;
                 }
+                grid.setStyle("-fx-background-color: #ffffff");
                 grid.add(anchorPane, column++, row);
                 // Set grid width
                 grid.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -329,9 +341,8 @@ public class HomeController implements Initializable {
         }
     }
 
-    public void initializeMsgGrid() {
+    private void initializeMsgGrid() {
         grid.getChildren().clear();
-
 
         int column = 0;
         int row = 1;
@@ -347,6 +358,7 @@ public class HomeController implements Initializable {
                     column = 0;
                     row++;
                 }
+
                 grid.setStyle("-fx-background-color: #ffffff");
                 grid.add(anchorPane, column++, row);
                 // Set grid width
@@ -368,7 +380,8 @@ public class HomeController implements Initializable {
 
     private void initializeAddNewRecipeGrid() {
         grid.getChildren().clear();
-
+        recipeImg.setVisible(false);
+        recipeLbl.setVisible(false);
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/addNewRecipe.fxml"));
@@ -462,13 +475,12 @@ public class HomeController implements Initializable {
 
     private void openDetailedGrid() {
         grid.getChildren().clear();
-
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             DetailedViewController detailedViewController = fxmlLoader.getController();
-            detailedViewController.setData(recipe);
+            detailedViewController.setData(recipe, userListener);
             grid.setStyle("-fx-background-color: #ffa9a9");
             grid.add(anchorPane, 1, 1);
             // Set grid width
@@ -484,14 +496,14 @@ public class HomeController implements Initializable {
         }
     }
 
-    private void openReplyGrid(UUID senderId) {
+    private void openReplyGrid(Message message) {
         grid.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/reply.fxml"));
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             ReplyController replyController = fxmlLoader.getController();
-            replyController.setData(message, senderId, userListener);
+            replyController.setData(message, userListener);
             grid.setStyle("-fx-background-color: #ffa9a9");
             grid.add(anchorPane, 1, 1);
             // Set grid width
@@ -506,40 +518,18 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializeSettingsGrid() {
-        grid.getChildren().clear();
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/settings.fxml"));
-        try {
 
-            AnchorPane anchorPane = fxmlLoader.load();
-            grid.add(anchorPane, 1, 1);
-            grid.setAlignment(Pos.CENTER);
-            grid.setStyle("-fx-background-color: #ffa9a9");
-
-            // Set grid width
-            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            grid.setMaxWidth(Region.USE_PREF_SIZE);
-            // Set grid height
-            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            grid.setMaxHeight(Region.USE_PREF_SIZE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     private void initializeCartGrid() {
         grid.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/cart.fxml"));
         try {
-
             AnchorPane anchorPane = fxmlLoader.load();
+            CartController cartController = fxmlLoader.getController();
+            cartController.setData(userListener);
             grid.add(anchorPane, 1, 1);
             grid.setAlignment(Pos.CENTER);
             grid.setStyle("-fx-background-color: #ffa9a9");
-
             // Set grid width
             grid.setMinWidth(Region.USE_COMPUTED_SIZE);
             grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
@@ -557,8 +547,30 @@ public class HomeController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/sendMsg.fxml"));
         try {
+            AnchorPane anchorPane = fxmlLoader.load();
             SendMsgController sendMsgController = fxmlLoader.getController();
-            sendMsgController.setData(recipe);
+            sendMsgController.setData(recipe, userListener);
+            grid.add(anchorPane, 1, 1);
+            grid.setAlignment(Pos.CENTER);
+            grid.setStyle("-fx-background-color: #ffa9a9");
+            // Set grid width
+            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            grid.setMaxWidth(Region.USE_PREF_SIZE);
+            // Set grid height
+            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            grid.setMaxHeight(Region.USE_PREF_SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeSettingsGrid() {
+        grid.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/settings.fxml"));
+        try {
 
             AnchorPane anchorPane = fxmlLoader.load();
             grid.add(anchorPane, 1, 1);
@@ -583,11 +595,8 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        home.setStyle("-fx-color: rgb(239, 242, 255)");
-        home.setStyle("-fx-border-color: #000000");
 
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
         // ComboBox User
         ObservableList<String> list = FXCollections.observableArrayList("Settings");
         comboBox.setItems(list);
@@ -599,7 +608,6 @@ public class HomeController implements Initializable {
         // Set cart count
         getCart();
 
-        
         // Slider
         filterPane.setVisible(false);
         anchorPaneBelowFilter.setTranslateY(-176);
@@ -657,8 +665,7 @@ public class HomeController implements Initializable {
             });
         });
 
-        // ----------------------------------------- MY LISTENER
-        // ----------------------------------------------- //
+        // ------------------------------------------------------------------- MY LISTENER
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             userListener = new UserListener() {
@@ -750,7 +757,7 @@ public class HomeController implements Initializable {
                 @Override
                 public void replyMsgListener(Message message) {
                     chosenMsg(message);
-                    openReplyGrid(message.getSender());
+                    openReplyGrid(message);
                 }
 
                 @Override
@@ -761,20 +768,34 @@ public class HomeController implements Initializable {
                     msgCountLbl.setText(messageCount);
                     initializeMsgGrid();
                 }
-
+                //------------- Close Listeners---------------//
                 @Override
                 public void closeMsgListener() {
+
                     initializeMsgGrid();
                 }
+                @Override
+                public void closeOpenForDetailed() {
+                    initializeHomeGrid();
+                }
+
+                @Override
+                public void closeSendMsgListener() {
+                    initializeHomeGrid();
+                }
+
+                @Override
+                public void closeCartListener() {
+                    initializeHomeGrid();
+                }
+
 
             };
 
         }
 
-
         // Initialize Home grid
         initializeHomeGrid();
-
 
         // -----------------------------------------BUTTONS---------------------------------------------------
         // //
@@ -824,7 +845,6 @@ public class HomeController implements Initializable {
             }
         });
 
-        // Filter Button-----------------------------------------
 
         // Open for a detailed view Button-----------------------------------------
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
@@ -838,30 +858,31 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                getTheDate();
-                if (!planList.contains(recipe)) {
-                    planList.add(recipe);
+                try {
+                    LocalDate localDate = datePicker.getValue();
+                    Date date = java.sql.Date.valueOf(localDate);
+                    checkDateBeforeToday(date);
+                    userService.addToPlan(user.getId(), recipe.getId(), date);
+                    user.addRecipeToPlan(recipe.getId(), date);
+                    planList.put(recipe, date);
                     removeFromPlan.setVisible(true);
-                    addToPlan.setVisible(true);
-                    initializePlanGrid();
-                } else {
-                    removeFromPlan.setVisible(false);
+                    addToPlan.setVisible(false);
+                } catch (InvalidDateException e) {
+                    showAlert(e.getMessage(), "");
                 }
-
             }
         });
 
         removeFromPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (planList.contains(recipe)) {
-                    planList.remove(recipe);
-                    addToPlan.setVisible(true);
-                    initializePlanGrid();
-                } else {
-                    removeFromPlan.setVisible(false);
-                }
-
+                userService.removeFromPlan(user.getId(), recipe.getId());
+                user.removeRecipeFromPlan(recipe.getId());
+                planList.remove(recipe);
+                System.out.println(planList.size());
+                addToPlan.setVisible(true);
+                removeFromPlan.setVisible(false);
+                initializePlanGrid();
             }
         });
 
@@ -879,14 +900,13 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 getMessages();
-                home.setStyle("-fx-color: rgb(239, 242, 255)");
-                favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                grid.getChildren().clear();
-                grid.setStyle("-fx-background-color: #ffffff");
+                recipeImg.setVisible(true);
+                recipeLbl.setVisible(true);
+                home.setStyle("-fx-border-color: #000000;" + "-fx-color: rgb(239, 242, 255)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+
                 initializeHomeGrid();
-
-
             }
         });
 
@@ -895,9 +915,9 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 getMessages();
-                favorites.setStyle("-fx-color: rgb(239, 242, 255)");
-                home.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-color: rgb(239, 242, 255)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 initializeFavouritesGrid();
             }
         });
@@ -908,9 +928,9 @@ public class HomeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 getMessages();
-                plan.setStyle("-fx-color: rgb(239, 242, 255)");
-                home.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-color: rgb(239, 242, 255)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 initializePlanGrid();
             }
         });
@@ -922,13 +942,12 @@ public class HomeController implements Initializable {
                 initializeCartGrid();
             }
         });
-
+        
         // Send Message --------------------------------------------------
         sendMsg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 initializeSendMsgGrid();
-
             }
         });
 
@@ -954,4 +973,30 @@ public class HomeController implements Initializable {
         });
     }
 
+    private void showAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    private void checkDateBeforeToday(Date date) throws InvalidDateException {
+        LocalDate todayLocalDate = LocalDate.now();
+        Date today = java.sql.Date.valueOf(todayLocalDate);
+
+        if (date.compareTo(today) < 0) {
+            throw new InvalidDateException();
+        }
+
+    }
+
+    private void getCart() {
+        cartList = userService.getUserCartById(user.getId());
+        cartCount.setText(String.valueOf(cartList.size()));
+    }
+
+    private void getMessages() {
+        msgList = userService.getUserMessagesById(user.getId());
+        msgCountLbl.setText(String.valueOf(msgList.size()));
+    }
 }

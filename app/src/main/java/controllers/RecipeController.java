@@ -1,15 +1,18 @@
 package controllers;
 
+import java.util.Calendar;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javafx.fxml.FXML;
 
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import models.entities.Recipe;
 import util.common.UserListener;
@@ -17,7 +20,6 @@ import util.common.UserListener;
 public class RecipeController{
     private Recipe recipe;
     private UserListener userListener;
-    public  RecipeController(){}
 
     @FXML
     private Label recipeName;
@@ -58,7 +60,6 @@ public class RecipeController{
         userListener.descriptionListener(recipe);
     }
     
-
     public void setData(Recipe recipe, Image heartImage, UserListener userListener) {
         this.recipe = recipe;
         this.userListener = userListener;
@@ -66,9 +67,13 @@ public class RecipeController{
         image.setImage(recipe.getPicture());
         this.heartImage.setImage(heartImage);
     }
-    public void setTheDate(String date) {
+
+    public void setDate(Date date) {
+        DateFormat df = new SimpleDateFormat("MMM-dd-yyyy");
+        String dateToString = df.format(date);
+
+        dateLbl.setText(dateToString);
         dateLbl.setVisible(true);
-        dateLbl.setText(date);
     }
 
 }

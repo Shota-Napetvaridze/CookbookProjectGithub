@@ -75,6 +75,7 @@ public class FailMessages {
         public static final String RECIPE_DELETE_FAIL = "Could not delete recipe.\n";
         public static final String RECIPE_TAG_ADD_FAIL = "Could not add tag to recipe.\n";
         public static final String RECIPE_INGREDIENT_ADD_FAIL = "Could not add ingredient to recipe.\n";
+        public static final String RECIPE_EDIT_FAIL = "Could not edit recipe.\n";
 
         //
         // MESSAGE
@@ -107,6 +108,13 @@ public class FailMessages {
                         + Variables.MIN_COMMENT_TEXT_LENGTH + " and "
                         + Variables.MAX_COMMENT_TEXT_LENGTH + " characters long.\n";
         public static final String COMMENT_ADD_FAIL = "Could not add comment.\n";
+
+        //
+        // PLAN
+        // 
+        public static final String PLAN_ADD_RECIPE_FAIL = "Could not add recipe to plan.\n";
+        public static final String PLAN_REMOVE_RECIPE_FAIL = "Could not remove recipe from plan.\n";
+        
         //
         // MISC
         //
@@ -116,5 +124,6 @@ public class FailMessages {
         public static final String INVALID_LENGTH = "Invalid length.\n";
         public static final String INVALID_COUNT = "Invalid count.\n";
         public static final String INVALID_INSTANCE = "Invalid instance.\n";
+        public static final String INVALID_DATE = "Date cannot be before today.\n";
 
 }

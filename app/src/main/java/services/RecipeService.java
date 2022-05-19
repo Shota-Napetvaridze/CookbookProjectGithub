@@ -31,13 +31,13 @@ public interface RecipeService {
 
     public List<Comment> getCommentsByRecipeId(UUID recipeId);
     
-    public String editRecipeName(UUID recipeId, String name);
+    public String editRecipeName(UUID recipeId, String name) throws InvalidRecipeNameLengthException;
 
     public String editRecipeDescription(UUID recipeId, String description) throws InvalidRecipeDescriptionLengthException;
 
-    public String editRecipeInstructions(UUID recipeId, String instructions);
+    public String editRecipeInstructions(UUID recipeId, String instructions) throws InvalidRecipeInstructionsLengthException;
 
-    public String editRecipeServingSize(UUID recipeId, byte servingSize);
+    public String editRecipeServingSize(UUID recipeId, byte servingSize) throws InvalidRecipeServingSizeException;
 
     public String removeRecipe(UUID recipeId);
 

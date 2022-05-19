@@ -27,7 +27,8 @@ public class SqlQueries {
                         + "receiver_id CHAR(38) NOT NULL "
                         + "REFERENCES users(id),"
                         + "message_text VARCHAR(300) NOT NULL,"
-                        + "is_read BOOL NOT NULL"
+                        + "is_read BOOL NOT NULL,"
+                        + "recipe_id CHAR(38)"
                         + ");";
 
         public static final String createTableIngredients = "CREATE TABLE ingredients ("
@@ -95,7 +96,7 @@ public class SqlQueries {
                         + "REFERENCES users(id),"
                         + "recipe_id CHAR(38) "
                         + "REFERENCES recipes(id),"
-                        + "Day DATE NOT NULL,"
+                        + "date DATE NOT NULL,"
                         + "PRIMARY KEY (user_id, recipe_id)"
                         + ");";
 
@@ -137,6 +138,8 @@ public class SqlQueries {
         public static final String addRecipeTag = "INSERT INTO recipes_tags (recipe_id, tag_id) VALUES (?, ?)";
 
         public static final String addRecipeIngredient = "INSERT INTO recipes_ingredients (recipe_id, ingredient_id, quantity) VALUES (?, ?, ?)";
+
+        public static final String addRecipeToPlan = "INSERT INTO weekly_plans (user_id, recipe_id, date) VALUES (?, ?, ?)";
         // SELECT -------------
         public static final String getUserByCredentials = "SELECT * FROM users WHERE username = ? AND password = ?";
 
@@ -184,6 +187,8 @@ public class SqlQueries {
 
         public static final String removeRecipeWithId = "DELETE FROM recipes WHERE id = ?";
 
+        public static final String removeRecipeFromPlan = "DELETE FROM weekly_plans WHERE user_id = ? AND recipe_id = ?";
+        
         public static final String getAllTags = "SELECT * FROM tags";
 
         public static final String getTagById = "SELECT * FROM tags WHERE id = ?";

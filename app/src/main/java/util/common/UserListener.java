@@ -17,11 +17,13 @@ public interface UserListener {
 
     public void recipeEntered(Recipe recipe, TextArea textArea);
     public void recipeExited(Recipe recipe, TextArea textArea);
-    public void closeMsgListener();
-
+    
     public void replyMsgListener(Message message);
     public void removeMsgListener(Message message);
-
+    public void closeMsgListener();
+    public void closeOpenForDetailed();
+    public void closeSendMsgListener();
+    public void closeCartListener();
 
 
 }

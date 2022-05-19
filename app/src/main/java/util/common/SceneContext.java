@@ -19,6 +19,7 @@ public class SceneContext {
                 FXMLLoader loader = new FXMLLoader(DbContext.class.getResource(fxmlFile));
                 root = loader.load();
             }catch (IOException e){
+                System.out.println("Error is here!!!!");
                 e.printStackTrace();
             }
         }else {

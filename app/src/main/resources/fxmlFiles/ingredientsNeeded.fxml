@@ -11,21 +11,9 @@
 
 <AnchorPane prefHeight="36.0" prefWidth="221.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.IngredientItemController">
     <children>
-        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="219.0" spacing="3.0">
+        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="219.0" spacing="10.0">
             <children>
-                <AnchorPane prefHeight="24.0" prefWidth="23.0">
-                    <HBox.margin>
-                        <Insets bottom="5.0" top="6.0" />
-                    </HBox.margin>
-                    <children>
-                        <ImageView fx:id="ingredientButton" fitHeight="25.0" fitWidth="22.0" onMousePressed="#ingredientClick" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/uncheck.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </AnchorPane>
-                <Label fx:id="ingredientLbl" prefHeight="24.0" prefWidth="70.0" text="Beef">
+                <Label fx:id="ingredientLbl" prefHeight="24.0" prefWidth="89.0" text="Beef">
                <HBox.margin>
                   <Insets />
                </HBox.margin></Label>
