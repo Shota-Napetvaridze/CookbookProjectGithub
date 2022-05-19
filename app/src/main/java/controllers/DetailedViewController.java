@@ -104,6 +104,11 @@ public class DetailedViewController implements Initializable {
         userListener.closeOpenForDetailed();
     }
 
+    @FXML
+    void remove(MouseEvent event) {
+        userListener.removeRecipeListener();
+    }
+
     private Recipe recipe;
     private IngredientService ingredientService = new IngredientServiceImpl();
     private RecipeService recipeService = new RecipeServiceImpl();
@@ -214,6 +219,7 @@ public class DetailedViewController implements Initializable {
         addComment.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                //TODO: implement
 
             }
         });
@@ -221,6 +227,7 @@ public class DetailedViewController implements Initializable {
         shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                //TODO: implement
 
             }
         });
@@ -262,7 +269,6 @@ public class DetailedViewController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 recipeService.removeRecipe(recipe.getId());
-                SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
             }
         });
     }

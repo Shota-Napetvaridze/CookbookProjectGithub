@@ -24,6 +24,7 @@ public interface UserListener {
     public void closeOpenForDetailed();
     public void closeSendMsgListener();
     public void closeCartListener();
+    public void removeRecipeListener();
 
 
 }

@@ -84,7 +84,7 @@
             <Font size="23.0" />
          </font>
       </Button>
-      <Button fx:id="remove" layoutX="554.0" layoutY="498.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="115.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Remove" visible="false">
+      <Button fx:id="remove" layoutX="554.0" layoutY="498.0" mnemonicParsing="false" onMousePressed="#remove" prefHeight="45.0" prefWidth="115.0" style="-fx-background-color: FED700; -fx-border-color: #000000;" text="Remove" visible="false">
          <font>
             <Font size="23.0" />
          </font>

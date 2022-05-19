@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         //
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxmlFiles/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600 , 400 ); // TODO: 600 400 (Replace) 1315.0, 810.0
+        Scene scene = new Scene(fxmlLoader.load(), 600 , 400 );
         stage.setTitle("CookBook!");
         stage.setResizable(false);
         stage.setScene(scene);

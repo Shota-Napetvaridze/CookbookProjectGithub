@@ -592,8 +592,7 @@ public class HomeController implements Initializable {
         }
     }
 
-    // ----------------------------------------- INITIALIZE
-    // ----------------------------------------------- //
+    // ----------------------------------------- INITIALIZE -----------------------------------------//
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -610,7 +609,7 @@ public class HomeController implements Initializable {
         // Set cart count
         getCart();
 
-        // Slider
+        // Slider -------------------------------------------------//
         filterPane.setVisible(false);
         anchorPaneBelowFilter.setTranslateY(-176);
         filter.setOnMousePressed(event -> {
@@ -791,6 +790,11 @@ public class HomeController implements Initializable {
                     initializeHomeGrid();
                 }
 
+                @Override
+                public void removeRecipeListener() {
+                    initializeHomeGrid();
+                }
+
 
             };
 
@@ -799,13 +803,15 @@ public class HomeController implements Initializable {
         // Initialize Home grid
         initializeHomeGrid();
 
-        // -----------------------------------------BUTTONS---------------------------------------------------
-        // //
+        // -----------------------------------------BUTTONS-------------------------------------------
 
         // Search Button-----------------------------------------
         search.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
                 recipeList = recipeService.getRecipesByNameLike(searchField.getText());
                 List<Recipe> filteredRecipes = new ArrayList<>();
@@ -847,11 +853,27 @@ public class HomeController implements Initializable {
             }
         });
 
+        searchIngredient.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: implement
+            }
+        });
+        searchTag.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: implement
+            }
+        });
+
 
         // Open for a detailed view Button-----------------------------------------
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 openDetailedGrid();
             }
         });
@@ -860,6 +882,9 @@ public class HomeController implements Initializable {
         addToPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 try {
                     LocalDate localDate = datePicker.getValue();
                     Date date = java.sql.Date.valueOf(localDate);
@@ -878,6 +903,9 @@ public class HomeController implements Initializable {
         removeFromPlan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 userService.removeFromPlan(user.getId(), recipe.getId());
                 user.removeRecipeFromPlan(recipe.getId());
                 planList.remove(recipe);
@@ -892,7 +920,9 @@ public class HomeController implements Initializable {
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 initializeAddNewRecipeGrid();
             }
         });
@@ -942,6 +972,9 @@ public class HomeController implements Initializable {
         cart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 initializeCartGrid();
             }
         });
@@ -950,6 +983,9 @@ public class HomeController implements Initializable {
         sendMsg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 initializeSendMsgGrid();
             }
         });
