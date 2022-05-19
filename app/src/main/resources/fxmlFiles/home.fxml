@@ -86,7 +86,7 @@
                                     </HBox>
                                     <HBox prefHeight="12.0" prefWidth="316.0" spacing="20.0">
                                        <children>
-                                          <TextField fx:id="tagsSearchField" promptText="search">
+                                          <TextField fx:id="tagsSearchField" promptText="search" style="-fx-border-color: #000000;">
                                              <HBox.margin>
                                                 <Insets left="10.0" />
                                              </HBox.margin>
@@ -95,7 +95,7 @@
                                              </font>
                                           </TextField>
                                           <Line endX="-100.0" endY="20.500015258789062" startX="-100.0" />
-                                          <TextField fx:id="ingredientsSearchField" promptText="search">
+                                          <TextField fx:id="ingredientsSearchField" promptText="search" style="-fx-border-color: #000000;">
                                              <HBox.margin>
                                                 <Insets right="10.0" />
                                              </HBox.margin>

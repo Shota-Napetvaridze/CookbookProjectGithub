@@ -140,6 +140,8 @@ public class HomeController implements Initializable {
 
     @FXML
     private TextField tagsSearchField;
+    @FXML
+    private TextField ingredientsSearchField;
 
     @FXML
     private Button removeFromPlan;
@@ -856,12 +858,42 @@ public class HomeController implements Initializable {
         searchIngredient.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                if (ingredientsSearchField.getText().equals("")){
+                    gridIngredient.getChildren().clear();
+                    initializeIngredientGrid();
+                } else {
+                    gridIngredient.getChildren().clear();
+                    List<Ingredient> filteredIngredient = new ArrayList<>();
+                    for (Ingredient ingredient : ingredientsList) {
+                        if (ingredientsSearchField.getText().equals(ingredient.getName())){
+                            filteredIngredient.add(ingredient);
+                        }
+                    }
+                    ingredientsList = filteredIngredient;
+                    initializeTagGrid();
+                }
+
                 //TODO: implement
             }
         });
         searchTag.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                if (tagsSearchField.getText().equals("")){
+                    gridTag.getChildren().clear();
+                    initializeTagGrid();
+                } else {
+                    gridTag.getChildren().clear();
+                    List<Tag> filteredTags = new ArrayList<>();
+                    for (Tag tag : tagList) {
+                        if (tagsSearchField.getText().equals(tag.getName())){
+                            filteredTags.add(tag);
+                        }
+                    }
+                    tagList = filteredTags;
+                    initializeTagGrid();
+                }
+
                 //TODO: implement
             }
         });
