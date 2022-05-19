@@ -475,6 +475,8 @@ public class HomeController implements Initializable {
 
     private void openDetailedGrid() {
         grid.getChildren().clear();
+        recipeImg.setVisible(true);
+        recipeLbl.setVisible(true);
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/openForDetailed.fxml"));
         try {
@@ -890,6 +892,7 @@ public class HomeController implements Initializable {
         addNewRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+
                 initializeAddNewRecipeGrid();
             }
         });
@@ -955,9 +958,9 @@ public class HomeController implements Initializable {
         msg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                home.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                favorites.setStyle("-fx-background-color: rgb(254, 215, 0)");
-                plan.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
+                favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 initializeMsgGrid();
             }
         });
