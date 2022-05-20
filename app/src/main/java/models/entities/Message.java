@@ -13,29 +13,22 @@ public class Message extends BaseEntity {
     private UUID receiverId;
     private String text;
     private boolean isRead;
-
-    // Create new Message
-    // public Message(UUID senderId, UUID receiverId, String text) {
-    //     super();
-    //     setSender(senderId);
-    //     setReceiver(receiverId);
-    //     setText(text);
-    //     isRead = false;
-    // }
+    private UUID recipeId;
+    // TODO: Date, so we can sort by date received
 
     // Import an existing Message
-    public Message(UUID id, UUID senderId, UUID receiverId, String text, boolean isRead) {
+    public Message(UUID id, UUID senderId, UUID receiverId, String text, boolean isRead, UUID recipeId) {
         super.id = id;
         setSender(senderId);
         setReceiver(receiverId);
         setText(text);
         this.isRead = isRead;
+        setRecipeId(recipeId);
     }
 
     // OPERATIONS
 
     
-
     // GETTERS
     public UUID getSender() {
         return senderId;
@@ -54,6 +47,9 @@ public class Message extends BaseEntity {
         return isRead;
     }
 
+    public UUID getRecipeId() {
+        return recipeId;
+    }
 
 
     // SETTERS
@@ -85,6 +81,10 @@ public class Message extends BaseEntity {
         } catch (InvalidLengthException e) {
             return String.format(FailMessages.MESSAGE_INVALID_TEXT_LENGTH);
         }
+    }
+
+    private void setRecipeId(UUID recipeId) {
+        this.recipeId = recipeId;
     }
 
 

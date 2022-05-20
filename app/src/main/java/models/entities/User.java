@@ -59,6 +59,19 @@ public class User extends BaseEntity {
         return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
     }
 
+    public String addIngredientToCart(UUID ingredientId, Integer quantity) {
+        cart.put(ingredientId, quantity);
+        return String.format(SuccessMessages.CART_ADDED_INGREDIENT);
+    }
+
+    public String removeIngredientFromCart(UUID ingredientId) {
+        if (cart.remove(ingredientId) != null) {
+            return String.format(SuccessMessages.PLAN_REMOVED_RECIPE);
+        }
+        return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
+    }
+
+
 
     // GETTERS
     public String getNickname() {

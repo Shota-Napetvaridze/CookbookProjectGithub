@@ -29,7 +29,7 @@
                   <Font size="16.0" />
                </font>
             </PasswordField>
-            <Button fx:id="signupNew" layoutX="229.0" layoutY="216.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Sign Up">
+            <Button fx:id="signupNew" layoutX="229.0" layoutY="216.0" mnemonicParsing="false" onKeyPressed="#signUp" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Sign Up">
                <font>
                   <Font size="18.0" />
                </font>

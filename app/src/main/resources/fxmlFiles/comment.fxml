@@ -18,15 +18,15 @@
                 <Insets top="5.0" />
             </padding>
         </Label>
-        <Button layoutX="271.0" layoutY="53.0" mnemonicParsing="false" onMousePressed="#removeComment" prefHeight="32.0" prefWidth="64.0" style="-fx-background-color: FED700;" stylesheets="@style.css" text="Remove">
+        <Button fx:id="remove" layoutX="271.0" layoutY="53.0" mnemonicParsing="false" onMousePressed="#removeComment" prefHeight="32.0" prefWidth="64.0" style="-fx-background-color: FED700;" stylesheets="@style.css" text="Remove" visible="false">
          <styleClass>
             <String fx:value="black" />
-            <String fx:value="recipeAnchorStyle" />
+            <String fx:value="borderStyle" />
          </styleClass></Button>
-        <Button layoutX="271.0" layoutY="10.0" mnemonicParsing="false" onMousePressed="#editComment" prefHeight="32.0" prefWidth="64.0" style="-fx-background-color: FED700;" stylesheets="@style.css" text="Edit" visible="false">
+        <Button fx:id="edit" layoutX="271.0" layoutY="10.0" mnemonicParsing="false" onMousePressed="#editComment" prefHeight="32.0" prefWidth="64.0" style="-fx-background-color: FED700;" stylesheets="@style.css" text="Edit" visible="false">
          <styleClass>
             <String fx:value="black" />
-            <String fx:value="recipeAnchorStyle" />
+            <String fx:value="borderStyle" />
          </styleClass></Button>
         <TextArea fx:id="commentArea" editable="false" layoutX="28.0" layoutY="32.0" opacity="0.67" prefHeight="65.0" prefWidth="211.0" styleClass="text-area" stylesheets="@style.css" wrapText="true">
             <font>

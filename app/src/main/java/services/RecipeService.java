@@ -9,6 +9,7 @@ import models.entities.Comment;
 import models.entities.Ingredient;
 import models.entities.Recipe;
 import models.entities.Tag;
+import util.exceptions.comment.InvalidCommentLengthException;
 import util.exceptions.recipe.InvalidRecipeDescriptionLengthException;
 import util.exceptions.recipe.InvalidRecipeIngredientsCountException;
 import util.exceptions.recipe.InvalidRecipeInstructionsLengthException;
@@ -21,7 +22,7 @@ public interface RecipeService {
 
     public Recipe getRecipeById(UUID id);
 
-    public List<Recipe> getRecipesByNameLike(String name);
+    public List<Recipe> getRecipesWithNameLike(String name);
 
     public List<Recipe> getRecipesFiltered(Set<String> filters);
 
@@ -29,6 +30,8 @@ public interface RecipeService {
     String instructions, UUID authorId,
     Map<Ingredient, Integer> ingredients, byte servingSize) throws InvalidRecipeNameLengthException, InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException, InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException;
 
+    public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Integer> selectedIngredients);
+    
     public List<Comment> getCommentsByRecipeId(UUID recipeId);
     
     public String editRecipeName(UUID recipeId, String name) throws InvalidRecipeNameLengthException;
@@ -50,5 +53,7 @@ public interface RecipeService {
     public void validateIngredients(Map<Ingredient, Integer> ingredients) throws InvalidRecipeIngredientsCountException;
 
     public void validateServingSize(byte servingSize) throws InvalidRecipeServingSizeException;
+
+    public Comment getCommentById(UUID commentId);
 
 }

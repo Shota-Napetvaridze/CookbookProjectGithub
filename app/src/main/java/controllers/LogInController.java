@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -21,7 +23,7 @@ import models.entities.User;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 
-public class LogInController implements Initializable {
+public class LogInController implements Initializable{
 
     @FXML
     private AnchorPane anchorVisible;
@@ -41,6 +43,32 @@ public class LogInController implements Initializable {
     @FXML
     private ImageView logo;
 
+
+    @FXML
+    void login(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            User user = userService.loginUser(username.getText(), password.getText());
+            if (user != null) {
+                SceneContext.setUser(user);
+                if (user.getUsername().equals("admin")) {
+                    SceneContext.changeSceneOnPressedKey(event, "/fxmlFiles/adminPage.fxml");
+                }
+                SceneContext.changeSceneOnPressedKey(event, "/fxmlFiles/home.fxml");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Credentials are incorrect");
+                alert.show();
+            }
+        }
+
+    }
+
+
+
+
+
+
+
     private UserServiceImpl userService = new UserServiceImpl();
 
     @Override
@@ -48,6 +76,7 @@ public class LogInController implements Initializable {
         // Animation ----------- ----------- -----------
         logo.setVisible(true);
         anchorVisible.setVisible(false);
+
 
         RotateTransition rotate = new RotateTransition();
         rotate.setNode(logo);
@@ -76,7 +105,7 @@ public class LogInController implements Initializable {
                 User user = userService.loginUser(username.getText(), password.getText());
                 if (user != null) {
                     SceneContext.setUser(user);
-                    if (user.getUsername().toLowerCase().equals("admin")) {
+                    if (user.getUsername().equals("admin")) {
                         SceneContext.changeScene(event, "/fxmlFiles/adminPage.fxml");
                     }
                     SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
@@ -85,6 +114,7 @@ public class LogInController implements Initializable {
                     alert.setContentText("Credentials are incorrect");
                     alert.show();
                 }
+
             }
         });
 
@@ -96,4 +126,5 @@ public class LogInController implements Initializable {
         });
 
     }
+
 }

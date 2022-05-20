@@ -36,6 +36,7 @@ public class FailMessages {
         public static final String USER_SET_EMAIL_FAIL = "Could not change user email.\n";
         public static final String USER_SET_PASSWORD_FAIL = "Could not change user password.\n";
         public static final String USER_ADD_FAVORITE_RECIPE_FAIL = "Could not add recipe to favorites.\n";
+        public static final String USER_RECEIVER_IS_SENDER = "Cannot send a message to yourself.\n";
         //
         // TAG
         //
@@ -88,6 +89,7 @@ public class FailMessages {
 
         public static final String MESSAGE_INVALID_SENDER = "Could not send message.\n";
         public static final String MESSAGE_DELETE_FAIL = "Could not delete message.\n";
+        public static final String MESSAGE_SEND_FAIL = "Could not send message.\n";
 
         //
         // INGREDIENT
@@ -108,6 +110,8 @@ public class FailMessages {
                         + Variables.MIN_COMMENT_TEXT_LENGTH + " and "
                         + Variables.MAX_COMMENT_TEXT_LENGTH + " characters long.\n";
         public static final String COMMENT_ADD_FAIL = "Could not add comment.\n";
+        public static final String COMMENT_DELETE_FAIL = "Could not delete comment.\n";
+        public static final String COMMENT_EDIT_FAIL = "Could not edit comment.\n";
 
         //
         // PLAN
@@ -115,6 +119,12 @@ public class FailMessages {
         public static final String PLAN_ADD_RECIPE_FAIL = "Could not add recipe to plan.\n";
         public static final String PLAN_REMOVE_RECIPE_FAIL = "Could not remove recipe from plan.\n";
         
+        //
+        // CART
+        //
+        public static final String CART_ADD_INGREDIENT_FAIL = "Could not add ingredient to cart.\n";
+        public static final String CART_REMOVE_INGREDIENT_FAIL = "Could not remove ingredient from cart.\n";
+
         //
         // MISC
         //

@@ -15,6 +15,7 @@ import util.common.DbContext;
 import util.common.Validator;
 import util.constants.SuccessMessages;
 import util.constants.Variables;
+import util.exceptions.comment.InvalidCommentLengthException;
 import util.exceptions.common.InvalidCountException;
 import util.exceptions.common.InvalidLengthException;
 import util.exceptions.recipe.InvalidRecipeDescriptionLengthException;
@@ -67,7 +68,9 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public String addRecipe(UUID recipeId, String name, String picturePath, String description,
             String instructions, UUID authorId,
-            Map<Ingredient, Integer> ingredients, byte servingSize) throws InvalidRecipeNameLengthException, InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException, InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException {
+            Map<Ingredient, Integer> ingredients, byte servingSize) throws InvalidRecipeNameLengthException,
+            InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException,
+            InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException {
         validateName(name);
         validateDescription(description);
         validateInstructions(instructions);
@@ -94,19 +97,21 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getRecipesByNameLike(String name) {
-        return dbContext.getRecipesByNameLike(name);
+    public List<Recipe> getRecipesWithNameLike(String name) {
+        return dbContext.getRecipesWithNameLike(name);
     }
 
     @Override
-    public String editRecipeDescription(UUID recipeId, String description) throws InvalidRecipeDescriptionLengthException {
+    public String editRecipeDescription(UUID recipeId, String description)
+            throws InvalidRecipeDescriptionLengthException {
         validateDescription(description);
         // TODO: dbContext.editRecipeDescription(recipeId, description);
         return null;
     }
 
     @Override
-    public String editRecipeInstructions(UUID recipeId, String instructions) throws InvalidRecipeInstructionsLengthException {
+    public String editRecipeInstructions(UUID recipeId, String instructions)
+            throws InvalidRecipeInstructionsLengthException {
         validateInstructions(instructions);
         // TODO: dbContext.editRecipeInstructions(recipeId, instructions);
         return null;
@@ -159,18 +164,29 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void validateIngredients(Map<Ingredient, Integer> ingredients) throws InvalidRecipeIngredientsCountException {
+    public void validateIngredients(Map<Ingredient, Integer> ingredients)
+            throws InvalidRecipeIngredientsCountException {
         try {
             Validator.validateCount(ingredients.size(),
-                        Variables.MIN_RECIPE_INGREDIENTS, Variables.MAX_RECIPE_INGREDIENTS);
+                    Variables.MIN_RECIPE_INGREDIENTS, Variables.MAX_RECIPE_INGREDIENTS);
         } catch (InvalidCountException e) {
             throw new InvalidRecipeIngredientsCountException();
-        }        
+        }
     }
 
     @Override
     public List<Comment> getCommentsByRecipeId(UUID recipeId) {
         return dbContext.getCommentsByRecipeId(recipeId);
+    }
+
+    @Override
+    public Comment getCommentById(UUID commentId) {
+        return dbContext.getCommentById(commentId);
+    }
+
+    @Override
+    public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Integer> selectedIngredients) {
+        // TODO: dbContext.addRecipeIngredients(recipeId, selectedIngredients) - Adds to recipes_ingredients
     }
 
 }

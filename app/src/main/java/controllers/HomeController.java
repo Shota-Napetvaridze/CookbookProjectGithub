@@ -13,8 +13,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -23,18 +21,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.UUID;
 import java.util.Map.Entry;
 
 import javafx.util.Duration;
+import models.entities.Comment;
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
@@ -47,6 +43,8 @@ import services.impl.TagServiceImpl;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 import util.common.UserListener;
+import util.constants.FailMessages;
+import util.constants.SuccessMessages;
 import util.exceptions.common.InvalidDateException;
 
 public class HomeController implements Initializable {
@@ -214,6 +212,9 @@ public class HomeController implements Initializable {
         int column = 0;
         int row = 1;
         try {
+            if (!recipeList.contains(recipe)) {
+                chosenRecipe(recipeList.get(0));
+            }
             for (int i = 0; i < recipeList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/recipeItem.fxml"));
@@ -546,7 +547,8 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void initializeSendMsgGrid() {
+
+    private void initializeSendMsgGrid(Recipe recipe) {
         grid.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/sendMsg.fxml"));
@@ -594,7 +596,8 @@ public class HomeController implements Initializable {
         }
     }
 
-    // ----------------------------------------- INITIALIZE -----------------------------------------//
+    // ----------------------------------------- INITIALIZE
+    // -----------------------------------------//
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -668,7 +671,8 @@ public class HomeController implements Initializable {
             });
         });
 
-        // ------------------------------------------------------------------- MY LISTENER
+        // ------------------------------------------------------------------- MY
+        // LISTENER
         if (recipeList.size() > 0) {
             chosenRecipe(recipeList.get(0));
             userListener = new UserListener() {
@@ -771,12 +775,14 @@ public class HomeController implements Initializable {
                     msgCountLbl.setText(messageCount);
                     initializeMsgGrid();
                 }
-                //------------- Close Listeners---------------//
+
+                // ------------- Close Listeners---------------//
                 @Override
                 public void closeMsgListener() {
 
                     initializeMsgGrid();
                 }
+
                 @Override
                 public void closeOpenForDetailed() {
                     initializeHomeGrid();
@@ -794,10 +800,54 @@ public class HomeController implements Initializable {
 
                 @Override
                 public void removeRecipeListener() {
+                    recipeService.removeRecipe(recipe.getId());
+                    recipeList.remove(recipe);
                     initializeHomeGrid();
                 }
 
+                @Override
+                public void shareTheRecipeListener() {
 
+                    initializeSendMsgGrid(recipe);
+                    
+                }
+
+                @Override
+                public void openRecipeListener(Recipe recipe) {
+                    chosenRecipe(recipe);
+                    openDetailedGrid();
+                }
+
+                @Override
+                public void removeCommentListener(Comment comment) {
+                    userService.removeComment(comment.getId());
+                    openDetailedGrid();
+                }
+
+                @Override
+                public void editCommentListener(Comment comment, String text) {
+                    try {
+                        userService.editComment(comment.getId(), text);
+                        showInformation(SuccessMessages.COMMENT_EDITED, null);
+                    } catch (Exception e) {
+                        showError(FailMessages.COMMENT_EDIT_FAIL, e.getMessage());
+                    }
+                }
+
+                @Override
+                public void addIngredientToCart(Ingredient ingredient, Integer quantity) {
+                    userService.addToCart(user.getId(), ingredient.getId(), quantity);
+                    user.addIngredientToCart(ingredient.getId(), quantity);
+                    cartCount.setText(String.valueOf(user.getCart().size()));
+                }
+
+                @Override
+                public void removeIngredientFromCart(Ingredient ingredient) {
+                    userService.removeFromCart(user.getId(), ingredient.getId());
+                    user.removeIngredientFromCart(ingredient.getId());
+                    cartCount.setText(String.valueOf(user.getCart().size()));
+                    initializeCartGrid();
+                }
             };
 
         }
@@ -815,7 +865,7 @@ public class HomeController implements Initializable {
                 home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 grid.getChildren().clear();
-                recipeList = recipeService.getRecipesByNameLike(searchField.getText());
+                recipeList = recipeService.getRecipesWithNameLike(searchField.getText());
                 List<Recipe> filteredRecipes = new ArrayList<>();
                 for (Recipe recipe : recipeList) {
                     boolean isValid = true;
@@ -851,6 +901,8 @@ public class HomeController implements Initializable {
                     }
                 }
                 recipeList = filteredRecipes;
+                selectedIngredients = new ArrayList<Ingredient>();
+                selectedTags = new ArrayList<Tag>();
                 initializeHomeGrid();
             }
         });
@@ -858,46 +910,22 @@ public class HomeController implements Initializable {
         searchIngredient.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (ingredientsSearchField.getText().equals("")){
                     gridIngredient.getChildren().clear();
-                    initializeIngredientGrid();
-                } else {
-                    gridIngredient.getChildren().clear();
-                    List<Ingredient> filteredIngredient = new ArrayList<>();
-                    for (Ingredient ingredient : ingredientsList) {
-                        if (ingredientsSearchField.getText().equals(ingredient.getName())){
-                            filteredIngredient.add(ingredient);
-                        }
-                    }
+                    List<Ingredient> filteredIngredient = ingredientService.getIngredientWithNameLike(ingredientsSearchField.getText());
                     ingredientsList = filteredIngredient;
-                    initializeTagGrid();
-                }
+                    initializeIngredientGrid();
 
-                //TODO: implement
             }
         });
         searchTag.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (tagsSearchField.getText().equals("")){
-                    gridTag.getChildren().clear();
-                    initializeTagGrid();
-                } else {
-                    gridTag.getChildren().clear();
-                    List<Tag> filteredTags = new ArrayList<>();
-                    for (Tag tag : tagList) {
-                        if (tagsSearchField.getText().equals(tag.getName())){
-                            filteredTags.add(tag);
-                        }
-                    }
-                    tagList = filteredTags;
-                    initializeTagGrid();
-                }
-
-                //TODO: implement
+                gridTag.getChildren().clear();
+                List<Tag> filteredTags = tagService.getTagsWithNameLike(tagsSearchField.getText());
+                tagList = filteredTags;
+                initializeTagGrid();
             }
         });
-
 
         // Open for a detailed view Button-----------------------------------------
         openDetailed.setOnAction(new EventHandler<ActionEvent>() {
@@ -927,7 +955,7 @@ public class HomeController implements Initializable {
                     removeFromPlan.setVisible(true);
                     addToPlan.setVisible(false);
                 } catch (InvalidDateException e) {
-                    showAlert(e.getMessage(), "");
+                    showError(e.getMessage(), "");
                 }
             }
         });
@@ -941,7 +969,6 @@ public class HomeController implements Initializable {
                 userService.removeFromPlan(user.getId(), recipe.getId());
                 user.removeRecipeFromPlan(recipe.getId());
                 planList.remove(recipe);
-                System.out.println(planList.size());
                 addToPlan.setVisible(true);
                 removeFromPlan.setVisible(false);
                 initializePlanGrid();
@@ -1010,7 +1037,7 @@ public class HomeController implements Initializable {
                 initializeCartGrid();
             }
         });
-        
+
         // Send Message --------------------------------------------------
         sendMsg.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -1018,7 +1045,7 @@ public class HomeController implements Initializable {
                 plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
-                initializeSendMsgGrid();
+                initializeSendMsgGrid(null);
             }
         });
 
@@ -1044,7 +1071,14 @@ public class HomeController implements Initializable {
         });
     }
 
-    private void showAlert(String header, String content) {
+    private void showError(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    private void showInformation(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(header);
         alert.setContentText(content);

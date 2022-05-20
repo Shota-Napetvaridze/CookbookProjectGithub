@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -23,13 +24,21 @@ public class CommentController {
     private TextArea commentArea;
 
     @FXML
-    void editComment(MouseEvent event) {
+    private Button edit;
 
+    @FXML
+    private Button remove;
+
+    @FXML
+    void editComment(MouseEvent event) {
+        if (!comment.getText().equals(commentArea.getText())) {
+            userListener.editCommentListener(comment, commentArea.getText());
+        }
     }
 
     @FXML
     void removeComment(MouseEvent event) {
-
+        userListener.removeCommentListener(comment);
     }
 
     public void setData(Comment comment, UserListener userListener){
@@ -37,6 +46,10 @@ public class CommentController {
         this.userListener = userListener;
         author.setText(userService.getUserById(comment.getUser()).getNickname());
         commentArea.setText(comment.getText());
-        
+        if (user.getId().equals(comment.getUser())) {
+            edit.setVisible(true);
+            remove.setVisible(true);
+            commentArea.setEditable(true);
+        }
     }
 }

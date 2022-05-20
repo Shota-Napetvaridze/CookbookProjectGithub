@@ -9,6 +9,6 @@ import models.entities.Ingredient;
 public interface IngredientService {
     public List<Ingredient> getAllIngredients();
     public Ingredient getIngredientById(UUID id);
-    public List<Ingredient> getIngredientByNameLike(String name);
+    public List<Ingredient> getIngredientWithNameLike(String name);
     public Map<Ingredient, Integer> getIngredientsByRecipeId(UUID recipeId);
 }

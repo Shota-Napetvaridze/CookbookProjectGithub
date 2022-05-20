@@ -124,8 +124,8 @@ public class SqlQueries {
                         "VALUES (?, ?)";
 
         public static final String addMessage = "INSERT INTO messages (\n" +
-                        "id, sender_id, receiver_id, message_text, is_read) \n" +
-                        "VALUES (?, ?, ?, ?, ?)";
+                        "id, sender_id, receiver_id, message_text, is_read, recipe_id) \n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)";
 
         public static final String addComment = "INSERT INTO comments (\n" +
                         "id, user_id, recipe_id, text) \n" +
@@ -140,6 +140,10 @@ public class SqlQueries {
         public static final String addRecipeIngredient = "INSERT INTO recipes_ingredients (recipe_id, ingredient_id, quantity) VALUES (?, ?, ?)";
 
         public static final String addRecipeToPlan = "INSERT INTO weekly_plans (user_id, recipe_id, date) VALUES (?, ?, ?)";
+
+        public static final String addIngredientToCart = "INSERT INTO users_ingredients (user_id, ingredient_id, quantity) VALUES (?, ?, ?)";
+        
+        
         // SELECT -------------
         public static final String getUserByCredentials = "SELECT * FROM users WHERE username = ? AND password = ?";
 
@@ -188,6 +192,10 @@ public class SqlQueries {
         public static final String removeRecipeWithId = "DELETE FROM recipes WHERE id = ?";
 
         public static final String removeRecipeFromPlan = "DELETE FROM weekly_plans WHERE user_id = ? AND recipe_id = ?";
+
+        public static final String removeCommentWithId = "DELETE FROM comments WHERE id = ?";
+
+        public static final String removeIngredientFromCart = "DELETE FROM users_ingredients WHERE user_id = ? AND ingredient_id = ?";
         
         public static final String getAllTags = "SELECT * FROM tags";
 
@@ -195,11 +203,13 @@ public class SqlQueries {
 
         public static final String getCommentById = "SELECT * FROM comments WHERE id = ?";
 
-        public static final String getRecipesByNameLike = "SELECT * FROM recipes WHERE recipe_name LIKE ?";
+        public static final String getRecipesWithNameLike = "SELECT * FROM recipes WHERE recipe_name LIKE ?";
 
         public static final String getUsersLike = "SELECT * FROM users WHERE username LIKE ? OR display_name LIKE ? OR email LIKE ?";
 
-        public static final String getIngredientsByNameLike = "SELECT * FROM ingredients WHERE ingredient_name LIKE ?";
+        public static final String getIngredientsWithNameLike = "SELECT * FROM ingredients WHERE ingredient_name LIKE ?";
+
+        public static final String getTagsWithNameLike = "SELECT * FROM tags WHERE tag_name LIKE ?";
 
         // UPDATE -------------
         public static final String updateUsername = "UPDATE users SET username = ? WHERE id = ?";
@@ -209,6 +219,8 @@ public class SqlQueries {
         public static final String updateEmail = "UPDATE users SET email = ? WHERE id = ?";
 
         public static final String updatePassword = "UPDATE users SET password = ? WHERE id = ?";
+
+        public static final String editComment = "UPDATE comments SET text = ? WHERE id = ?";
 
         public static final String removeMessageById = "DELETE FROM messages WHERE id = ?";
 

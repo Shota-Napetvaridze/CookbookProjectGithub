@@ -1,8 +1,6 @@
 package util.constants;
 
 public class SuccessMessages {
-
-
     //
     // USER
     //
@@ -47,6 +45,7 @@ public class SuccessMessages {
     public static final String MESSAGE_SET_RECEIVER = "Message sent.\n";
     public static final String MESSAGE_SET_SENDER = "Message sent.\n";
     public static final String MESSAGE_DELETED = "Message deleted.\n";
+    public static final String MESSAGE_SENT = "Message sent successfully.\n";
 
     //
     // INGREDIENT
@@ -61,7 +60,9 @@ public class SuccessMessages {
     public static final String COMMENT_SET_TEXT = "Comment posted successfully.\n";
     public static final String COMMENT_SET_USER = "Comment author set.\n";
     public static final String COMMENT_SET_RECIPE = "Comment recipe set.\n";
-    public static final String COMMENT_ADDED = "Added comment successfully.\n";
+    public static final String COMMENT_ADDED = "Comment added successfully.\n";
+    public static final String COMMENT_DELETED = "Comment deleted successfully.\n";
+    public static final String COMMENT_EDITED = "Comment edited successfully.\n";
 
     //
     // PLAN
@@ -69,6 +70,13 @@ public class SuccessMessages {
     public static final String PLAN_ADDED_RECIPE = "Successfully added recipe to plan.\n";
     public static final String PLAN_REMOVED_RECIPE = "Successfully removed recipe from plan.\n";
 
+    // 
+    // CART
+    //
+    public static final String CART_ADDED_INGREDIENT = "Successfully added ingredient to cart.\n";
+    public static final String CART_REMOVED_INGREDIENT = "Successfully removed ingredient from cart.\n";
+
+    
     //
     // MISC
     //

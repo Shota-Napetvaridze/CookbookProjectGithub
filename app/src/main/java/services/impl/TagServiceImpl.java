@@ -42,5 +42,10 @@ public class TagServiceImpl implements TagService {
     public List<Tag> getTagsByRecipeId(UUID recipeId) {
         return dbContext.getTagsByRecipeId(recipeId);
     }
+
+    @Override
+    public List<Tag> getTagsWithNameLike(String name) {
+        return dbContext.getTagsWithNameLike(name);
+    }
     
 }

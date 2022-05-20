@@ -1,18 +1,22 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import models.entities.Ingredient;
+import util.common.NewRecipeListener;
 import util.common.UserListener;
 
 public class IngredientItemController {
     private Ingredient ingredient;
     private UserListener userListener;
+    private NewRecipeListener newRecipeListener;
 
     @FXML
-    private Label amount;
+    private TextField amountField;
 
     @FXML
     private ImageView ingredientButton;
@@ -21,22 +25,54 @@ public class IngredientItemController {
     private Label ingredientLbl;
 
     @FXML
-    void addToCartClick(MouseEvent event) {
-        userListener.ingredientClickListener(ingredient, ingredientButton);
-    }
+    private ImageView cart;
 
     @FXML
-    private void ingredientClick(MouseEvent event) {
-        userListener.ingredientClickListener(ingredient, ingredientButton);
+    private Button button;
+
+    @FXML
+    void buttonAction(MouseEvent event) {
+        if (caller.equals("DetailedViewController")) {
+            userListener.addIngredientToCart(ingredient, quantity);
+        } else if (caller.equals("NewRecipeController")) {
+            newRecipeListener.addIngredientToRecipe(ingredient, Integer.parseInt(amountField.getText()));
+        } else if (caller.equals("SelectedNewRecipeController")) {
+
+        } else if (caller.equals("CartController")) {
+            userListener.removeIngredientFromCart(ingredient);
+        }
     }
 
     private Integer quantity;
+    private String caller;
 
-    public void setData(Ingredient ingredient, Integer quantity, UserListener userListener){
+    public void setData(NewRecipeListener newRecipeListener) {
+        this.newRecipeListener = newRecipeListener;
+    }
+
+    public void setData(Ingredient ingredient, Integer quantity, String caller, UserListener userListener){
+        this.caller = caller;
         this.ingredient = ingredient;
         this.userListener = userListener;
         this.quantity = quantity;
-        ingredientLbl.setText(quantity + ingredient.getUnit() + " " + ingredient.getName());
+        ingredientLbl.setText(ingredient.getName());
+        if (caller.equals("DetailedViewController")) {
+            amountField.setEditable(false);
+            amountField.setText(quantity.toString());
+            button.setText("+");
+        } else if (caller.equals("NewRecipeController")) {
+            amountField.setPromptText(quantity.toString());
+            cart.setVisible(false);
+            button.setText("+");
+        } else if (caller.equals("SelectedNewRecipeController")) {
+            amountField.setText(quantity.toString());
+            cart.setVisible(false);
+            button.setText("-");
+        } else if (caller.equals("CartController")) {
+            amountField.setText(quantity.toString());
+            cart.setVisible(false);
+            button.setText("-");
+        }
     }
 
 }

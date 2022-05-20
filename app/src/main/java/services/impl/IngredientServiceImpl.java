@@ -18,8 +18,8 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<Ingredient> getIngredientByNameLike(String name) {
-        return dbContext.getIngredientsByNameLike(name);
+    public List<Ingredient> getIngredientWithNameLike(String name) {
+        return dbContext.getIngredientsWithNameLike(name);
     }
 
     @Override

@@ -152,7 +152,12 @@ public class DbContext {
             UUID senderId = UUID.fromString(message[1]);
             UUID receiverId = UUID.fromString(message[2]);
             String text = message[3];
-            sendMessage(messageId, senderId, receiverId, text);
+            Boolean isRead = Boolean.parseBoolean(message[4]);
+            UUID recipeId = null;
+            if (!message[5].equals("NULL")) {
+                recipeId = UUID.fromString(message[5]);
+            }
+            sendMessage(messageId, senderId, receiverId, text, recipeId);
         }
         System.out.println("Imported " + counter + " messages.");
 
@@ -545,8 +550,11 @@ public class DbContext {
                 UUID receiverId = UUID.fromString(rs.getString("receiver_id"));
                 String text = rs.getString("message_text");
                 Boolean isRead = rs.getBoolean("is_read");
-
-                message = new Message(messageId, senderId, receiverId, text, isRead);
+                UUID recipeId = null;
+                if (rs.getString("recipe_id") != null) {
+                    recipeId = UUID.fromString(rs.getString("recipe_id"));
+                }
+                message = new Message(messageId, senderId, receiverId, text, isRead, recipeId);
             }
             ps.close();
             rs.close();
@@ -713,7 +721,7 @@ public class DbContext {
         }
     }
 
-    public void sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message) {
+    public void sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, UUID recipeId) {
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addMessage);
@@ -722,6 +730,11 @@ public class DbContext {
             ps.setString(3, receiverId.toString());
             ps.setString(4, message);
             ps.setBoolean(5, false);
+            if (recipeId != null) {
+                ps.setString(6, recipeId.toString());
+            } else {
+                ps.setNull(6, java.sql.Types.VARCHAR);
+            }
             ps.execute();
             ps.close();
         } catch (SQLException e) {
@@ -839,7 +852,7 @@ public class DbContext {
         return commentIds;
     }
 
-    private Comment getCommentById(UUID commentId) {
+    public Comment getCommentById(UUID commentId) {
         Comment comment = null;
         try {
             useDatabase();
@@ -940,11 +953,11 @@ public class DbContext {
         return tagIds;
     }
 
-    public List<Recipe> getRecipesByNameLike(String name) {
+    public List<Recipe> getRecipesWithNameLike(String name) {
         List<Recipe> recipes = new ArrayList<>();
         try {
             useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipesByNameLike);
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getRecipesWithNameLike);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -1004,6 +1017,7 @@ public class DbContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Got " + ingredients.size() + " ingredients.");
         return ingredients;
     }
 
@@ -1027,11 +1041,11 @@ public class DbContext {
         return ingredient;
     }
 
-    public List<Ingredient> getIngredientsByNameLike(String name) {
+    public List<Ingredient> getIngredientsWithNameLike(String name) {
         List<Ingredient> ingredients = new ArrayList<>();
         try {
             useDatabase();
-            PreparedStatement ps = conn.prepareStatement(SqlQueries.getIngredientsByNameLike);
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getIngredientsWithNameLike);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -1217,7 +1231,7 @@ public class DbContext {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();    
+            e.printStackTrace();
             return String.format(FailMessages.PLAN_ADD_RECIPE_FAIL);
         }
     }
@@ -1240,5 +1254,99 @@ public class DbContext {
         } catch (Exception e) {
             return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
         }
+    }
+
+    public List<Tag> getTagsWithNameLike(String name) {
+        List<Tag> tags = new ArrayList<>();
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getTagsWithNameLike);
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Tag tag = getTagById(UUID.fromString(rs.getString("id")));
+                tags.add(tag);
+            }
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tags;
+    }
+
+    public String removeCommentById(UUID commentId) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeCommentWithId);
+            ps.setString(1, commentId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.COMMENT_DELETED);
+            } else {
+                return String.format(FailMessages.COMMENT_DELETE_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.COMMENT_DELETE_FAIL);
+        }
+    }
+
+    public String editComment(UUID commentId, String commentText) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.editComment);
+            ps.setString(1, commentText);
+            ps.setString(2, commentId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.COMMENT_EDITED);
+            } else {
+                return String.format(FailMessages.COMMENT_EDIT_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.COMMENT_EDIT_FAIL);
+        }
+    }
+
+    public String addToCart(UUID userId, UUID ingredientId, int amount) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.addIngredientToCart);
+            ps.setString(1, userId.toString());
+            ps.setString(2, ingredientId.toString());
+            ps.setInt(3, amount);
+            ps.execute();
+            ps.close();
+            return String.format(SuccessMessages.CART_ADDED_INGREDIENT);
+        } catch (SQLException e) {
+            return String.format(FailMessages.CART_ADD_INGREDIENT_FAIL);
+        }
+    }
+
+    public String removeFromCart(UUID userId, UUID ingredientId) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeIngredientFromCart);
+            ps.setString(1, userId.toString());
+            ps.setString(2, ingredientId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.CART_REMOVED_INGREDIENT);
+            } else {
+                return String.format(FailMessages.CART_REMOVE_INGREDIENT_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.CART_REMOVE_INGREDIENT_FAIL);
+        }
+
     }
 }

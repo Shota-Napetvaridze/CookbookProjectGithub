@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -22,6 +21,7 @@ import models.entities.Recipe;
 import models.entities.User;
 import services.IngredientService;
 import services.RecipeService;
+import services.UserService;
 import services.impl.IngredientServiceImpl;
 import services.impl.RecipeServiceImpl;
 import services.impl.UserServiceImpl;
@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.UUID;
 
 public class DetailedViewController implements Initializable {
     private UserListener userListener;
@@ -49,7 +50,6 @@ public class DetailedViewController implements Initializable {
 
     @FXML
     private TextArea addCommentArea;
-
 
     @FXML
     private GridPane commentsGrid;
@@ -88,9 +88,6 @@ public class DetailedViewController implements Initializable {
     private Button remove;
 
     @FXML
-    private Button shareTheRecipe;
-
-    @FXML
     private GridPane tagsGrid;
 
     @FXML
@@ -109,9 +106,15 @@ public class DetailedViewController implements Initializable {
         userListener.removeRecipeListener();
     }
 
+    @FXML
+    void shareTheRecipe(MouseEvent event) {
+        userListener.shareTheRecipeListener();
+    }
+
     private Recipe recipe;
     private IngredientService ingredientService = new IngredientServiceImpl();
     private RecipeService recipeService = new RecipeServiceImpl();
+    private UserService userService = new UserServiceImpl();
     private Map<Ingredient, Integer> ingredientsList = new HashMap<>();
     private List<Comment> commentsList = new ArrayList<>();
     private User user = SceneContext.getUser();
@@ -129,7 +132,7 @@ public class DetailedViewController implements Initializable {
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientItemController ingredientItemController = fxmlLoader.getController();
                 Integer quantity = ingredientsList.get(ingredient);
-                ingredientItemController.setData(ingredient, quantity, userListener);
+                ingredientItemController.setData(ingredient, quantity, "DetailedViewController", userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -155,6 +158,7 @@ public class DetailedViewController implements Initializable {
     }
 
     private void initializeCommentsGrid() {
+        commentsGrid.getChildren().clear();
         commentsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         commentsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         int column = 0;
@@ -219,16 +223,15 @@ public class DetailedViewController implements Initializable {
         addComment.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: implement
-
-            }
-        });
-
-        shareTheRecipe.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //TODO: implement
-
+                UUID commentId = UUID.randomUUID();
+                String commentText = addCommentArea.getText();
+                try {
+                    userService.addComment(commentId, user.getId(), recipe.getId(), commentText);
+                    commentsList.add(recipeService.getCommentById(commentId));
+                    initializeCommentsGrid();
+                } catch (Exception e) {
+                    showAlert(FailMessages.COMMENT_ADD_FAIL, e.getMessage());
+                }
             }
         });
 

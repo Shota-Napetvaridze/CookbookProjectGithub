@@ -36,7 +36,7 @@
                         <Font size="10.0" />
                      </font>
                   </PasswordField>
-                  <Button fx:id="login" layoutX="71.0" layoutY="190.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Login">
+                  <Button fx:id="login" layoutX="71.0" layoutY="190.0" mnemonicParsing="false" onKeyPressed="#login" prefHeight="35.0" prefWidth="141.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Login">
                      <font>
                         <Font size="18.0" />
                      </font>

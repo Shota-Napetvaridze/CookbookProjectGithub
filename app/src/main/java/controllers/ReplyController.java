@@ -11,7 +11,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import models.entities.Message;
 import services.impl.UserServiceImpl;
+import util.common.SceneContext;
 import util.common.UserListener;
+import util.constants.FailMessages;
+import util.constants.SuccessMessages;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,7 +25,6 @@ public class ReplyController implements Initializable {
     private UserListener userListener;
     private Message message;
     private UUID senderId;
-
 
     @FXML
     private Button close;
@@ -43,8 +45,7 @@ public class ReplyController implements Initializable {
         userListener.closeMsgListener();
     }
 
-
-    public void setData(Message message, UserListener userListener){
+    public void setData(Message message, UserListener userListener) {
         this.userListener = userListener;
         this.message = message;
         this.senderId = message.getSender();
@@ -54,22 +55,34 @@ public class ReplyController implements Initializable {
 
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         send.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(), replyMsgArea.getText(), null);
-                showAlert("", "");
+                try {
+                    userService.sendMessage(UUID.randomUUID(), message.getReceiver(), message.getSender(),
+                            replyMsgArea.getText(), null);
+                        showInformation(SuccessMessages.MESSAGE_SENT, null);
+                        SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+                } catch (Exception e) {
+                    showError(FailMessages.MESSAGE_SEND_FAIL, e.getMessage());
+                }
             }
 
         });
     }
 
-    private void showAlert(String header, String content) {
+    private void showInformation(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    private void showError(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.show();

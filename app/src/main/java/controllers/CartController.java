@@ -2,32 +2,29 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import models.entities.Ingredient;
-import models.entities.Recipe;
+import models.entities.User;
 import services.IngredientService;
+import services.UserService;
 import services.impl.IngredientServiceImpl;
+import services.impl.UserServiceImpl;
+import util.common.SceneContext;
 import util.common.UserListener;
-import util.exceptions.recipe.InvalidRecipeIngredientsCountException;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
-public class CartController implements Initializable {
+public class CartController {
     private UserListener userListener;
+    private User user = SceneContext.getUser();
     private Ingredient ingredient;
-
 
     @FXML
     private GridPane ingredientsGrid;
@@ -41,12 +38,14 @@ public class CartController implements Initializable {
     }
 
     private IngredientService ingredientService = new IngredientServiceImpl();
-    private Map<Ingredient, Integer> ingredientsList = new HashMap<>();
+    private UserService userService = new UserServiceImpl();
+    private Map<Ingredient, Integer> ingredientsList = userService.getUserCartById(user.getId());
 
 
 
 
     private void initializeIngredientGrid(){
+        // ingredientsScroll.setPrefWidth(350);
         ingredientsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         ingredientsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Set<Ingredient> ingredients = ingredientsList.keySet();
@@ -55,12 +54,13 @@ public class CartController implements Initializable {
         try {
             for (Ingredient ingredient : ingredients) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientForCart.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
-                IngredientCartController ingredientCartController = fxmlLoader.getController();
+                // IngredientCartController ingredientCartController = fxmlLoader.getController();
+                IngredientItemController ingredientItemController = fxmlLoader.getController();
                 Integer quantity = ingredientsList.get(ingredient);
-                ingredientCartController.setData(ingredient, quantity, userListener);
-
+                // ingredientCartController.setData(ingredient, quantity, userListener);
+                ingredientItemController.setData(ingredient, quantity, "CartController", userListener);
                 if (column == 1) {
                     column = 0;
                     row++;
@@ -86,12 +86,8 @@ public class CartController implements Initializable {
 
     public void setData(UserListener userListener) {
         this.userListener = userListener;
+        initializeIngredientGrid();
+
     }
 
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-//        initializeIngredientGrid();
-    }
 }

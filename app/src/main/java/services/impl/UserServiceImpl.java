@@ -2,11 +2,8 @@ package services.impl;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import models.entities.Ingredient;
@@ -19,6 +16,9 @@ import util.common.Hasher;
 import util.common.SceneContext;
 import util.common.Validator;
 import util.constants.Variables;
+import util.exceptions.comment.InvalidCommentLengthException;
+import util.exceptions.common.InvalidLengthException;
+import util.exceptions.message.InvalidMessageTextException;
 import util.exceptions.user.InvalidEmailException;
 import util.exceptions.user.InvalidNicknameLengthException;
 import util.exceptions.user.InvalidPasswordComplexityException;
@@ -27,6 +27,7 @@ import util.exceptions.user.InvalidUserNameLengthException;
 import util.exceptions.user.TakenEmailException;
 import util.exceptions.user.TakenNicknameException;
 import util.exceptions.user.TakenUsernameException;
+import util.exceptions.user.UserReceiverCannotBeSenderException;
 
 public class UserServiceImpl implements UserService {
     private DbContext dbContext;
@@ -42,12 +43,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addUser(UUID userId, String username, String email, String password) throws TakenUsernameException, InvalidUserNameLengthException, TakenEmailException, InvalidEmailException, InvalidPasswordLengthException, InvalidPasswordComplexityException, NoSuchAlgorithmException {
-            validateUsername(username);
-            validateEmail(email);
-            validatePassword(password);
-            String hashedPassword = Hasher.hashString(password);
-            return dbContext.addUser(userId, username, email, hashedPassword);
+    public String addUser(UUID userId, String username, String email, String password)
+            throws TakenUsernameException, InvalidUserNameLengthException, TakenEmailException, InvalidEmailException,
+            InvalidPasswordLengthException, InvalidPasswordComplexityException, NoSuchAlgorithmException {
+        validateUsername(username);
+        validateEmail(email);
+        validatePassword(password);
+        String hashedPassword = Hasher.hashString(password);
+        return dbContext.addUser(userId, username, email, hashedPassword);
     }
 
     @Override
@@ -56,56 +59,61 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changeUsername(UUID userId, String username) throws TakenUsernameException, InvalidUserNameLengthException {
-            validateUsername(username);
-            User user = dbContext.getUserById(userId);
-            user.setUsername(username);
-            return dbContext.userChangeUsername(userId, username);
+    public String changeUsername(UUID userId, String username)
+            throws TakenUsernameException, InvalidUserNameLengthException {
+        validateUsername(username);
+        User user = dbContext.getUserById(userId);
+        user.setUsername(username);
+        return dbContext.userChangeUsername(userId, username);
     }
 
     @Override
-    public String changeNickname(UUID userId, String nickname) throws InvalidNicknameLengthException, TakenNicknameException {
-            validateNickname(nickname);
-            User user = dbContext.getUserById(userId);
-            user.setNickname(nickname);
-            return dbContext.userChangeNickname(userId, nickname);
+    public String changeNickname(UUID userId, String nickname)
+            throws InvalidNicknameLengthException, TakenNicknameException {
+        validateNickname(nickname);
+        User user = dbContext.getUserById(userId);
+        user.setNickname(nickname);
+        return dbContext.userChangeNickname(userId, nickname);
     }
 
     @Override
     public String changeEmail(UUID userId, String email) throws TakenEmailException, InvalidEmailException {
-            validateEmail(email);
-            User user = dbContext.getUserById(userId);
-            user.setEmail(email);
-            return dbContext.userChangeEmail(userId, email);
+        validateEmail(email);
+        User user = dbContext.getUserById(userId);
+        user.setEmail(email);
+        return dbContext.userChangeEmail(userId, email);
     }
 
     @Override
-    public String changePassword(UUID userId, String password) throws InvalidPasswordLengthException, InvalidPasswordComplexityException, NoSuchAlgorithmException {
-            validatePassword(password);
-            User user = dbContext.getUserById(userId);
-            String hashedPassword = Hasher.hashString(password);
-            user.setPassword(hashedPassword);
-            return dbContext.userChangePassword(userId, hashedPassword);
-        
+    public String changePassword(UUID userId, String password)
+            throws InvalidPasswordLengthException, InvalidPasswordComplexityException, NoSuchAlgorithmException {
+        validatePassword(password);
+        User user = dbContext.getUserById(userId);
+        String hashedPassword = Hasher.hashString(password);
+        user.setPassword(hashedPassword);
+        return dbContext.userChangePassword(userId, hashedPassword);
+
     }
 
     @Override
-    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, UUID recipeId) {
-        // TODO: validateMessageText(message)
-        dbContext.sendMessage(messageId, senderId, receiverId, message);
+    public String sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, UUID recipeId)
+            throws InvalidMessageTextException, UserReceiverCannotBeSenderException {
+        validateMessageText(message);
+        if (senderId.equals(receiverId)) {
+            throw new UserReceiverCannotBeSenderException();
+        }
+        dbContext.sendMessage(messageId, senderId, receiverId, message, recipeId);
         return null;
     }
 
     @Override
-    public String addToCart(UUID ingredientId, int amount) {
-        // TODO Auto-generated method stub
-        return null;
+    public String addToCart(UUID userId, UUID ingredientId, int amount) {
+        return dbContext.addToCart(userId, ingredientId, amount);
     }
 
     @Override
-    public String removeFromCart(UUID ingredientId) {
-        // TODO Auto-generated method stub
-        return null;
+    public String removeFromCart(UUID userId, UUID ingredientId) {
+        return dbContext.removeFromCart(userId, ingredientId);
     }
 
     @Override
@@ -137,21 +145,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addComment(UUID commentId) {
-        // TODO Auto-generated method stub
-        return null;
+    public String addComment(UUID commentId, UUID userId, UUID recipeId, String commentText) throws InvalidCommentLengthException {
+        validateComment(commentText);
+        return dbContext.addComment(commentId, userId, recipeId, commentText);
     }
 
     @Override
-    public String editComment(UUID oldCommentId, UUID newCommentId) {
-        // TODO Auto-generated method stub
-        return null;
+    public String editComment(UUID commentId, String commentText) throws InvalidCommentLengthException {
+        validateComment(commentText);
+        return dbContext.editComment(commentId, commentText);
     }
 
     @Override
     public String removeComment(UUID commentId) {
-        // TODO Auto-generated method stub
-        return null;
+        return dbContext.removeCommentById(commentId);
     }
 
     @Override
@@ -189,16 +196,6 @@ public class UserServiceImpl implements UserService {
         return dbContext.getWeeklyListByUserId(userId);
     }
 
-    // @Override
-    // public Map<Recipe, LocalDate> getPlanRecipes(UUID userId) {
-    //     Set<Recipe> recipeSet = getWeeklyPlan(userId).keySet();
-    //     List<Recipe> recipes = new ArrayList<>();
-    //     for (Recipe recipe : recipeSet) {
-    //         recipes.add(recipe);
-    //     }
-    //     return recipes;
-    // }
-
     @Override
     public List<User> getUsersLike(String text) {
         return dbContext.getUsersLike(text);
@@ -226,7 +223,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void validateMessageText(String message) throws InvalidMessageTextException {
+        try {
+            Validator.validateStringLength(message, Variables.MIN_MESSAGE_TEXT_LENGTH,
+                    Variables.MAX_MESSAGE_TEXT_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidMessageTextException();
+        }
+    }
+
+    @Override
     public Map<Ingredient, Integer> getUserCartById(UUID id) {
         return dbContext.getCartByUserId(id);
     }
+
+    private void validateComment(String commentText) throws InvalidCommentLengthException {
+        try {
+            Validator.validateStringLength(commentText, Variables.MIN_COMMENT_TEXT_LENGTH,
+                    Variables.MAX_COMMENT_TEXT_LENGTH);
+        } catch (InvalidLengthException e) {
+            throw new InvalidCommentLengthException();
+        }
+    }
+
 }
