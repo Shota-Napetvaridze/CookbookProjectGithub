@@ -18,6 +18,10 @@
     -fx-background-radius: 30px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
+
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
 .transparent{
     -fx-background: transparent;
     -fx-background-color: rgba(0,0,0,0);
@@ -37,7 +41,7 @@
 
 
 }
-.text-area .scroll-bar:vertical:disabled {
+.text-areaForScroll .scroll-bar:vertical:disabled {
     -fx-opacity: 0;
 }
 
