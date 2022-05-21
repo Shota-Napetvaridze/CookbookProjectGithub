@@ -2,13 +2,9 @@ package services.impl;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
@@ -106,7 +102,7 @@ public class UserServiceImpl implements UserService {
         if (senderId.equals(receiverId)) {
             throw new UserReceiverCannotBeSenderException();
         }
-        dbContext.sendMessage(messageId, senderId, receiverId, message, recipeId);
+        dbContext.sendMessage(messageId, senderId, receiverId, message, false, recipeId);
         return null;
     }
 

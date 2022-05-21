@@ -8,8 +8,6 @@ import java.util.UUID;
 import models.entities.Comment;
 import models.entities.Ingredient;
 import models.entities.Recipe;
-import models.entities.Tag;
-import util.exceptions.comment.InvalidCommentLengthException;
 import util.exceptions.recipe.InvalidRecipeDescriptionLengthException;
 import util.exceptions.recipe.InvalidRecipeIngredientsCountException;
 import util.exceptions.recipe.InvalidRecipeInstructionsLengthException;

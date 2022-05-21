@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -158,7 +156,7 @@ public class DbContext {
             if (!message[5].equals("NULL")) {
                 recipeId = UUID.fromString(message[5]);
             }
-            sendMessage(messageId, senderId, receiverId, text, recipeId);
+            sendMessage(messageId, senderId, receiverId, text, isRead, recipeId);
         }
         System.out.println("Imported " + counter + " messages.");
 
@@ -726,7 +724,7 @@ public class DbContext {
         }
     }
 
-    public void sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, UUID recipeId) {
+    public void sendMessage(UUID messageId, UUID senderId, UUID receiverId, String message, Boolean isRead, UUID recipeId) {
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addMessage);
@@ -734,7 +732,7 @@ public class DbContext {
             ps.setString(2, senderId.toString());
             ps.setString(3, receiverId.toString());
             ps.setString(4, message);
-            ps.setBoolean(5, false);
+            ps.setBoolean(5, isRead);
             if (recipeId != null) {
                 ps.setString(6, recipeId.toString());
             } else {

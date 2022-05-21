@@ -1,10 +1,8 @@
 package models.entities;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import util.constants.FailMessages;
 import util.constants.SuccessMessages;

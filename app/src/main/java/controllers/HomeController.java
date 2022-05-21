@@ -1037,6 +1037,7 @@ public class HomeController implements Initializable {
         home.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                comboBox.setPromptText(user.getNickname());
                 getMessages();
                 recipeImg.setVisible(true);
                 recipeLbl.setVisible(true);

@@ -22,18 +22,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public String changeTagName(Tag tag, String name) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String removeTag(Tag tag) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<Tag> getAllTags(UUID userId) {
         return dbContext.getAllTags(userId);
     }
