@@ -1,7 +1,7 @@
 package util.constants;
 
 public class Variables {
-    public static final int DATABASE_PORT = 8889;
+    public static final int DATABASE_PORT = 3306;
     public static final String DATABASE_USER = "root";
     public static final String DATABASE_PASS = "root";
 

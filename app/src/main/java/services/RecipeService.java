@@ -56,4 +56,9 @@ public interface RecipeService {
 
     public Comment getCommentById(UUID commentId);
 
+    public void addTagToRecipe(UUID tagId, UUID recipeId);
+
+    public void removeTagFromRecipe(UUID recipeId, UUID tagId);
+
+    public void editRecipeImage(UUID recipeId, String picturePath);
 }

@@ -153,7 +153,7 @@
                            </children></AnchorPane>
                         <AnchorPane fx:id="anchorPaneBelowFilter" prefHeight="502.0" prefWidth="316.0">
                            <children>
-                              <VBox alignment="CENTER" prefHeight="487.0" prefWidth="316.0">
+                              <VBox alignment="CENTER" prefHeight="443.0" prefWidth="316.0">
                                  <children>
                                     <HBox alignment="TOP_CENTER" prefHeight="41.0" prefWidth="316.0" style="-fx-background-color: #f8d6d6#f8d6d6;">
                                        <children>
@@ -187,18 +187,13 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
                                        <children>
-                                          <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703; -fx-border-color: #000000#000000;" text="Add a new recipe">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font></Button>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="69.0" prefWidth="316.0">
-                                       <children>
                                           <Button fx:id="addToPlan" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED700 FED700; -fx-border-color: #000000#000000;" text="Add to Plan">
                                              <graphic>
                                                 <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: FED703; -fx-border-color: #000000;" />
                                              </graphic>
+                                             <font>
+                                                <Font name="System Bold" size="13.0" />
+                                             </font>
                                           </Button>
                                        </children>
                                     </HBox>
@@ -215,6 +210,15 @@
                               </VBox>
                            </children>
                         </AnchorPane>
+                        <HBox alignment="CENTER" prefHeight="156.0" prefWidth="316.0">
+                           <children>
+                              <Button fx:id="addNewRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: FED703; -fx-border-color: #000000#000000;" text="Add a new recipe">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -273,9 +277,9 @@
                               <Label fx:id="cartCount" alignment="CENTER" layoutX="374.0" layoutY="6.0" prefHeight="24.0" prefWidth="21.0" text="2" />
                               <Button fx:id="cart" layoutX="332.0" layoutY="11.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="31.0" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="35.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="35.0" fitWidth="37.0" pickOnBounds="true">
                                        <image>
-                                          <Image url="@../img/ic_cart.png" />
+                                          <Image url="@../img/cart.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

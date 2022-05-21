@@ -9,6 +9,7 @@ import java.util.UUID;
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
+import models.entities.Tag;
 import models.entities.User;
 import util.exceptions.comment.InvalidCommentLengthException;
 import util.exceptions.message.InvalidMessageTextException;
@@ -94,4 +95,6 @@ public interface UserService {
                         throws InvalidPasswordLengthException, InvalidPasswordComplexityException;
 
         public void validateMessageText(String message) throws InvalidMessageTextException;
+
+        public List<Tag> getUserRecipeTags(UUID userId, UUID recipeId);
 }

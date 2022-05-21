@@ -7,9 +7,10 @@ public class SqlQueries {
 
         // CREATE -------------
         public static final String createDatabase = "CREATE DATABASE Cookbook"; // modified here
-        public static final String createTableTags = "CREATE TABLE tags ("
+        public static final String createTableUserTags = "CREATE TABLE users_tags ("
                         + "id CHAR(38) NOT NULL PRIMARY KEY,"
-                        + "tag_name VARCHAR(30) NOT NULL"
+                        + "tag_name VARCHAR(30) NOT NULL,"
+                        + "user_id CHAR(38)"
                         + ");";
 
         public static final String createTableUsers = "CREATE TABLE users ("
@@ -79,7 +80,7 @@ public class SqlQueries {
                         + "recipe_id CHAR(38) NOT NULL "
                         + "REFERENCES recipes(id),"
                         + "tag_id CHAR(38) NOT NULL "
-                        + "REFERENCES tags(id),"
+                        + "REFERENCES users_tags(id),"
                         + "PRIMARY KEY(recipe_id, tag_id)"
                         + ");";
 
@@ -119,9 +120,9 @@ public class SqlQueries {
                         "id, username, display_name, email, password) \n" +
                         "VALUES (?, ?, ?, ?, ?)";
 
-        public static final String addTag = "INSERT INTO tags (\n" +
-                        "id, tag_name) \n" +
-                        "VALUES (?, ?)";
+        public static final String addTag = "INSERT INTO users_tags (\n" +
+                        "id, tag_name, user_id) \n" +
+                        "VALUES (?, ?, ?)";
 
         public static final String addMessage = "INSERT INTO messages (\n" +
                         "id, sender_id, receiver_id, message_text, is_read, recipe_id) \n" +
@@ -197,9 +198,15 @@ public class SqlQueries {
 
         public static final String removeIngredientFromCart = "DELETE FROM users_ingredients WHERE user_id = ? AND ingredient_id = ?";
         
-        public static final String getAllTags = "SELECT * FROM tags";
+        public static final String removeRecipeTagById = "DELETE FROM recipes_tags WHERE recipe_id = ? AND tag_id = ?";
+        
+        public static final String removeRecipeIngredientsByRecipeId = "DELETE FROM recipes_ingredients WHERE recipe_id = ?";
+        
+        public static final String getAllTags = "SELECT * FROM users_tags WHERE user_id IS NULL OR user_id = ?";
 
-        public static final String getTagById = "SELECT * FROM tags WHERE id = ?";
+        public static final String getTagByName = "SELECT * FROM users_tags WHERE tag_name = ? AND user_id IS NULL OR user_id = ?";
+
+        public static final String getTagById = "SELECT * FROM users_tags WHERE id = ?";
 
         public static final String getCommentById = "SELECT * FROM comments WHERE id = ?";
 
@@ -209,7 +216,8 @@ public class SqlQueries {
 
         public static final String getIngredientsWithNameLike = "SELECT * FROM ingredients WHERE ingredient_name LIKE ?";
 
-        public static final String getTagsWithNameLike = "SELECT * FROM tags WHERE tag_name LIKE ?";
+        public static final String getTagsWithNameLike = "SELECT * FROM users_tags WHERE user_id = ? OR user_id IS NULL AND tag_name LIKE ?";
+
 
         // UPDATE -------------
         public static final String updateUsername = "UPDATE users SET username = ? WHERE id = ?";
@@ -232,4 +240,13 @@ public class SqlQueries {
 
         public static final String removeRecipeFavorite = "DELETE FROM users_favorites WHERE user_id = ? AND recipe_id = ?";
 
+        public static final String editRecipeName = "UPDATE recipes SET recipe_name = ? WHERE id = ?";
+
+        public static final String editRecipeDescription = "UPDATE recipes SET recipe_description = ? WHERE id =?";
+
+        public static final String editRecipeInstructions = "UPDATE recipes SET instructions = ? WHERE id = ?";
+
+        public static final String editRecipeServeSize = "UPDATE recipes SET serving_size = ? WHERE id = ?";
+
+        public static final String editRecipeImage = "UPDATE recipes SET picture = ? WHERE id = ?";
 }

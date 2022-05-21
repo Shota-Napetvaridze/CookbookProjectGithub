@@ -16,7 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -27,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Map.Entry;
-
 import javafx.util.Duration;
 import models.entities.Comment;
 import models.entities.Ingredient;
@@ -36,7 +35,6 @@ import models.entities.Message;
 import models.entities.Recipe;
 import models.entities.Tag;
 import models.entities.User;
-
 import services.impl.IngredientServiceImpl;
 import services.impl.RecipeServiceImpl;
 import services.impl.TagServiceImpl;
@@ -185,20 +183,27 @@ public class HomeController implements Initializable {
 
     private List<Ingredient> ingredientsList = ingredientService.getAllIngredients();
     private List<Ingredient> selectedIngredients = new ArrayList<>();
-    private List<Tag> tagList = tagService.getAllTags();
+    private List<Tag> tagList = tagService.getAllTags(user.getId());
     private List<Tag> selectedTags = new ArrayList<>();
 
     private void chosenRecipe(Recipe recipe) {
-        this.recipe = recipe;
-        image = recipe.getPicture();
-        recipeImg.setImage(image);
-        recipeLbl.setText(recipe.getName());
-        if (user.getWeeklyList().keySet().contains(recipe.getId())) {
-            removeFromPlan.setVisible(true);
-            addToPlan.setVisible(false);
+        if (recipe == null) {
+            anchorPaneBelowFilter.setVisible(false);
         } else {
-            removeFromPlan.setVisible(false);
-            addToPlan.setVisible(true);
+            anchorPaneBelowFilter.setVisible(true);
+            this.recipe = recipe;
+            image = recipe.getPicture();
+            recipeImg.setVisible(true);
+            recipeImg.setImage(image);
+            recipeLbl.setVisible(true);
+            recipeLbl.setText(recipe.getName());
+            if (user.getWeeklyList().keySet().contains(recipe.getId())) {
+                removeFromPlan.setVisible(true);
+                addToPlan.setVisible(false);
+            } else {
+                removeFromPlan.setVisible(false);
+                addToPlan.setVisible(true);
+            }
         }
     }
 
@@ -213,7 +218,7 @@ public class HomeController implements Initializable {
         int row = 1;
         try {
             if (!recipeList.contains(recipe)) {
-                chosenRecipe(recipeList.get(0));
+                chosenRecipe(null);
             }
             for (int i = 0; i < recipeList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
@@ -381,7 +386,7 @@ public class HomeController implements Initializable {
         }
     }
 
-    private void initializeAddNewRecipeGrid() {
+    private void initializeAddNewRecipeGrid(Recipe recipe) {
         grid.getChildren().clear();
         recipeImg.setVisible(false);
         recipeLbl.setVisible(false);
@@ -390,6 +395,10 @@ public class HomeController implements Initializable {
         fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/addNewRecipe.fxml"));
         try {
             AnchorPane anchorPane = fxmlLoader.load();
+            NewRecipeController newRecipeController = fxmlLoader.getController();
+            if (recipe != null) {
+                newRecipeController.setData(recipe);
+            }
             grid.add(anchorPane, 1, 1);
             grid.setAlignment(Pos.CENTER);
             grid.setStyle("-fx-background-color: #ffa9a9");
@@ -411,13 +420,24 @@ public class HomeController implements Initializable {
     private void initializeTagGrid() {
         int column = 0;
         int row = 1;
+        gridTag.getChildren().clear();
         try {
             for (int i = 0; i < tagList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/tag.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 TagController tagController = fxmlLoader.getController();
-                tagController.setData(tagList.get(i), userListener);
+
+                List<UUID> selectedTagsIds = new ArrayList<>();
+                for (Tag tag : selectedTags) {
+                    selectedTagsIds.add(tag.getId());
+                }
+
+                if (selectedTagsIds.contains(tagList.get(i).getId())) {
+                    tagController.checkBox();
+                }
+
+                tagController.setData(tagList.get(i), "HomeController", userListener);
 
                 if (column == 1) {
                     column = 0;
@@ -444,12 +464,25 @@ public class HomeController implements Initializable {
     private void initializeIngredientGrid() {
         int column = 0;
         int row = 1;
+        gridIngredient.getChildren().clear();
         try {
             for (int i = 0; i < ingredientsList.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredient.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientController ingredientController = fxmlLoader.getController();
+
+                // Adds the checkbox to selected ingredients
+                List<UUID> selectedIngredientsIds = new ArrayList<>();
+                for (Ingredient ingredient : selectedIngredients) {
+                    selectedIngredientsIds.add(ingredient.getId());
+                }
+
+                if (selectedIngredientsIds.contains(ingredientsList.get(i).getId())) {
+                    ingredientController.checkBox();
+                }
+                //
+
                 ingredientController.setData(ingredientsList.get(i), userListener);
 
                 if (column == 1) {
@@ -616,7 +649,7 @@ public class HomeController implements Initializable {
 
         // Slider -------------------------------------------------//
         filterPane.setVisible(false);
-        anchorPaneBelowFilter.setTranslateY(-176);
+        anchorPaneBelowFilter.setTranslateY(-166);
         filter.setOnMousePressed(event -> {
             gridTag.getChildren().clear();
             gridIngredient.getChildren().clear();
@@ -631,7 +664,7 @@ public class HomeController implements Initializable {
             TranslateTransition slide2 = new TranslateTransition();
             slide2.setDuration(Duration.seconds(0.7));
             slide2.setNode(anchorPaneBelowFilter);
-            slide2.setToY(-176);
+            slide2.setToY(-166);
             slide2.play();
             anchorPaneBelowFilter.setTranslateY(0);
             // ----------------------------------------------------//
@@ -661,9 +694,8 @@ public class HomeController implements Initializable {
             slide2.setNode(anchorPaneBelowFilter);
             slide2.setToY(0);
             slide2.play();
-            anchorPaneBelowFilter.setTranslateY(-176);
+            anchorPaneBelowFilter.setTranslateY(-166);
             // ----------------------------------------------------//
-
             slide.setOnFinished((ActionEvent e) -> {
                 filter.setVisible(true);
                 filterBack.setVisible(false);
@@ -673,184 +705,196 @@ public class HomeController implements Initializable {
 
         // ------------------------------------------------------------------- MY
         // LISTENER
-        if (recipeList.size() > 0) {
-            chosenRecipe(recipeList.get(0));
-            userListener = new UserListener() {
-                // When the user clicks on a specific recipe
-                @Override
-                public void onClickListener(Recipe recipe) {
-                    chosenRecipe(recipe);
-                }
+        chosenRecipe(null);
+        userListener = new UserListener() {
+            // When the user clicks on a specific recipe
+            @Override
+            public void onClickListener(Recipe recipe) {
+                chosenRecipe(recipe);
+            }
 
-                @Override
-                public void descriptionListener(Recipe recipe) {
-                    chosenRecipe(recipe);
-                }
+            @Override
+            public void descriptionListener(Recipe recipe) {
+                chosenRecipe(recipe);
+            }
 
-                // When the User clicks on the heart button
-                @Override
-                public void favClickListener(Recipe recipe, ImageView heartImage) {
-                    if (user.getFavorites().contains(recipe.getId())) {
-                        userService.removeFromFavorites(user.getId(), recipe.getId());
-                        favouriteRecipeList.remove(recipe);
-                        String imgFile = "/img/heartEmpty.png";
-                        Image empty = new Image(getClass().getResourceAsStream(imgFile));
-                        heartImage.setImage(empty);
-                    } else {
-                        userService.addToFavorites(user.getId(), recipe.getId());
-                        favouriteRecipeList.add(recipe);
-                        String imgFile = "/img/heartFilled.png";
-                        Image filled = new Image(getClass().getResourceAsStream(imgFile));
-                        heartImage.setImage(filled);
+            // When the User clicks on the heart button
+            @Override
+            public void favClickListener(Recipe recipe, ImageView heartImage) {
+                if (user.getFavorites().contains(recipe.getId())) {
+                    userService.removeFromFavorites(user.getId(), recipe.getId());
+                    favouriteRecipeList.remove(recipe);
+                    String imgFile = "/img/heartEmpty.png";
+                    Image empty = new Image(getClass().getResourceAsStream(imgFile));
+                    heartImage.setImage(empty);
+                } else {
+                    userService.addToFavorites(user.getId(), recipe.getId());
+                    favouriteRecipeList.add(recipe);
+                    String imgFile = "/img/heartFilled.png";
+                    Image filled = new Image(getClass().getResourceAsStream(imgFile));
+                    heartImage.setImage(filled);
+                }
+            }
+
+            // When the user clicks on a specific Ingredient
+            @Override
+            public void ingredientClickListener(Ingredient ingredient, ImageView ingredientButton) {
+                if (selectedIngredients.contains(ingredient)) {
+                    String imgFile = "/img/uncheck.png";
+                    Image uncheck = new Image(getClass().getResourceAsStream(imgFile));
+                    ingredientButton.setImage(uncheck);
+                    selectedIngredients.remove(ingredient);
+                } else {
+                    String imgFile = "/img/check.png";
+                    Image check = new Image(getClass().getResourceAsStream(imgFile));
+                    ingredientButton.setImage(check);
+                    selectedIngredients.add(ingredient);
+                }
+            }
+
+            // When the user clicks on a specific Tag
+            @Override
+            public void tagClickListener(Tag tag) { //(Tag tag, ImageView tagButton)
+                if (selectedTags.contains(tag)) {
+                    // String imgFile = "/img/uncheck.png";
+                    // Image uncheck = new Image(getClass().getResourceAsStream(imgFile));
+                    // tagButton.setImage(uncheck);
+                    selectedTags.remove(tag);
+                } else {
+                    // String imgFile = "/img/check.png";
+                    // Image check = new Image(getClass().getResourceAsStream(imgFile));
+                    // tagButton.setImage(check);
+                    selectedTags.add(tag);
+                }
+            }
+
+            @Override
+            public void recipeEntered(Recipe recipe, TextArea textArea) {
+                textArea.setVisible(true);
+                String[] descriptionWords = recipe.getDescription().split(" ");
+                StringBuilder shortDescription = new StringBuilder();
+                if (descriptionWords.length < 10) {
+                    for (int i = 0; i < descriptionWords.length; i++) {
+                        shortDescription.append(descriptionWords[i] + " ");
+                    }
+                } else {
+                    for (int i = 0; i < 10; i++) {
+                        shortDescription.append(descriptionWords[i] + " ");
                     }
                 }
+                textArea.setText(shortDescription.toString());
+                textArea.setOpacity(0.8);
+                textArea.setWrapText(true);
+            }
 
-                // When the user clicks on a specific Ingredient
-                @Override
-                public void ingredientClickListener(Ingredient ingredient, ImageView ingredientButton) {
-                    if (selectedIngredients.contains(ingredient)) {
-                        String imgFile = "/img/uncheck.png";
-                        Image uncheck = new Image(getClass().getResourceAsStream(imgFile));
-                        ingredientButton.setImage(uncheck);
-                        selectedIngredients.remove(ingredient);
-                    } else {
-                        String imgFile = "/img/check.png";
-                        Image check = new Image(getClass().getResourceAsStream(imgFile));
-                        ingredientButton.setImage(check);
-                        selectedIngredients.add(ingredient);
-                    }
+            @Override
+            public void recipeExited(Recipe recipe, TextArea textArea) {
+                textArea.setVisible(false);
+            }
+
+            @Override
+            public void replyMsgListener(Message message) {
+                chosenMsg(message);
+                openReplyGrid(message);
+            }
+
+            @Override
+            public void removeMsgListener(Message message) {
+                userService.removeMessageById(message.getId());
+                msgList.remove(message);
+                String messageCount = String.valueOf(msgList.size());
+                msgCountLbl.setText(messageCount);
+                initializeMsgGrid();
+            }
+
+            // ------------- Close Listeners---------------//
+            @Override
+            public void closeMsgListener() {
+
+                initializeMsgGrid();
+            }
+
+            @Override
+            public void closeOpenForDetailed() {
+                initializeHomeGrid();
+            }
+
+            @Override
+            public void closeSendMsgListener() {
+                initializeHomeGrid();
+            }
+
+            @Override
+            public void closeCartListener() {
+                initializeHomeGrid();
+            }
+
+            @Override
+            public void removeRecipeListener() {
+                recipeService.removeRecipe(recipe.getId());
+                recipeList.remove(recipe);
+                initializeHomeGrid();
+            }
+
+            @Override
+            public void shareTheRecipeListener() {
+
+                initializeSendMsgGrid(recipe);
+
+            }
+
+            @Override
+            public void openRecipeListener(Recipe recipe) {
+                chosenRecipe(recipe);
+                openDetailedGrid();
+            }
+
+            @Override
+            public void removeCommentListener(Comment comment) {
+                userService.removeComment(comment.getId());
+                openDetailedGrid();
+            }
+
+            @Override
+            public void editCommentListener(Comment comment, String text) {
+                try {
+                    userService.editComment(comment.getId(), text);
+                    showInformation(SuccessMessages.COMMENT_EDITED, null);
+                } catch (Exception e) {
+                    showError(FailMessages.COMMENT_EDIT_FAIL, e.getMessage());
                 }
+            }
 
-                // When the user clicks on a specific Tag
-                @Override
-                public void tagClickListener(Tag tag, ImageView tagButton) {
-                    if (selectedTags.contains(tag)) {
-                        String imgFile = "/img/uncheck.png";
-                        Image uncheck = new Image(getClass().getResourceAsStream(imgFile));
-                        tagButton.setImage(uncheck);
-                        selectedTags.remove(tag);
-                    } else {
-                        String imgFile = "/img/check.png";
-                        Image check = new Image(getClass().getResourceAsStream(imgFile));
-                        tagButton.setImage(check);
-                        selectedTags.add(tag);
-                    }
-                }
+            @Override
+            public void addIngredientToCart(Ingredient ingredient, Integer quantity) {
+                userService.addToCart(user.getId(), ingredient.getId(), quantity);
+                user.addIngredientToCart(ingredient.getId(), quantity);
+                cartCount.setText(String.valueOf(user.getCart().size()));
+            }
 
-                @Override
-                public void recipeEntered(Recipe recipe, TextArea textArea) {
-                    textArea.setVisible(true);
-                    String[] descriptionWords = recipe.getDescription().split(" ");
-                    StringBuilder shortDescription = new StringBuilder();
-                    if (descriptionWords.length < 10) {
-                        for (int i = 0; i < descriptionWords.length; i++) {
-                            shortDescription.append(descriptionWords[i] + " ");
-                        }
-                    } else {
-                        for (int i = 0; i < 10; i++) {
-                            shortDescription.append(descriptionWords[i] + " ");
-                        }
-                    }
-                    textArea.setText(shortDescription.toString());
-                    textArea.setOpacity(0.8);
-                    textArea.setWrapText(true);
-                }
+            @Override
+            public void removeIngredientFromCart(Ingredient ingredient) {
+                userService.removeFromCart(user.getId(), ingredient.getId());
+                user.removeIngredientFromCart(ingredient.getId());
+                cartCount.setText(String.valueOf(user.getCart().size()));
+                initializeCartGrid();
+            }
 
-                @Override
-                public void recipeExited(Recipe recipe, TextArea textArea) {
-                    textArea.setVisible(false);
-                }
+            @Override
+            public void editRecipeListener(Recipe recipe) {
+                initializeAddNewRecipeGrid(recipe);
+            }
 
-                @Override
-                public void replyMsgListener(Message message) {
-                    chosenMsg(message);
-                    openReplyGrid(message);
-                }
+            @Override
+            public void addTagToRecipe(Tag tag) { // (Tag tag, ImageView tagButton)
+                recipeService.addTagToRecipe(tag.getId(), recipe.getId());
+            }
 
-                @Override
-                public void removeMsgListener(Message message) {
-                    userService.removeMessageById(message.getId());
-                    msgList.remove(message);
-                    String messageCount = String.valueOf(msgList.size());
-                    msgCountLbl.setText(messageCount);
-                    initializeMsgGrid();
-                }
-
-                // ------------- Close Listeners---------------//
-                @Override
-                public void closeMsgListener() {
-
-                    initializeMsgGrid();
-                }
-
-                @Override
-                public void closeOpenForDetailed() {
-                    initializeHomeGrid();
-                }
-
-                @Override
-                public void closeSendMsgListener() {
-                    initializeHomeGrid();
-                }
-
-                @Override
-                public void closeCartListener() {
-                    initializeHomeGrid();
-                }
-
-                @Override
-                public void removeRecipeListener() {
-                    recipeService.removeRecipe(recipe.getId());
-                    recipeList.remove(recipe);
-                    initializeHomeGrid();
-                }
-
-                @Override
-                public void shareTheRecipeListener() {
-
-                    initializeSendMsgGrid(recipe);
-                    
-                }
-
-                @Override
-                public void openRecipeListener(Recipe recipe) {
-                    chosenRecipe(recipe);
-                    openDetailedGrid();
-                }
-
-                @Override
-                public void removeCommentListener(Comment comment) {
-                    userService.removeComment(comment.getId());
-                    openDetailedGrid();
-                }
-
-                @Override
-                public void editCommentListener(Comment comment, String text) {
-                    try {
-                        userService.editComment(comment.getId(), text);
-                        showInformation(SuccessMessages.COMMENT_EDITED, null);
-                    } catch (Exception e) {
-                        showError(FailMessages.COMMENT_EDIT_FAIL, e.getMessage());
-                    }
-                }
-
-                @Override
-                public void addIngredientToCart(Ingredient ingredient, Integer quantity) {
-                    userService.addToCart(user.getId(), ingredient.getId(), quantity);
-                    user.addIngredientToCart(ingredient.getId(), quantity);
-                    cartCount.setText(String.valueOf(user.getCart().size()));
-                }
-
-                @Override
-                public void removeIngredientFromCart(Ingredient ingredient) {
-                    userService.removeFromCart(user.getId(), ingredient.getId());
-                    user.removeIngredientFromCart(ingredient.getId());
-                    cartCount.setText(String.valueOf(user.getCart().size()));
-                    initializeCartGrid();
-                }
-            };
-
-        }
+            @Override
+            public void removeTagFromRecipe(Tag tag) {
+                recipeService.removeTagFromRecipe(recipe.getId(), tag.getId());
+            }
+        };
 
         // Initialize Home grid
         initializeHomeGrid();
@@ -871,7 +915,7 @@ public class HomeController implements Initializable {
                     boolean isValid = true;
 
                     // Search tags
-                    List<Tag> tags = tagService.getTagsByRecipeId(recipe.getId());
+                    List<Tag> tags = tagService.getTagsByRecipeId(user.getId(), recipe.getId());
                     Set<String> tagNames = new HashSet<>();
                     for (Tag tag : tags) {
                         tagNames.add(tag.getName());
@@ -904,24 +948,26 @@ public class HomeController implements Initializable {
                 selectedIngredients = new ArrayList<Ingredient>();
                 selectedTags = new ArrayList<Tag>();
                 initializeHomeGrid();
+                initializeIngredientGrid();
+                initializeTagGrid();
             }
         });
 
         searchIngredient.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                    gridIngredient.getChildren().clear();
-                    List<Ingredient> filteredIngredient = ingredientService.getIngredientWithNameLike(ingredientsSearchField.getText());
-                    ingredientsList = filteredIngredient;
-                    initializeIngredientGrid();
-
+                List<Ingredient> filteredIngredient = ingredientService
+                        .getIngredientWithNameLike(ingredientsSearchField.getText());
+                ingredientsList = filteredIngredient;
+                initializeIngredientGrid();
             }
         });
         searchTag.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 gridTag.getChildren().clear();
-                List<Tag> filteredTags = tagService.getTagsWithNameLike(tagsSearchField.getText());
+                List<Tag> filteredTags = tagService.getTagsWithNameLike(user.getId(), tagsSearchField.getText());
+                System.out.println(filteredTags.size());
                 tagList = filteredTags;
                 initializeTagGrid();
             }
@@ -982,7 +1028,7 @@ public class HomeController implements Initializable {
                 plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 home.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
-                initializeAddNewRecipeGrid();
+                initializeAddNewRecipeGrid(null);
             }
         });
 
@@ -998,6 +1044,7 @@ public class HomeController implements Initializable {
                 favorites.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
                 plan.setStyle("-fx-border-color: #000000;" + "-fx-background-color: rgb(254, 215, 0)");
 
+                recipeList = recipeService.getAllRecipes();
                 initializeHomeGrid();
             }
         });

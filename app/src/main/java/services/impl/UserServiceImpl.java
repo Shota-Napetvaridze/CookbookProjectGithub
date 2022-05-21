@@ -2,13 +2,17 @@ package services.impl;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import models.entities.Ingredient;
 import models.entities.Message;
 import models.entities.Recipe;
+import models.entities.Tag;
 import models.entities.User;
 import services.UserService;
 import util.common.DbContext;
@@ -244,6 +248,11 @@ public class UserServiceImpl implements UserService {
         } catch (InvalidLengthException e) {
             throw new InvalidCommentLengthException();
         }
+    }
+
+    @Override
+    public List<Tag> getUserRecipeTags(UUID userId, UUID recipeId) {
+        return dbContext.getTagsByRecipeId(userId, recipeId);
     }
 
 }

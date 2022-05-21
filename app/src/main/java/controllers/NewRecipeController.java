@@ -16,7 +16,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -27,8 +26,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.Map.Entry;
-
 import models.entities.Ingredient;
+import models.entities.Recipe;
 import models.entities.User;
 import services.IngredientService;
 import services.impl.IngredientServiceImpl;
@@ -36,7 +35,7 @@ import services.impl.RecipeServiceImpl;
 import util.common.NewRecipeListener;
 import util.common.SceneContext;
 import util.common.UserListener;
-
+import util.constants.SuccessMessages;
 public class NewRecipeController implements Initializable {
 
     @FXML
@@ -81,6 +80,17 @@ public class NewRecipeController implements Initializable {
     @FXML
     private TextField txtFilename;
 
+    @FXML
+    private Button sizeEight;
+
+    @FXML
+    private Button sizeFour;
+
+    @FXML
+    private Button sizeSix;
+
+    @FXML
+    private Button sizeTwo;
 
     private RecipeServiceImpl recipeService = new RecipeServiceImpl();
     private IngredientService ingredientService = new IngredientServiceImpl();
@@ -90,6 +100,8 @@ public class NewRecipeController implements Initializable {
     private User user = SceneContext.user;
     private File file;
     private Image image;
+    private Recipe recipe;
+    private Byte serveSize = 6;
 
     private List<Ingredient> allIngredients = new ArrayList<>();
     private List<Ingredient> filteredIngredients = new ArrayList<>();
@@ -103,7 +115,6 @@ public class NewRecipeController implements Initializable {
         stage.setTitle("Add Images");
         return stage;
     }
-
 
     private void initializeSelectedIngredientsGrid() {
         initializeGrid(selectedIngredients, recipeIngredientGrid, "SelectedNewRecipeController");
@@ -138,13 +149,14 @@ public class NewRecipeController implements Initializable {
         int column = 0;
         int row = 1;
         try {
-            for (Entry<Ingredient,Integer> ingredientEntry : ingredientsIntegers) {
+            for (Entry<Ingredient, Integer> ingredientEntry : ingredientsIntegers) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientItemController ingredientItemController = fxmlLoader.getController();
-                
-                ingredientItemController.setData(ingredientEntry.getKey(), ingredientEntry.getValue(), caller, userListener);
+
+                ingredientItemController.setData(ingredientEntry.getKey(), ingredientEntry.getValue(), caller,
+                        userListener);
                 ingredientItemController.setData(newRecipeListener);
 
                 if (column == 1) {
@@ -170,6 +182,41 @@ public class NewRecipeController implements Initializable {
         }
     }
 
+    public void setData(Recipe recipe) {
+        this.recipe = recipe;
+        addRecipe.setText("Save recipe");
+        recipeName.setText(recipe.getName());
+        recipeDescription.setText(recipe.getDescription());
+        recipeInstruction.setText(recipe.getInstructions());
+        newRecipeImg.setImage(recipe.getPicture());
+        serveSize = recipe.getServingSize();
+        selectedIngredients = ingredientService.getIngredientsByRecipeId(recipe.getId());
+        initializeGrid(selectedIngredients, recipeIngredientGrid, "SelectedNewRecipeController");
+
+        if (serveSize == 2) {
+            sizeTwo.setStyle("-fx-background-color: rgb(255, 255, 255)");
+            sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+        } else if (serveSize == 4) {
+            sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeFour.setStyle("-fx-background-color: rgb(255, 255, 255)");
+            sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+        } else if (serveSize == 6) {
+            sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeSix.setStyle("-fx-background-color: rgb(255, 255, 255)");
+            sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+        } else if (serveSize == 8) {
+            sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            sizeEight.setStyle("-fx-background-color: rgb(255, 255, 255)");
+        }
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         newRecipeListener = new NewRecipeListener() {
@@ -177,11 +224,17 @@ public class NewRecipeController implements Initializable {
             @Override
             public void addIngredientToRecipe(Ingredient ingredient, Integer quantity) {
                 selectedIngredients.put(ingredient, quantity);
-                System.out.println(ingredient + " - " + quantity);
                 initializeSelectedIngredientsGrid();
                 initializeAllIngredientsGrid();
             }
-            
+
+            @Override
+            public void removeIngredientFromRecipe(Ingredient ingredient) {
+                selectedIngredients.remove(ingredient);
+                initializeSelectedIngredientsGrid();
+                initializeAllIngredientsGrid();
+            }
+
         };
 
         ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -189,7 +242,7 @@ public class NewRecipeController implements Initializable {
         recipeIngredients.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         recipeIngredients.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         initializeAllIngredientsGrid();
-        
+
         addImage.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -212,22 +265,36 @@ public class NewRecipeController implements Initializable {
         addRecipe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                UUID recipeId = UUID.randomUUID();
-                String name = recipeName.getText();
-                String picturePath = txtFilename.getText();
-                String description = recipeDescription.getText();
-                String instructions = recipeInstruction.getText();
-                UUID authorId = user.getId();
-                Map<Ingredient, Integer> ingredients = new HashMap<>();
-                byte servingSize = Byte.parseByte(recipeServeSize.getText());
-                
-                try {
-                    recipeService.addRecipe(recipeId, name, picturePath, description, instructions, authorId,
-                            ingredients, servingSize);
-                    recipeService.addRecipeIngredients(recipeId, selectedIngredients);
-                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
-                } catch (Exception e) {
-                    showError(e.getMessage());
+                if (recipe != null) {
+                    try {
+                        recipeService.editRecipeName(recipe.getId(), recipeName.getText());
+                        recipeService.editRecipeDescription(recipe.getId(), recipeDescription.getText());
+                        recipeService.editRecipeInstructions(recipe.getId(), recipeInstruction.getText());
+                        recipeService.editRecipeServingSize(recipe.getId(), serveSize);
+                        recipeService.editRecipeImage(recipe.getId(), txtFilename.getText());
+                        recipeService.removeRecipeIngredientsByRecipeId(recipe.getId());
+                        recipeService.addRecipeIngredients(recipe.getId(), selectedIngredients);
+                        showInformation(SuccessMessages.RECIPE_EDITED, null);
+
+                    } catch (Exception e) {
+                        showError(e.getMessage());
+                    }
+                } else {
+                    UUID recipeId = UUID.randomUUID();
+                    String name = recipeName.getText();
+                    String picturePath = txtFilename.getText();
+                    String description = recipeDescription.getText();
+                    String instructions = recipeInstruction.getText();
+                    UUID authorId = user.getId();
+                    Map<Ingredient, Integer> ingredients = new HashMap<>();
+                    try {
+                        recipeService.addRecipe(recipeId, name, picturePath, description, instructions, authorId,
+                                ingredients, serveSize);
+                        recipeService.addRecipeIngredients(recipeId, selectedIngredients);
+                        SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
+                    } catch (Exception e) {
+                        showError(e.getMessage());
+                    }
                 }
             }
         });
@@ -239,6 +306,51 @@ public class NewRecipeController implements Initializable {
             }
         });
 
+        sizeTwo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                serveSize = 2;
+                sizeTwo.setStyle("-fx-background-color: rgb(255, 255, 255)");
+                sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+            }
+        });
+
+        sizeFour.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                serveSize = 4;
+                sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeFour.setStyle("-fx-background-color: rgb(255, 255, 255)");
+                sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+
+            }
+        });
+
+        sizeSix.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                serveSize = 6;
+                sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeSix.setStyle("-fx-background-color: rgb(255, 255, 255)");
+                sizeEight.setStyle("-fx-background-color: rgb(254, 215, 2505)");
+            }
+        });
+
+        sizeEight.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                serveSize = 8;
+                sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeEight.setStyle("-fx-background-color: rgb(255, 255, 255)");
+            }
+        });
+
     }
 
     private void showError(String message) {
@@ -247,4 +359,11 @@ public class NewRecipeController implements Initializable {
         alert.show();
     }
 
+    private void showInformation(String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.show();
+
+    }
 }

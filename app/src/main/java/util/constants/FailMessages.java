@@ -77,7 +77,14 @@ public class FailMessages {
         public static final String RECIPE_TAG_ADD_FAIL = "Could not add tag to recipe.\n";
         public static final String RECIPE_INGREDIENT_ADD_FAIL = "Could not add ingredient to recipe.\n";
         public static final String RECIPE_EDIT_FAIL = "Could not edit recipe.\n";
-
+        public static final String RECIPE_TAG_REMOVE_FAIL = "Could not remove tag from recipe.\n";
+        public static final String RECIPE_SET_NAME_FAIL = "Could not set recipe name.\n";
+        public static final String RECIPE_SET_DESC_FAIL = "Coult not set recipe description.\n";
+        public static final String RECIPE_SET_INSTRUCTIONS_FAIL = "Could not set recipe instructions.\n";
+        public static final String RECIPE_SET_SERVING_SIZE_FAIL = "Could not set recipe serving size.\n";
+        public static final String RECIPE_SET_PICTURE_FAIL = "Could not set recipe picture.\n";
+        public static final String RECIPE_DELETE_INGREDIENTS_FAIL = "Could not remove recipe ingredients.\n";
+        
         //
         // MESSAGE
         //
@@ -135,5 +142,6 @@ public class FailMessages {
         public static final String INVALID_COUNT = "Invalid count.\n";
         public static final String INVALID_INSTANCE = "Invalid instance.\n";
         public static final String INVALID_DATE = "Date cannot be before today.\n";
+        
 
 }

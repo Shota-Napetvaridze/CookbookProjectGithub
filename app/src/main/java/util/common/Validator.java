@@ -122,7 +122,6 @@ public class Validator {
         boolean hasDigit = false;
         for (int i = 0; i < password.length(); i++) { // Check for lowercase, uppercase and digit
             Character currChar = password.charAt(i);
-            System.out.println(currChar);
             if (Character.isLowerCase(currChar)
                     && !hasLowerCase) {
                 hasLowerCase = true;

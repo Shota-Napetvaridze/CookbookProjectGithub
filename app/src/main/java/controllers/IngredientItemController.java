@@ -31,13 +31,16 @@ public class IngredientItemController {
     private Button button;
 
     @FXML
+    private Label ingredientUnit;
+
+    @FXML
     void buttonAction(MouseEvent event) {
         if (caller.equals("DetailedViewController")) {
             userListener.addIngredientToCart(ingredient, quantity);
         } else if (caller.equals("NewRecipeController")) {
             newRecipeListener.addIngredientToRecipe(ingredient, Integer.parseInt(amountField.getText()));
         } else if (caller.equals("SelectedNewRecipeController")) {
-
+            newRecipeListener.removeIngredientFromRecipe(ingredient);
         } else if (caller.equals("CartController")) {
             userListener.removeIngredientFromCart(ingredient);
         }
@@ -56,6 +59,7 @@ public class IngredientItemController {
         this.userListener = userListener;
         this.quantity = quantity;
         ingredientLbl.setText(ingredient.getName());
+        ingredientUnit.setText(ingredient.getUnit());
         if (caller.equals("DetailedViewController")) {
             amountField.setEditable(false);
             amountField.setText(quantity.toString());

@@ -22,7 +22,7 @@
                 <Font size="23.0" />
             </font>
         </Button>
-        <ScrollPane fx:id="ingredientsScroll" layoutX="14.0" layoutY="71.0" prefHeight="594.0" prefWidth="363.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="14.0">
+        <ScrollPane fx:id="ingredientsScroll" layoutX="14.0" layoutY="71.0" prefHeight="594.0" prefWidth="308.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="14.0">
             <content>
                 <GridPane fx:id="ingredientsGrid" prefHeight="9.0" prefWidth="30.0">
                     <rowConstraints>

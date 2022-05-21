@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -18,19 +19,19 @@ import javafx.scene.layout.Region;
 import models.entities.Comment;
 import models.entities.Ingredient;
 import models.entities.Recipe;
+import models.entities.Tag;
 import models.entities.User;
 import services.IngredientService;
 import services.RecipeService;
+import services.TagService;
 import services.UserService;
 import services.impl.IngredientServiceImpl;
 import services.impl.RecipeServiceImpl;
+import services.impl.TagServiceImpl;
 import services.impl.UserServiceImpl;
 import util.common.SceneContext;
 import util.common.UserListener;
 import util.constants.FailMessages;
-import util.exceptions.recipe.InvalidRecipeDescriptionLengthException;
-import util.exceptions.recipe.InvalidRecipeInstructionsLengthException;
-import util.exceptions.recipe.InvalidRecipeNameLengthException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -97,6 +98,24 @@ public class DetailedViewController implements Initializable {
     private TextArea servingSize;
 
     @FXML
+    private TextField tagTxtField;
+
+    @FXML
+    private Button addTag;
+
+    @FXML
+    private Button sizeEight;
+
+    @FXML
+    private Button sizeFour;
+
+    @FXML
+    private Button sizeSix;
+
+    @FXML
+    private Button sizeTwo;
+
+    @FXML
     void close(MouseEvent event) {
         userListener.closeOpenForDetailed();
     }
@@ -112,16 +131,23 @@ public class DetailedViewController implements Initializable {
     }
 
     private Recipe recipe;
+    private User user = SceneContext.getUser();
+
     private IngredientService ingredientService = new IngredientServiceImpl();
+    private TagService tagService = new TagServiceImpl();
     private RecipeService recipeService = new RecipeServiceImpl();
     private UserService userService = new UserServiceImpl();
+
     private Map<Ingredient, Integer> ingredientsList = new HashMap<>();
+    private List<Tag> tagsList = new ArrayList<>();
     private List<Comment> commentsList = new ArrayList<>();
-    private User user = SceneContext.getUser();
+
+    private List<UUID> addedTagsIds = new ArrayList<>();
 
     private void initializeIngredientGrid() {
         ingredientScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         ingredientScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ingredientsGrid.getChildren().clear();
         Set<Ingredient> ingredients = ingredientsList.keySet();
         int column = 0;
         int row = 1;
@@ -194,6 +220,49 @@ public class DetailedViewController implements Initializable {
 
     }
 
+    private void initializeTagsGrid() {
+        tagsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        tagsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        List<Tag> tags = tagService.getAllTags(user.getId());
+        
+
+        int column = 0;
+        int row = 1;
+        try {
+            tagsGrid.getChildren().clear();
+            for (Tag tag : tags) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/tag.fxml"));
+                AnchorPane anchorPane = fxmlLoader.load();
+                TagController tagController = fxmlLoader.getController();
+                Integer quantity = ingredientsList.get(tag);                
+                tagController.setData(tag, "DetailedViewController", userListener);
+                if (addedTagsIds.contains(tag.getId())) {
+                    tagController.setSelected(true);
+                }
+                if (column == 1) {
+                    column = 0;
+                    row++;
+                }
+                tagsGrid.add(anchorPane, column++, row);
+                // Set grid width
+                tagsGrid.setMinWidth(Region.USE_COMPUTED_SIZE);
+                tagsGrid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                tagsGrid.setMaxWidth(Region.USE_PREF_SIZE);
+
+                // Set grid height
+                tagsGrid.setMinHeight(Region.USE_COMPUTED_SIZE);
+                tagsGrid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                tagsGrid.setMaxHeight(Region.USE_PREF_SIZE);
+                GridPane.setMargin(anchorPane, new Insets(3));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+    }
+
+
     public void setData(Recipe recipe, UserListener userListener) {
         this.recipe = recipe;
         this.userListener = userListener;
@@ -201,24 +270,35 @@ public class DetailedViewController implements Initializable {
         recipeDescription.setText(recipe.getDescription());
         recipeImg.setImage(recipe.getPicture());
         recipeInstruction.setText(recipe.getInstructions());
-        ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());
+        if (recipe.getServingSize() == 2) {
+            sizeTwo.setStyle("-fx-background-color: rgb(255, 255, 255)");
+        } else if (recipe.getServingSize() == 4) {
+            sizeFour.setStyle("-fx-background-color: rgb(255, 255, 255)");
+        }else if (recipe.getServingSize() == 6) {
+            sizeSix.setStyle("-fx-background-color: rgb(255, 255, 255)");
+        }else if (recipe.getServingSize() == 8) {
+            sizeEight.setStyle("-fx-background-color: rgb(255, 255, 255)");
+        }
+
+        ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());;
+        tagsList = userService.getUserRecipeTags(user.getId(), recipe.getId());
+        addedTagsIds = tagService.getTagIdsByRecipeId(user.getId(), recipe.getId());
         commentsList = recipeService.getCommentsByRecipeId(recipe.getId());
+
         if (user.getId().equals(recipe.getAuthor())) {
             edit.setVisible(true);
             remove.setVisible(true);
-            recipeDescription.setEditable(true);
-            recipeInstruction.setEditable(true);
-            recipeName.setEditable(true);
-
         }
         initializeIngredientGrid();
         initializeCommentsGrid();
+        initializeTagsGrid();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeIngredientGrid();
         initializeCommentsGrid();
+
 
         addComment.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -238,32 +318,34 @@ public class DetailedViewController implements Initializable {
         edit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                StringBuilder errorMessage = new StringBuilder();
-                try {
-                    if (!recipe.getName().equals(recipeName.getText())) {
-                        recipeService.editRecipeName(recipe.getId(), recipeName.getText());
-                    }
-                } catch (InvalidRecipeNameLengthException e) {
-                    errorMessage.append(e.getMessage());
-                }
+                userListener.editRecipeListener(recipe);
+            }
+        });
 
-                try {
-                    if (!recipe.getDescription().equals(recipeDescription.getText())) {
-                        recipeService.editRecipeDescription(recipe.getId(), recipeDescription.getText());
+        addTag.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (tagService.getTagByName(user.getId(), tagTxtField.getText()) != null) {
+                    System.out.println("Found it");
+                    Tag tag = tagService.getTagByName(user.getId(), tagTxtField.getText());
+                    if (!addedTagsIds.contains(tag.getId())) {
+                        recipeService.addTagToRecipe(tag.getId(), recipe.getId());
+                        tagsList.add(tag);
+                        addedTagsIds.add(tag.getId());
+                        initializeTagsGrid();
+                    } else {
+                        showAlert(FailMessages.TAG_ADD_FAIL, "Tag already added");
                     }
-                } catch (InvalidRecipeDescriptionLengthException e) {
-                    errorMessage.append(e.getMessage());
-                }
+                } else {
+                    System.out.println("Didn't find it");
+                    UUID tagId = UUID.randomUUID();
+                    tagService.addTag(tagId, tagTxtField.getText(), user.getId());
+                    Tag tag = tagService.getTagById(tagId);
+                    recipeService.addTagToRecipe(tag.getId(), recipe.getId());
+                    tagsList.add(tag);
+                    addedTagsIds.add(tag.getId());
+                    initializeTagsGrid();
 
-                try {
-                    if (!recipe.getIngredients().equals(recipeInstruction.getText())) {
-                        recipeService.editRecipeInstructions(recipe.getId(), recipeInstruction.getText());
-                    }
-                } catch (InvalidRecipeInstructionsLengthException e) {
-                    errorMessage.append(e.getMessage());
-                }
-                if (!errorMessage.toString().equals("")) {
-                    showAlert(String.format(FailMessages.RECIPE_EDIT_FAIL), errorMessage.toString());
                 }
             }
         });
@@ -272,6 +354,74 @@ public class DetailedViewController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 recipeService.removeRecipe(recipe.getId());
+            }
+        });
+        
+        sizeTwo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());
+                sizeTwo.setStyle("-fx-background-color: rgb(255, 255, 255)");
+                sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+
+                for (Ingredient ingredient : ingredientsList.keySet()) {
+                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    ingredientsList.replace(ingredient, quantityForOne * 2);
+                }
+                initializeIngredientGrid();
+            }
+        });
+
+        sizeFour.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());
+                sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeFour.setStyle("-fx-background-color: rgb(255, 255, 255)");
+                sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+
+                for (Ingredient ingredient : ingredientsList.keySet()) {
+                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    ingredientsList.replace(ingredient, quantityForOne * 4);
+                }
+                initializeIngredientGrid();
+            }
+        });
+
+        sizeSix.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());
+                sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeSix.setStyle("-fx-background-color: rgb(255, 255, 255)");
+                sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
+
+                for (Ingredient ingredient : ingredientsList.keySet()) {
+                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    ingredientsList.replace(ingredient, quantityForOne * 6);
+                }
+                initializeIngredientGrid();
+            }
+        });
+   
+        sizeEight.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ingredientsList = ingredientService.getIngredientsByRecipeId(recipe.getId());
+                sizeTwo.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeFour.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeSix.setStyle("-fx-background-color: rgb(254, 215, 0)");
+                sizeEight.setStyle("-fx-background-color: rgb(255, 255, 255)");
+
+                for (Ingredient ingredient : ingredientsList.keySet()) {
+                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    ingredientsList.replace(ingredient, quantityForOne * 8);
+                }
+                initializeIngredientGrid();
             }
         });
     }

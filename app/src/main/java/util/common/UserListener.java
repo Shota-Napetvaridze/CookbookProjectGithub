@@ -16,7 +16,7 @@ public interface UserListener {
     public void descriptionListener(Recipe recipe);
     public void favClickListener(Recipe recipe, ImageView imageView);
     public void ingredientClickListener(Ingredient ingredient, ImageView ingredientButton);
-    public void tagClickListener(Tag tag, ImageView tagButton);
+    public void tagClickListener(Tag tag); //(Tag tag, ImageView tagButton)
 
     public void recipeEntered(Recipe recipe, TextArea textArea);
     public void recipeExited(Recipe recipe, TextArea textArea);
@@ -35,6 +35,10 @@ public interface UserListener {
     public void editCommentListener(Comment comment, String text);
     public void addIngredientToCart(Ingredient ingredient, Integer quantity);
     public void removeIngredientFromCart(Ingredient ingredient);
+    public void editRecipeListener(Recipe recipe);
+    
+    public void addTagToRecipe(Tag tag); // (Tag tag, ImageView tagButton)
+    public void removeTagFromRecipe(Tag tag);
 
 
 }

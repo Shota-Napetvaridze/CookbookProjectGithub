@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="36.0" prefWidth="150.0" style="-fx-background-color: ffa9a9;" styleClass="recipeAnchorStyle" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TagController">
    <children>
-      <HBox alignment="CENTER" prefHeight="34.0" prefWidth="140.0" spacing="5.0">
+      <HBox fx:id="size" alignment="CENTER" prefHeight="34.0" prefWidth="140.0" spacing="5.0">
          <children>
             <AnchorPane onMousePressed="#tagClick" prefHeight="34.0" prefWidth="25.0">
                <HBox.margin>

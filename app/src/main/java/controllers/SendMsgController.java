@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -17,7 +18,6 @@ import util.common.SceneContext;
 import util.common.UserListener;
 import util.constants.FailMessages;
 import util.constants.SuccessMessages;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -39,6 +39,9 @@ public class SendMsgController implements Initializable {
 
     @FXML
     private ImageView recipeImg;
+
+    @FXML
+    private Label successMessage;
 
     @FXML
     void close(MouseEvent event) {

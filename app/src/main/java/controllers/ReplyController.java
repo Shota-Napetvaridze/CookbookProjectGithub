@@ -15,7 +15,6 @@ import util.common.SceneContext;
 import util.common.UserListener;
 import util.constants.FailMessages;
 import util.constants.SuccessMessages;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -39,6 +38,9 @@ public class ReplyController implements Initializable {
 
     @FXML
     private Label sender;
+
+    @FXML
+    private Label successMessage;
 
     @FXML
     void closeMsgReply(MouseEvent event) {

@@ -39,13 +39,10 @@ public class CartController {
 
     private IngredientService ingredientService = new IngredientServiceImpl();
     private UserService userService = new UserServiceImpl();
+    // private List<Entry<Ingredient, Integer>> ingredientsList = userService.getUserCartById(user.getId());
     private Map<Ingredient, Integer> ingredientsList = userService.getUserCartById(user.getId());
 
-
-
-
     private void initializeIngredientGrid(){
-        // ingredientsScroll.setPrefWidth(350);
         ingredientsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         ingredientsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Set<Ingredient> ingredients = ingredientsList.keySet();
@@ -56,10 +53,8 @@ public class CartController {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
-                // IngredientCartController ingredientCartController = fxmlLoader.getController();
                 IngredientItemController ingredientItemController = fxmlLoader.getController();
                 Integer quantity = ingredientsList.get(ingredient);
-                // ingredientCartController.setData(ingredient, quantity, userListener);
                 ingredientItemController.setData(ingredient, quantity, "CartController", userListener);
                 if (column == 1) {
                     column = 0;

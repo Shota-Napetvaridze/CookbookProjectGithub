@@ -13,6 +13,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import javafx.scene.image.Image;
 import models.entities.Comment;
@@ -85,7 +86,7 @@ public class DbContext {
 
     public void createTables() throws SQLException {
         Statement stmt = conn.createStatement();
-        stmt.execute(SqlQueries.createTableTags);
+        stmt.execute(SqlQueries.createTableUserTags);
         stmt.execute(SqlQueries.createTableUsers);
         stmt.execute(SqlQueries.createTableMessages);
         stmt.execute(SqlQueries.createTableIngredients);
@@ -171,8 +172,12 @@ public class DbContext {
         for (String[] tag : tags) {
             UUID tagId = UUID.fromString(tag[0]);
             String name = tag[1];
+            UUID userId = null;
+            if (!tag[2].equals("NULL")) {
+                userId = UUID.fromString(tag[2]);
+            }
 
-            addTag(tagId, name);
+            addTag(tagId, name, userId);
             counter++;
         }
         System.out.println("Imported " + counter + " tags.");
@@ -925,11 +930,16 @@ public class DbContext {
         return ingredientIds;
     }
 
-    public List<Tag> getTagsByRecipeId(UUID recipeId) {
+    public List<Tag> getTagsByRecipeId(UUID userId, UUID recipeId) {
         List<Tag> tags = new ArrayList<>();
         List<UUID> tagIds = getTagIdsByRecipeId(recipeId);
         for (UUID tagId : tagIds) {
-            tags.add(getTagById(tagId));
+            Tag tag = getTagById(tagId);
+            if (tag != null) {
+                if (userId.equals(tag.getUser()) || tag.getUser() == null) {
+                    tags.add(tag);
+                }    
+            }
         }
         return tags;
     }
@@ -944,7 +954,6 @@ public class DbContext {
 
             while (rs.next()) {
                 UUID tagId = UUID.fromString(rs.getString("tag_id"));
-
                 tagIds.add(tagId);
             }
         } catch (SQLException e) {
@@ -1017,7 +1026,6 @@ public class DbContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Got " + ingredients.size() + " ingredients.");
         return ingredients;
     }
 
@@ -1081,18 +1089,19 @@ public class DbContext {
     }
 
     // ------------------- TAG -------------------//
-    public List<Tag> getAllTags() {
+    public List<Tag> getAllTags(UUID userId) {
         List<Tag> tags = new ArrayList<>();
         try {
             useDatabase();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(SqlQueries.getAllTags);
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getAllTags);
+            ps.setString(1, userId.toString());
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 UUID tagId = UUID.fromString(rs.getString("id"));
                 tags.add(getTagById(tagId));
             }
-            stmt.close();
+            ps.close();
             rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1110,8 +1119,11 @@ public class DbContext {
 
             if (rs.next()) {
                 String name = rs.getString("tag_name");
-
-                tag = new Tag(tagId, name);
+                UUID userId = null;
+                if (rs.getString("user_id") != null) {
+                    userId = UUID.fromString(rs.getString("user_id"));
+                }
+                tag = new Tag(tagId, name, userId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1138,12 +1150,17 @@ public class DbContext {
         }
     }
 
-    public String addTag(UUID tagId, String name) {
+    public String addTag(UUID tagId, String name, UUID userId) {
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.addTag);
             ps.setString(1, tagId.toString());
             ps.setString(2, name);
+            if (userId != null) {
+                ps.setString(3, userId.toString());
+            } else {
+                ps.setNull(3, java.sql.Types.VARCHAR);
+            }
 
             ps.execute();
             ps.close();
@@ -1256,12 +1273,13 @@ public class DbContext {
         }
     }
 
-    public List<Tag> getTagsWithNameLike(String name) {
+    public List<Tag> getTagsWithNameLike(UUID userId, String name) {
         List<Tag> tags = new ArrayList<>();
         try {
             useDatabase();
             PreparedStatement ps = conn.prepareStatement(SqlQueries.getTagsWithNameLike);
-            ps.setString(1, "%" + name + "%");
+            ps.setString(1, userId.toString());
+            ps.setString(2, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Tag tag = getTagById(UUID.fromString(rs.getString("id")));
@@ -1347,6 +1365,223 @@ public class DbContext {
         } catch (SQLException e) {
             return String.format(FailMessages.CART_REMOVE_INGREDIENT_FAIL);
         }
+
+    }
+
+    public String addRecipeIngredients(UUID recipeId, Map<Ingredient, Integer> selectedIngredients) {
+        try {
+            useDatabase();
+            for (Entry<Ingredient, Integer> ingredient : selectedIngredients.entrySet()) {
+                PreparedStatement ps = conn.prepareStatement(SqlQueries.addRecipeIngredient);
+                ps.setString(1, recipeId.toString());
+                ps.setString(2, ingredient.getKey().getId().toString());
+                ps.setInt(3, ingredient.getValue());
+    
+                ps.execute();
+                ps.close();
+            }
+            return String.format(SuccessMessages.RECIPE_INGREDIENT_ADDED);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return String.format(FailMessages.RECIPE_INGREDIENT_ADD_FAIL);
+        }
+
+    }
+
+    public String removeRecipeTagById(UUID recipeId, UUID tagId) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeRecipeTagById);
+            ps.setString(1, recipeId.toString());
+            ps.setString(2, tagId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_TAG_REMOVED);
+            } else {
+                return String.format(FailMessages.RECIPE_TAG_REMOVE_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_TAG_REMOVE_FAIL);
+        }
+
+    }
+
+    public List<UUID> getAllTagsIdsByRecipeId(UUID recipeId) {
+        List<UUID> recipeIds = new ArrayList<>();
+        // try {
+        //     useDatabase();
+        //     PreparedStatement ps = conn.prepareStatement(SqlQueries.getUserCart);
+        //     ps.setString(1, userId.toString());
+        //     ResultSet rs = ps.executeQuery();
+
+        //     while (rs.next()) {
+        //         UUID ingredientId = UUID.fromString(rs.getString("ingredient_id"));
+        //         Integer quantity = rs.getInt("quantity");
+        //         cartIds.put(ingredientId, quantity);
+        //     }
+        //     ps.close();
+        //     rs.close();
+        // } catch (SQLException e) {
+        //     e.printStackTrace();
+        // }
+        return recipeIds;
+    }
+
+    public List<UUID> getTagIdsByUserIdAndRecipeId(UUID userId, UUID recipeId) {
+        List<UUID> allRecipeTagsIds = new ArrayList<>();
+        List<Tag> allRecipeTags = getTagsByRecipeId(userId, recipeId);
+        for (Tag tag : allRecipeTags) {
+            allRecipeTagsIds.add(tag.getId());
+        }
+        return allRecipeTagsIds;
+    }
+
+    public String editRecipeName(UUID recipeId, String name) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.editRecipeName);
+            ps.setString(1, name);
+            ps.setString(2, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_SET_NAME);
+            } else {
+                return String.format(FailMessages.RECIPE_SET_NAME_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_SET_NAME_FAIL);
+        }
+    }
+
+    public String editRecipeImage(UUID recipeId, String picturePath) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.editRecipeImage);
+            InputStream inputStream = getClass().getResourceAsStream(picturePath);
+            if (inputStream == null) {
+                inputStream = new FileInputStream(picturePath);
+            }
+            ps.setBlob(1, inputStream);
+            ps.setString(2, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_SET_PICTURE);
+            } else {
+                return String.format(FailMessages.RECIPE_SET_PICTURE_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_SET_PICTURE_FAIL);
+        } catch (FileNotFoundException e) {
+            return String.format(FailMessages.RECIPE_SET_PICTURE_FAIL);
+        }        
+    }
+
+    public String editRecipeDescription(UUID recipeId, String description) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.editRecipeDescription);
+            ps.setString(1, description);
+            ps.setString(2, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_SET_DESC);
+            } else {
+                return String.format(FailMessages.RECIPE_SET_DESC_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_SET_DESC_FAIL);
+        }
+    }
+
+    public String editRecipeInstructions(UUID recipeId, String instructions) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.editRecipeInstructions);
+            ps.setString(1, instructions);
+            ps.setString(2, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_SET_INSTRUCTIONS);
+            } else {
+                return String.format(FailMessages.RECIPE_SET_INSTRUCTIONS_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_SET_INSTRUCTIONS_FAIL);
+        }
+    }
+
+    public String editRecipeServingSize(UUID recipeId, byte servingSize) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.editRecipeServeSize);
+            ps.setByte(1, servingSize);
+            ps.setString(2, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_SET_SERVING_SIZE);
+            } else {
+                return String.format(FailMessages.RECIPE_SET_SERVING_SIZE_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_SET_SERVING_SIZE_FAIL);
+        }
+    }
+
+    public String removeRecipeIngredientsByRecipeId(UUID recipeId) {
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.removeRecipeIngredientsByRecipeId);
+            ps.setString(1, recipeId.toString());
+
+            int result = ps.executeUpdate();
+            ps.close();
+
+            if (result != 0) {
+                return String.format(SuccessMessages.RECIPE_DELETED_INGREDIENTS);
+            } else {
+                return String.format(FailMessages.RECIPE_DELETE_INGREDIENTS_FAIL);
+            }
+        } catch (SQLException e) {
+            return String.format(FailMessages.RECIPE_DELETE_INGREDIENTS_FAIL);
+        }
+
+    }
+
+    public Tag getTagByName(UUID userId, String name) {
+        Tag tag = null;
+        try {
+            useDatabase();
+            PreparedStatement ps = conn.prepareStatement(SqlQueries.getTagByName);
+            ps.setString(1, name);
+            ps.setString(2, userId.toString());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                UUID tagId = UUID.fromString(rs.getString("id"));
+                tag = new Tag(tagId, name, userId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tag;
 
     }
 }

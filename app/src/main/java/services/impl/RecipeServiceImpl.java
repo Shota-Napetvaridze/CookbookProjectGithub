@@ -87,8 +87,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public String editRecipeName(UUID recipeId, String name) throws InvalidRecipeNameLengthException {
         validateName(name);
-        // TODO: dbContext.editRecipeName(recipeId, name);
-        return null;
+        return dbContext.editRecipeName(recipeId, name);
     }
 
     @Override
@@ -105,7 +104,7 @@ public class RecipeServiceImpl implements RecipeService {
     public String editRecipeDescription(UUID recipeId, String description)
             throws InvalidRecipeDescriptionLengthException {
         validateDescription(description);
-        // TODO: dbContext.editRecipeDescription(recipeId, description);
+        dbContext.editRecipeDescription(recipeId, description);
         return null;
     }
 
@@ -113,14 +112,14 @@ public class RecipeServiceImpl implements RecipeService {
     public String editRecipeInstructions(UUID recipeId, String instructions)
             throws InvalidRecipeInstructionsLengthException {
         validateInstructions(instructions);
-        // TODO: dbContext.editRecipeInstructions(recipeId, instructions);
+        dbContext.editRecipeInstructions(recipeId, instructions);
         return null;
     }
 
     @Override
     public String editRecipeServingSize(UUID recipeId, byte servingSize) throws InvalidRecipeServingSizeException {
         validateServingSize(servingSize);
-        // TODO: dbContext.editRecipeServingSize(recipeId, servingSize);
+        dbContext.editRecipeServingSize(recipeId, servingSize);
         return null;
     }
 
@@ -186,7 +185,26 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Integer> selectedIngredients) {
-        // TODO: dbContext.addRecipeIngredients(recipeId, selectedIngredients) - Adds to recipes_ingredients
+        dbContext.addRecipeIngredients(recipeId, selectedIngredients);
+    }
+
+    @Override
+    public void addTagToRecipe(UUID tagId, UUID recipeId) {
+       dbContext.addRecipeTag(recipeId, tagId);        
+    }
+
+    @Override
+    public void removeTagFromRecipe(UUID recipeId, UUID tagId) {
+        dbContext.removeRecipeTagById(recipeId, tagId);
+    }
+
+    @Override
+    public void editRecipeImage(UUID recipeId, String picturePath) {
+        dbContext.editRecipeImage(recipeId, picturePath);
+    }
+
+    public void removeRecipeIngredientsByRecipeId(UUID recipeId) {
+        dbContext.removeRecipeIngredientsByRecipeId(recipeId);
     }
 
 }

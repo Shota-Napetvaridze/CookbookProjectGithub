@@ -17,8 +17,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public String addTag(String name) {
-        return dbContext.addTag(UUID.randomUUID(), name);
+    public String addTag(UUID tagId, String name, UUID userId) {
+        return dbContext.addTag(tagId, name, userId);
     }
 
     @Override
@@ -34,18 +34,32 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags() {
-        return dbContext.getAllTags();
+    public List<Tag> getAllTags(UUID userId) {
+        return dbContext.getAllTags(userId);
     }
 
     @Override
-    public List<Tag> getTagsByRecipeId(UUID recipeId) {
-        return dbContext.getTagsByRecipeId(recipeId);
+    public List<Tag> getTagsByRecipeId(UUID userId, UUID recipeId) {
+        return dbContext.getTagsByRecipeId(userId, recipeId);
     }
 
     @Override
-    public List<Tag> getTagsWithNameLike(String name) {
-        return dbContext.getTagsWithNameLike(name);
+    public List<Tag> getTagsWithNameLike(UUID userId, String name) {
+        return dbContext.getTagsWithNameLike(userId, name);
     }
-    
+
+    @Override
+    public Tag getTagById(UUID tagId) {
+        return dbContext.getTagById(tagId);
+    }
+
+    @Override
+    public List<UUID> getTagIdsByRecipeId(UUID userId, UUID recipeId) {
+        return dbContext.getTagIdsByUserIdAndRecipeId(userId, recipeId);
+    }
+
+    @Override
+    public Tag getTagByName(UUID userId, String name) {
+        return dbContext.getTagByName(userId, name);
+    }
 }

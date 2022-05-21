@@ -43,5 +43,6 @@
             <Image url="@../img/account.png" />
          </image>
       </ImageView>
+      <Label fx:id="successMessage" alignment="CENTER" layoutX="500.0" layoutY="513.0" prefHeight="17.0" prefWidth="197.0" text="Message sent successfully" visible="false" />
     </children>
 </AnchorPane>

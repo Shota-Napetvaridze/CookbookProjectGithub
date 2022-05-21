@@ -3,7 +3,6 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import models.entities.Ingredient;
-import models.entities.Recipe;
 import util.common.UserListener;
 
 public class IngredientCartController {

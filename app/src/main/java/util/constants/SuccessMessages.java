@@ -23,21 +23,25 @@ public class SuccessMessages {
     public static final String TAG_ADDED = "Tag added successfully.\n";
     public static final String TAG_SET_NAME = "Tag name set to %s.\n";
 
-
     //
     // RECIPE
     //
     public static final String RECIPE_ADDED = "Recipe added successfully.\n";
-    public static final String RECIPE_SET_NAME = "Recipe name set to %s.\n";
+    public static final String RECIPE_SET_NAME = "Recipe name set.\n";
     public static final String RECIPE_SET_DESC = "Recipe description set.\n";
     public static final String RECIPE_SET_INSTRUCTIONS = "Recipe instructions set.\n";
     public static final String RECIPE_SET_INGREDIENTS = "Recipe ingredients set.\n";
     public static final String RECIPE_SET_TAGS = "Recipe tags set.\n";
-    public static final String RECIPE_SET_SERVING_SIZE = "Recipe serving size set to %s.\n";
+    public static final String RECIPE_SET_SERVING_SIZE = "Recipe serving size set.\n";
     public static final String RECIPE_SET_AUTHOR = "Recipe author set.\n";
     public static final String RECIPE_DELETED = "Recipe deletede successfully.\n";
     public static final String RECIPE_TAG_ADDED = "Successfully added tag to recipe.\n";
     public static final String RECIPE_INGREDIENT_ADDED = "Successfully added ingredient to recipe\n";
+    public static final String RECIPE_TAG_REMOVED = "Successfully removed tag from recipe.\n";
+    public static final String RECIPE_SET_PICTURE = "Successfully set recipe picture.\n";
+    public static final String RECIPE_DELETED_INGREDIENTS = "Successfully deleted recipe ingredients.\n";
+    public static final String RECIPE_EDITED = "Successfully edited recipe.\n";
+    
     //
     // MESSAGE
     //

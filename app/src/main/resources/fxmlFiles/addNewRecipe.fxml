@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
@@ -68,16 +69,6 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="recipeServeSize" layoutX="211.0" layoutY="53.0" prefHeight="43.0" prefWidth="156.0" promptText="Size" style="-fx-border-color: #000000;">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </TextField>
-      <Label layoutX="213.0" layoutY="15.0" prefHeight="29.0" prefWidth="136.0" text="Serve size:">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
       <ScrollPane fx:id="recipeIngredients" layoutX="405.0" layoutY="233.0" prefHeight="104.0" prefWidth="305.0" style="-fx-border-color: #000000;">
          <content>
             <GridPane fx:id="recipeIngredientGrid" prefHeight="0.0" prefWidth="40.0">
@@ -92,5 +83,18 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Label layoutX="215.0" layoutY="17.0" prefHeight="18.0" prefWidth="124.0" text="Serving size:">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" layoutX="182.0" layoutY="60.0" prefHeight="36.0" prefWidth="188.0" spacing="7.0">
+         <children>
+            <Button fx:id="sizeTwo" mnemonicParsing="false" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="X2" />
+            <Button fx:id="sizeFour" mnemonicParsing="false" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="X4" />
+            <Button fx:id="sizeSix" mnemonicParsing="false" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="X6" />
+            <Button fx:id="sizeEight" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="X8" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
