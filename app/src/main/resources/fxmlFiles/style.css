@@ -41,7 +41,8 @@
 
 
 }
-.text-areaForScroll .scroll-bar:vertical:disabled {
+.text-areaForScroll .scroll-bar:vertical {
+    -fx-pref-width: 1;
     -fx-opacity: 0;
 }
 

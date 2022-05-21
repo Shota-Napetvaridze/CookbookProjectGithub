@@ -96,8 +96,8 @@
             <Font size="18.0" />
          </font>
          <styleClass>
-            <String fx:value="text-area" />
             <String fx:value="jfx-text-field" />
+            <String fx:value="text-areaForScroll" />
          </styleClass>
       </TextArea>
       <ScrollPane fx:id="tagsScroll" layoutX="509.0" layoutY="364.0" prefHeight="111.0" prefWidth="181.0" style="-fx-border-color: #000000;" styleClass="transparent" stylesheets="@style.css" AnchorPane.rightAnchor="20.0">

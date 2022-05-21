@@ -277,9 +277,9 @@
                               <Label fx:id="cartCount" alignment="CENTER" layoutX="374.0" layoutY="6.0" prefHeight="24.0" prefWidth="21.0" text="2" />
                               <Button fx:id="cart" layoutX="332.0" layoutY="11.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="31.0" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="35.0" fitWidth="37.0" pickOnBounds="true">
+                                    <ImageView fitHeight="35.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../img/cart.png" />
+                                          <Image url="@../img/ic_cart.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
