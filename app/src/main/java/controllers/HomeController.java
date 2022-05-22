@@ -870,6 +870,7 @@ public class HomeController implements Initializable {
                 userService.addToCart(user.getId(), ingredient.getId(), quantity);
                 user.addIngredientToCart(ingredient.getId(), quantity);
                 cartCount.setText(String.valueOf(user.getCart().size()));
+                showInformation(String.format(SuccessMessages.CART_ADDED_INGREDIENT), null);
             }
 
             @Override
