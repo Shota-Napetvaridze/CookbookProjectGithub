@@ -100,7 +100,7 @@
             <String fx:value="text-areaForScroll" />
          </styleClass>
       </TextArea>
-      <ScrollPane fx:id="tagsScroll" layoutX="509.0" layoutY="364.0" prefHeight="111.0" prefWidth="168.0" style="-fx-border-color: #000000;" styleClass="transparent" stylesheets="@style.css" AnchorPane.rightAnchor="20.0">
+      <ScrollPane fx:id="tagsScroll" layoutX="509.0" layoutY="364.0" prefHeight="111.0" prefWidth="181.0" style="-fx-border-color: #000000;" styleClass="transparent" stylesheets="@style.css" AnchorPane.rightAnchor="20.0">
          <content>
             <GridPane fx:id="tagsGrid" prefHeight="10.0" prefWidth="31.0">
                <rowConstraints>
@@ -109,7 +109,7 @@
             </GridPane>
          </content>
       </ScrollPane>
-      <TextField fx:id="tagTxtField" layoutX="547.0" layoutY="328.0" prefHeight="28.0" prefWidth="118.0" style="-fx-border-color: #000000;" />
+      <TextField fx:id="tagTxtField" layoutX="534.0" layoutY="328.0" prefHeight="28.0" prefWidth="131.0" style="-fx-border-color: #000000;" />
       <Button fx:id="addTag" layoutX="667.0" layoutY="328.0" mnemonicParsing="false" style="-fx-border-color: #000000; -fx-background-color: FED700;" text="Add" AnchorPane.rightAnchor="20.0" />
       <Label layoutX="244.0" layoutY="6.0" prefHeight="18.0" prefWidth="124.0" text="Serving size">
          <font>
