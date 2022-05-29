@@ -52,8 +52,9 @@ public class LogInController implements Initializable{
                 SceneContext.setUser(user);
                 if (user.getUsername().equals("admin")) {
                     SceneContext.changeSceneOnPressedKey(event, "/fxmlFiles/adminPage.fxml");
+                }else {
+                    SceneContext.changeSceneOnPressedKey(event, "/fxmlFiles/home.fxml");
                 }
-                SceneContext.changeSceneOnPressedKey(event, "/fxmlFiles/home.fxml");
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Credentials are incorrect");
@@ -107,8 +108,9 @@ public class LogInController implements Initializable{
                     SceneContext.setUser(user);
                     if (user.getUsername().equals("admin")) {
                         SceneContext.changeScene(event, "/fxmlFiles/adminPage.fxml");
+                    }else {
+                        SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
                     }
-                    SceneContext.changeScene(event, "/fxmlFiles/home.fxml");
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Credentials are incorrect");

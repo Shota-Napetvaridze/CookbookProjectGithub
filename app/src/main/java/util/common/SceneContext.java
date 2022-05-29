@@ -44,7 +44,6 @@ public class SceneContext {
             String title = String.format("Welcome to Cookbook");
             stage.setTitle(title);
             stage.setResizable(false);
-
             stage.show();
         }
     }
