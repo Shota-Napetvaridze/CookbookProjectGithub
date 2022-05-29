@@ -61,13 +61,11 @@ public interface UserService {
 
         public String removeMessageById(UUID messageId);
 
-        public Map<Ingredient, Integer> getUserCartById(UUID id);
+        public Map<Ingredient, Float> getUserCartById(UUID id);
 
-        public String addToCart(UUID userId, UUID ingredientId, int amount);
+        public String addToCart(UUID userId, UUID ingredientId, Float amount);
 
         public String removeFromCart(UUID userId, UUID ingredientId);
-
-        public String changeAmount(UUID ingredientId, int amount);
 
         public boolean addToFavorites(UUID userId, UUID recipeId);
 

@@ -1,8 +1,6 @@
 package controllers;
 
 import javafx.animation.TranslateTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -163,7 +161,7 @@ public class HomeController implements Initializable {
     // Lists ----------------------------
     private List<Recipe> recipeList = recipeService.getAllRecipes();
     private List<Message> msgList = userService.getUserMessagesById(user.getId());
-    private Map<Ingredient, Integer> cartList = userService.getUserCartById(user.getId());
+    private Map<Ingredient, Float> cartList = userService.getUserCartById(user.getId());
     private List<Recipe> favouriteRecipeList = userService.getFavoriteRecipes(user.getId());
     private Map<Recipe, Date> planList = userService.getWeeklyPlan(user.getId());
 
@@ -383,7 +381,7 @@ public class HomeController implements Initializable {
             AnchorPane anchorPane = fxmlLoader.load();
             NewRecipeController newRecipeController = fxmlLoader.getController();
             if (recipe != null) {
-                newRecipeController.setData(recipe);
+                newRecipeController.setData(recipe, userListener);
             }
             grid.add(anchorPane, 1, 1);
             grid.setAlignment(Pos.CENTER);
@@ -822,7 +820,7 @@ public class HomeController implements Initializable {
             }
 
             @Override
-            public void addIngredientToCart(Ingredient ingredient, Integer quantity) {
+            public void addIngredientToCart(Ingredient ingredient, Float quantity) {
                 userService.addToCart(user.getId(), ingredient.getId(), quantity);
                 user.addIngredientToCart(ingredient.getId(), quantity);
                 cartCount.setText(String.valueOf(user.getCart().size()));
@@ -850,6 +848,12 @@ public class HomeController implements Initializable {
             @Override
             public void removeTagFromRecipe(Tag tag) {
                 recipeService.removeTagFromRecipe(recipe.getId(), tag.getId());
+            }
+
+            @Override
+            public void emptyCart() {
+                cartCount.setText("0");
+                
             }
         };
 
@@ -885,7 +889,7 @@ public class HomeController implements Initializable {
                     }
 
                     // Search ingredients
-                    Map<Ingredient, Integer> ingredients = ingredientService.getIngredientsByRecipeId(recipe.getId());
+                    Map<Ingredient, Float> ingredients = ingredientService.getIngredientsByRecipeId(recipe.getId());
                     Set<String> ingredientNames = new HashSet<>();
                     for (Ingredient ingredient : ingredients.keySet()) {
                         ingredientNames.add(ingredient.getName());
@@ -1082,7 +1086,7 @@ public class HomeController implements Initializable {
     }
 
     private void showInformation(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.show();

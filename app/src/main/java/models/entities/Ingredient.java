@@ -34,26 +34,4 @@ public class Ingredient extends BaseEntity {
         this.unit = unit;
         return String.format(SuccessMessages.INGREDIENT_SET_UNIT, unit);
     }
-
-    // VALIDATORS
-    // private void validateName(String name) throws InvalidLengthException,
-    // TakenIngredientName {
-    // Validator.validateStringLength(name, Variables.MIN_INGREDIENT_NAME_LENGTH,
-    // Variables.MAX_INGREDIENT_NAME_LENGTH);
-    // if (!isUnique(name)) {
-    // throw new TakenIngredientName(name);
-    // }
-    // }
-    // private void validateUnit(String unit) throws InvalidUnitException {
-    // if (unit == null) {
-    // throw new InvalidUnitException();
-    // }
-    // }
-    // private boolean isUnique(String name) {
-    // if (name == "taken") {
-    // return false;
-    // }
-    // return true;
-    // }
-
 }

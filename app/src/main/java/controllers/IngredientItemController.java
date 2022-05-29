@@ -38,7 +38,7 @@ public class IngredientItemController {
         if (caller.equals("DetailedViewController")) {
             userListener.addIngredientToCart(ingredient, quantity);
         } else if (caller.equals("NewRecipeController")) {
-            newRecipeListener.addIngredientToRecipe(ingredient, Integer.parseInt(amountField.getText()));
+            newRecipeListener.addIngredientToRecipe(ingredient, Float.parseFloat(amountField.getText()));
         } else if (caller.equals("SelectedNewRecipeController")) {
             newRecipeListener.removeIngredientFromRecipe(ingredient);
         } else if (caller.equals("CartController")) {
@@ -46,34 +46,35 @@ public class IngredientItemController {
         }
     }
 
-    private Integer quantity;
+    private Float quantity;
     private String caller;
 
     public void setData(NewRecipeListener newRecipeListener) {
         this.newRecipeListener = newRecipeListener;
     }
 
-    public void setData(Ingredient ingredient, Integer quantity, String caller, UserListener userListener){
+    public void setData(Ingredient ingredient, Float quantity, String caller, UserListener userListener){
         this.caller = caller;
         this.ingredient = ingredient;
         this.userListener = userListener;
         this.quantity = quantity;
+        String quantityText = String.format("%.2f", quantity);
         ingredientLbl.setText(ingredient.getName());
         ingredientUnit.setText(ingredient.getUnit());
         if (caller.equals("DetailedViewController")) {
             amountField.setEditable(false);
-            amountField.setText(quantity.toString());
+            amountField.setPromptText(quantityText);
             button.setText("+");
         } else if (caller.equals("NewRecipeController")) {
-            amountField.setPromptText(quantity.toString());
+            amountField.setPromptText(quantityText);
             cart.setVisible(false);
             button.setText("+");
         } else if (caller.equals("SelectedNewRecipeController")) {
-            amountField.setText(quantity.toString());
+            amountField.setPromptText(quantityText);
             cart.setVisible(false);
             button.setText("-");
         } else if (caller.equals("CartController")) {
-            amountField.setText(quantity.toString());
+            amountField.setPromptText(quantityText);
             cart.setVisible(false);
             button.setText("-");
         }

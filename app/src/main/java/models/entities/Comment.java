@@ -45,18 +45,4 @@ public class Comment extends BaseEntity {
         this.recipeId = recipeId;
         return String.format(SuccessMessages.COMMENT_SET_RECIPE);
     }
-
-    // VALIDATORS
-    // private void validateText(String text) throws InvalidLengthException {
-    //     Validator.validateStringLength(text, Variables.MIN_COMMENT_TEXT_LENGTH,
-    //             Variables.MAX_COMMENT_TEXT_LENGTH);
-    // }
-
-    // private void validateUser(UUID userId) throws InvalidInstanceException {
-    //     Validator.validateUser(userId);
-    // }
-
-    // private void validateRecipe(UUID recipeId) throws InvalidInstanceException {
-    //     Validator.validateRecipe(recipeId);
-    // }
 }

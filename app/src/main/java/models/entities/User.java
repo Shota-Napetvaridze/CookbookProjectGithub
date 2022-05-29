@@ -16,10 +16,10 @@ public class User extends BaseEntity {
     private List<UUID> messages;
     private Map<UUID, Date> weeklyList;
     private List<UUID> favorites;
-    private Map<UUID, Integer> cart;
+    private Map<UUID, Float> cart;
 
     public User(UUID id, String username, String nickname, String email, String password,
-            Map<UUID, Integer> cart, List<UUID> messages, Map<UUID, Date> weeklyList,
+            Map<UUID, Float> cart, List<UUID> messages, Map<UUID, Date> weeklyList,
             List<UUID> favorites) {
         super.id = id;
         setUsername(username);
@@ -57,7 +57,7 @@ public class User extends BaseEntity {
         return String.format(FailMessages.PLAN_REMOVE_RECIPE_FAIL);
     }
 
-    public String addIngredientToCart(UUID ingredientId, Integer quantity) {
+    public String addIngredientToCart(UUID ingredientId, Float quantity) {
         cart.put(ingredientId, quantity);
         return String.format(SuccessMessages.CART_ADDED_INGREDIENT);
     }
@@ -88,7 +88,7 @@ public class User extends BaseEntity {
         return email;
     }
 
-    public Map<UUID, Integer> getCart() {
+    public Map<UUID, Float> getCart() {
         return cart;
     }
 
@@ -136,7 +136,7 @@ public class User extends BaseEntity {
         this.favorites = favorites;
     }
 
-    private void setCart(Map<UUID, Integer> cart) {
+    private void setCart(Map<UUID, Float> cart) {
         this.cart = cart;
     }
 

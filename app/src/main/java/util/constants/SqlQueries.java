@@ -43,7 +43,7 @@ public class SqlQueries {
                         + "REFERENCES users(id),"
                         + "ingredient_id CHAR(38) NOT NULL "
                         + "REFERENCES ingredients(id),"
-                        + "quantity INT NOT NULL,"
+                        + "quantity FLOAT NOT NULL,"
                         + "PRIMARY KEY (user_id, ingredient_id)"
                         + ");";
 
@@ -72,7 +72,7 @@ public class SqlQueries {
                         + "REFERENCES recipes(id),"
                         + "ingredient_id CHAR(38) NOT NULL "
                         + "REFERENCES ingredients(id),"
-                        + "quantity INT NOT NULL,"
+                        + "quantity FLOAT NOT NULL,"
                         + "PRIMARY KEY (recipe_id, ingredient_id)"
                         + ");";
 
@@ -204,7 +204,9 @@ public class SqlQueries {
         
         public static final String getAllTags = "SELECT * FROM users_tags WHERE user_id IS NULL OR user_id = ?";
 
-        public static final String getTagByName = "SELECT * FROM users_tags WHERE tag_name = ? AND user_id IS NULL OR user_id = ?";
+        public static final String getTagByNameAndNoUser = "SELECT * FROM users_tags WHERE tag_name = ? AND user_id IS NULL";
+
+        public static final String getTagByName = "SELECT * FROM users_tags WHERE tag_name = ? AND user_id = ?";
 
         public static final String getTagById = "SELECT * FROM users_tags WHERE id = ?";
 
@@ -216,7 +218,9 @@ public class SqlQueries {
 
         public static final String getIngredientsWithNameLike = "SELECT * FROM ingredients WHERE ingredient_name LIKE ?";
 
-        public static final String getTagsWithNameLike = "SELECT * FROM users_tags WHERE user_id = ? OR user_id IS NULL AND tag_name LIKE ?";
+        public static final String getTagsWithNameLikeAndNoUser = "SELECT * FROM users_tags WHERE tag_name LIKE ? AND user_id IS NULL";
+
+        public static final String getTagsWithNameLike = "SELECT * FROM users_tags WHERE tag_name LIKE ? AND user_id = ?";
 
 
         // UPDATE -------------

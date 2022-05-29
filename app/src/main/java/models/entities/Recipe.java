@@ -15,14 +15,14 @@ public class Recipe extends BaseEntity {
     private String instructions;
     private UUID author;
     private List<UUID> tags;
-    private Map<UUID, Integer> ingredients;
+    private Map<UUID, Float> ingredients;
     private byte servingSize;
     private List<UUID> comments;
 
 
     public Recipe(UUID id, String name, Image picture, String description,
     String instructions, UUID author, List<UUID> tags,
-    Map<UUID, Integer> ingredients, List<UUID> comments, byte servingSize) {
+    Map<UUID, Float> ingredients, List<UUID> comments, byte servingSize) {
         super.id = id;
         setName(name);
         setPicture(picture);
@@ -60,7 +60,7 @@ public class Recipe extends BaseEntity {
         return tags;
     }
 
-    public Map<UUID, Integer> getIngredients() {
+    public Map<UUID, Float> getIngredients() {
         return ingredients;
     }
 
@@ -99,7 +99,7 @@ public class Recipe extends BaseEntity {
             return String.format(SuccessMessages.RECIPE_SET_TAGS);
     }
 
-    public String setIngredients(Map<UUID, Integer> ingredients) {
+    public String setIngredients(Map<UUID, Float> ingredients) {
             this.ingredients = ingredients;
             return String.format(SuccessMessages.RECIPE_SET_INGREDIENTS);
     }

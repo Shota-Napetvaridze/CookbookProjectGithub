@@ -105,7 +105,7 @@ public class NewRecipeController implements Initializable {
 
     private List<Ingredient> allIngredients = new ArrayList<>();
     private List<Ingredient> filteredIngredients = new ArrayList<>();
-    private Map<Ingredient, Integer> selectedIngredients = new HashMap<>();
+    private Map<Ingredient, Float> selectedIngredients = new HashMap<>();
 
     private Stage createStage() {
         VBox vBox = new VBox(new Label("A Label"));
@@ -120,10 +120,10 @@ public class NewRecipeController implements Initializable {
         initializeGrid(selectedIngredients, recipeIngredientGrid, "SelectedNewRecipeController");
     }
 
-    private <T> Map<T, Integer> transformListToMap(List<T> ingredients) {
-        Map<T, Integer> map = new HashMap<>();
+    private <T> Map<T, Float> transformListToMap(List<T> ingredients) {
+        Map<T, Float> map = new HashMap<>();
         for (T item : ingredients) {
-            map.put(item, 0);
+            map.put(item, Float.valueOf("0"));
         }
         return map;
     }
@@ -133,23 +133,23 @@ public class NewRecipeController implements Initializable {
         for (Ingredient ingredient : selectedIngredients.keySet()) {
             allIngredients.remove(ingredient);
         }
-        Map<Ingredient, Integer> allIngredientsMap = transformListToMap(allIngredients);
+        Map<Ingredient, Float> allIngredientsMap = transformListToMap(allIngredients);
         initializeGrid(allIngredientsMap, ingredientGrid, "NewRecipeController");
     }
 
     private void initializeFilteredIngredientsGrid(String name) {
         filteredIngredients = ingredientService.getIngredientWithNameLike(name);
-        Map<Ingredient, Integer> filteredIngredientsMap = transformListToMap(filteredIngredients);
+        Map<Ingredient, Float> filteredIngredientsMap = transformListToMap(filteredIngredients);
         initializeGrid(filteredIngredientsMap, ingredientGrid, "NewRecipeController");
     }
 
-    private void initializeGrid(Map<Ingredient, Integer> ingredients, GridPane grid, String caller) {
+    private void initializeGrid(Map<Ingredient, Float> ingredients, GridPane grid, String caller) {
         grid.getChildren().clear();
-        List<Entry<Ingredient, Integer>> ingredientsIntegers = new ArrayList<>(ingredients.entrySet());
+        List<Entry<Ingredient, Float>> ingredientsFloats = new ArrayList<>(ingredients.entrySet());
         int column = 0;
         int row = 1;
         try {
-            for (Entry<Ingredient, Integer> ingredientEntry : ingredientsIntegers) {
+            for (Entry<Ingredient, Float> ingredientEntry : ingredientsFloats) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
@@ -182,8 +182,9 @@ public class NewRecipeController implements Initializable {
         }
     }
 
-    public void setData(Recipe recipe) {
+    public void setData(Recipe recipe, UserListener userListener) {
         this.recipe = recipe;
+        this.userListener = userListener;
         addRecipe.setText("Save recipe");
         recipeName.setText(recipe.getName());
         recipeDescription.setText(recipe.getDescription());
@@ -222,7 +223,7 @@ public class NewRecipeController implements Initializable {
         newRecipeListener = new NewRecipeListener() {
 
             @Override
-            public void addIngredientToRecipe(Ingredient ingredient, Integer quantity) {
+            public void addIngredientToRecipe(Ingredient ingredient, Float quantity) {
                 selectedIngredients.put(ingredient, quantity);
                 initializeSelectedIngredientsGrid();
                 initializeAllIngredientsGrid();
@@ -275,18 +276,19 @@ public class NewRecipeController implements Initializable {
                         recipeService.removeRecipeIngredientsByRecipeId(recipe.getId());
                         recipeService.addRecipeIngredients(recipe.getId(), selectedIngredients);
                         showInformation(SuccessMessages.RECIPE_EDITED, null);
-
+                        userListener.openRecipeListener(recipeService.getRecipeById(recipe.getId()));
                     } catch (Exception e) {
                         showError(e.getMessage());
                     }
                 } else {
                     UUID recipeId = UUID.randomUUID();
                     String name = recipeName.getText();
+                    System.out.println(name);
                     String picturePath = txtFilename.getText();
                     String description = recipeDescription.getText();
                     String instructions = recipeInstruction.getText();
                     UUID authorId = user.getId();
-                    Map<Ingredient, Integer> ingredients = new HashMap<>();
+                    Map<Ingredient, Float> ingredients = new HashMap<>();
                     try {
                         recipeService.addRecipe(recipeId, name, picturePath, description, instructions, authorId,
                                 ingredients, serveSize);

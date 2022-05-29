@@ -10,5 +10,5 @@ public interface IngredientService {
     public List<Ingredient> getAllIngredients();
     public Ingredient getIngredientById(UUID id);
     public List<Ingredient> getIngredientWithNameLike(String name);
-    public Map<Ingredient, Integer> getIngredientsByRecipeId(UUID recipeId);
+    public Map<Ingredient, Float> getIngredientsByRecipeId(UUID recipeId);
 }

@@ -26,9 +26,9 @@ public interface RecipeService {
 
     public String addRecipe(UUID recipeId, String name, String picturePath, String description,
     String instructions, UUID authorId,
-    Map<Ingredient, Integer> ingredients, byte servingSize) throws InvalidRecipeNameLengthException, InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException, InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException;
+    Map<Ingredient, Float> ingredients, byte servingSize) throws InvalidRecipeNameLengthException, InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException, InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException;
 
-    public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Integer> selectedIngredients);
+    public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Float> selectedIngredients);
     
     public List<Comment> getCommentsByRecipeId(UUID recipeId);
     
@@ -48,7 +48,7 @@ public interface RecipeService {
 
     public void validateInstructions(String instructions) throws InvalidRecipeInstructionsLengthException;
 
-    public void validateIngredients(Map<Ingredient, Integer> ingredients) throws InvalidRecipeIngredientsCountException;
+    public void validateIngredients(Map<Ingredient, Float> ingredients) throws InvalidRecipeIngredientsCountException;
 
     public void validateServingSize(byte servingSize) throws InvalidRecipeServingSizeException;
 

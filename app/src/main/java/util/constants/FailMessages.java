@@ -16,7 +16,7 @@ public class FailMessages {
                         + " characters long.\n";
 
         public static final String USER_INVALID_PASSWORD_COMPLEXITY = "Password must include "
-                        + "at least one uppercase letter, one lowercase letter and one digit.\n";
+                        + "at least one uppercase letter,\n one lowercase letter and one digit.\n";
 
         public static final String USER_INVALID_EMAIL = "Please enter a valid email.\n";
 

@@ -138,7 +138,7 @@ public class DetailedViewController implements Initializable {
     private RecipeService recipeService = new RecipeServiceImpl();
     private UserService userService = new UserServiceImpl();
 
-    private Map<Ingredient, Integer> ingredientsList = new HashMap<>();
+    private Map<Ingredient, Float> ingredientsList = new HashMap<>();
     private List<Tag> tagsList = new ArrayList<>();
     private List<Comment> commentsList = new ArrayList<>();
 
@@ -157,7 +157,7 @@ public class DetailedViewController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientItemController ingredientItemController = fxmlLoader.getController();
-                Integer quantity = ingredientsList.get(ingredient);
+                Float quantity = ingredientsList.get(ingredient);
                 ingredientItemController.setData(ingredient, quantity, "DetailedViewController", userListener);
 
                 if (column == 1) {
@@ -224,6 +224,8 @@ public class DetailedViewController implements Initializable {
         tagsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         tagsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         List<Tag> tags = tagService.getAllTags(user.getId());
+        
+
         int column = 0;
         int row = 1;
         try {
@@ -233,7 +235,7 @@ public class DetailedViewController implements Initializable {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/tag.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 TagController tagController = fxmlLoader.getController();
-                Integer quantity = ingredientsList.get(tag);                
+                Float quantity = ingredientsList.get(tag);                
                 tagController.setData(tag, "DetailedViewController", userListener);
                 if (addedTagsIds.contains(tag.getId())) {
                     tagController.setSelected(true);
@@ -365,7 +367,7 @@ public class DetailedViewController implements Initializable {
                 sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
 
                 for (Ingredient ingredient : ingredientsList.keySet()) {
-                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    Float quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
                     ingredientsList.replace(ingredient, quantityForOne * 2);
                 }
                 initializeIngredientGrid();
@@ -382,7 +384,7 @@ public class DetailedViewController implements Initializable {
                 sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
 
                 for (Ingredient ingredient : ingredientsList.keySet()) {
-                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    Float quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
                     ingredientsList.replace(ingredient, quantityForOne * 4);
                 }
                 initializeIngredientGrid();
@@ -399,7 +401,7 @@ public class DetailedViewController implements Initializable {
                 sizeEight.setStyle("-fx-background-color: rgb(254, 215, 0)");
 
                 for (Ingredient ingredient : ingredientsList.keySet()) {
-                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    Float quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
                     ingredientsList.replace(ingredient, quantityForOne * 6);
                 }
                 initializeIngredientGrid();
@@ -416,7 +418,7 @@ public class DetailedViewController implements Initializable {
                 sizeEight.setStyle("-fx-background-color: rgb(255, 255, 255)");
 
                 for (Ingredient ingredient : ingredientsList.keySet()) {
-                    Integer quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
+                    Float quantityForOne = ingredientsList.get(ingredient) / recipe.getServingSize();
                     ingredientsList.replace(ingredient, quantityForOne * 8);
                 }
                 initializeIngredientGrid();

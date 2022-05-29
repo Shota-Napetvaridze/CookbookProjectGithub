@@ -19,7 +19,7 @@ public class IngredientCartController {
 
 
 
-    public void setData(Ingredient ingredient, Integer quantity, UserListener userListener){
+    public void setData(Ingredient ingredient, Float quantity, UserListener userListener){
         this.ingredient = ingredient;
         this.userListener = userListener;
         String ingredientQuantity =String.valueOf(quantity);

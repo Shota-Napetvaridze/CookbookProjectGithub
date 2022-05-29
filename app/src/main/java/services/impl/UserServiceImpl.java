@@ -107,19 +107,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addToCart(UUID userId, UUID ingredientId, int amount) {
+    public String addToCart(UUID userId, UUID ingredientId, Float amount) {
         return dbContext.addToCart(userId, ingredientId, amount);
     }
 
     @Override
     public String removeFromCart(UUID userId, UUID ingredientId) {
         return dbContext.removeFromCart(userId, ingredientId);
-    }
-
-    @Override
-    public String changeAmount(UUID ingredientId, int amount) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -233,7 +227,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Ingredient, Integer> getUserCartById(UUID id) {
+    public Map<Ingredient, Float> getUserCartById(UUID id) {
         return dbContext.getCartByUserId(id);
     }
 

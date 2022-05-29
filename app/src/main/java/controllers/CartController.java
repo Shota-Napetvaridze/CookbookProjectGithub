@@ -1,8 +1,12 @@
 package controllers;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -18,13 +22,18 @@ import util.common.SceneContext;
 import util.common.UserListener;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
-public class CartController {
+public class CartController implements Initializable {
     private UserListener userListener;
     private User user = SceneContext.getUser();
     private Ingredient ingredient;
+
+    @FXML
+    private Button emptyCart;
 
     @FXML
     private GridPane ingredientsGrid;
@@ -39,10 +48,11 @@ public class CartController {
 
     private IngredientService ingredientService = new IngredientServiceImpl();
     private UserService userService = new UserServiceImpl();
-    // private List<Entry<Ingredient, Integer>> ingredientsList = userService.getUserCartById(user.getId());
-    private Map<Ingredient, Integer> ingredientsList = userService.getUserCartById(user.getId());
+    private Map<Ingredient, Float> ingredientsList = userService.getUserCartById(user.getId());
 
-    private void initializeIngredientGrid(){
+    private void initializeIngredientGrid() {
+        ingredientsGrid.getChildren().clear();
+
         ingredientsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         ingredientsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Set<Ingredient> ingredients = ingredientsList.keySet();
@@ -54,7 +64,7 @@ public class CartController {
                 fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/ingredientItem.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
                 IngredientItemController ingredientItemController = fxmlLoader.getController();
-                Integer quantity = ingredientsList.get(ingredient);
+                Float quantity = ingredientsList.get(ingredient);
                 ingredientItemController.setData(ingredient, quantity, "CartController", userListener);
                 if (column == 1) {
                     column = 0;
@@ -82,6 +92,21 @@ public class CartController {
     public void setData(UserListener userListener) {
         this.userListener = userListener;
         initializeIngredientGrid();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        emptyCart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                for (Ingredient ingredient : ingredientsList.keySet()) {
+                    userService.removeFromCart(user.getId(), ingredient.getId());
+                }
+                ingredientsList = userService.getUserCartById(user.getId());
+                initializeIngredientGrid();
+                userListener.emptyCart();
+            }
+        });
 
     }
 

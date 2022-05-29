@@ -33,12 +33,13 @@ public interface UserListener {
     public void removeRecipeListener();
     public void removeCommentListener(Comment comment);
     public void editCommentListener(Comment comment, String text);
-    public void addIngredientToCart(Ingredient ingredient, Integer quantity);
+    public void addIngredientToCart(Ingredient ingredient, Float quantity);
     public void removeIngredientFromCart(Ingredient ingredient);
     public void editRecipeListener(Recipe recipe);
     
     public void addTagToRecipe(Tag tag); // (Tag tag, ImageView tagButton)
     public void removeTagFromRecipe(Tag tag);
+    public void emptyCart();
 
 
 }

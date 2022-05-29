@@ -66,7 +66,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public String addRecipe(UUID recipeId, String name, String picturePath, String description,
             String instructions, UUID authorId,
-            Map<Ingredient, Integer> ingredients, byte servingSize) throws InvalidRecipeNameLengthException,
+            Map<Ingredient, Float> ingredients, byte servingSize) throws InvalidRecipeNameLengthException,
             InvalidRecipeDescriptionLengthException, InvalidRecipeInstructionsLengthException,
             InvalidRecipeServingSizeException, InvalidRecipeTagsCountException, InvalidRecipeIngredientsCountException {
         validateName(name);
@@ -125,7 +125,7 @@ public class RecipeServiceImpl implements RecipeService {
     public void validateName(String name) throws InvalidRecipeNameLengthException {
         try {
             Validator.validateStringLength(name,
-                    Variables.MIN_TAG_NAME_LENGTH, Variables.MAX_TAG_NAME_LENGTH);
+                    Variables.MIN_RECIPE_NAME_LENGTH, Variables.MAX_RECIPE_NAME_LENGTH);
         } catch (InvalidLengthException e) {
             throw new InvalidRecipeNameLengthException();
         }
@@ -161,7 +161,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void validateIngredients(Map<Ingredient, Integer> ingredients)
+    public void validateIngredients(Map<Ingredient, Float> ingredients)
             throws InvalidRecipeIngredientsCountException {
         try {
             Validator.validateCount(ingredients.size(),
@@ -182,7 +182,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Integer> selectedIngredients) {
+    public void addRecipeIngredients(UUID recipeId, Map<Ingredient, Float> selectedIngredients) {
         dbContext.addRecipeIngredients(recipeId, selectedIngredients);
     }
 
