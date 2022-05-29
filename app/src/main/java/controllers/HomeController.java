@@ -54,7 +54,7 @@ public class HomeController implements Initializable {
     private Button addToPlan;
 
     @FXML
-    private ComboBox<String> comboBox;
+    private Label userLbl;
 
     @FXML
     private Button favorites;
@@ -159,20 +159,6 @@ public class HomeController implements Initializable {
     private Image image;
     private UserListener userListener;
     private LocalDate date;
-
-    @FXML
-    void select(ActionEvent event) {
-        String s = comboBox.getSelectionModel().getSelectedItem().toString();
-        if (s.startsWith("S")) {
-            comboBox.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    initializeSettingsGrid();
-                }
-            });
-
-        }
-    }
 
     // Lists ----------------------------
     private List<Recipe> recipeList = recipeService.getAllRecipes();
@@ -605,29 +591,6 @@ public class HomeController implements Initializable {
         }
     }
 
-    private void initializeSettingsGrid() {
-        grid.getChildren().clear();
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/fxmlFiles/settings.fxml"));
-        try {
-
-            AnchorPane anchorPane = fxmlLoader.load();
-            grid.add(anchorPane, 1, 1);
-            grid.setAlignment(Pos.CENTER);
-            grid.setStyle("-fx-background-color: #ffa9a9");
-
-            // Set grid width
-            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            grid.setMaxWidth(Region.USE_PREF_SIZE);
-            // Set grid height
-            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            grid.setMaxHeight(Region.USE_PREF_SIZE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // ----------------------------------------- INITIALIZE
     // -----------------------------------------//
@@ -637,9 +600,7 @@ public class HomeController implements Initializable {
 
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         // ComboBox User
-        ObservableList<String> list = FXCollections.observableArrayList("Settings");
-        comboBox.setItems(list);
-        comboBox.setPromptText(user.getNickname());
+        userLbl.setText(user.getNickname());
 
         // Set message count
         getMessages();
@@ -756,14 +717,9 @@ public class HomeController implements Initializable {
             @Override
             public void tagClickListener(Tag tag) { //(Tag tag, ImageView tagButton)
                 if (selectedTags.contains(tag)) {
-                    // String imgFile = "/img/uncheck.png";
-                    // Image uncheck = new Image(getClass().getResourceAsStream(imgFile));
-                    // tagButton.setImage(uncheck);
+
                     selectedTags.remove(tag);
                 } else {
-                    // String imgFile = "/img/check.png";
-                    // Image check = new Image(getClass().getResourceAsStream(imgFile));
-                    // tagButton.setImage(check);
                     selectedTags.add(tag);
                 }
             }
@@ -1038,8 +994,6 @@ public class HomeController implements Initializable {
         home.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                comboBox.setPromptText(user.getNickname());
-                getMessages();
                 recipeImg.setVisible(true);
                 recipeLbl.setVisible(true);
                 home.setStyle("-fx-border-color: #000000;" + "-fx-color: rgb(239, 242, 255)");
