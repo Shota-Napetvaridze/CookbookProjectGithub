@@ -224,8 +224,6 @@ public class DetailedViewController implements Initializable {
         tagsScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         tagsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         List<Tag> tags = tagService.getAllTags(user.getId());
-        
-
         int column = 0;
         int row = 1;
         try {
