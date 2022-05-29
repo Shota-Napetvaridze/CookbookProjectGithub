@@ -21,7 +21,7 @@
          <image>
             <Image url="@../img/cart.png" />
          </image></ImageView>
-        <Button layoutX="442.0" layoutY="561.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="238.0" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="Buy" AnchorPane.rightAnchor="59.0">
+        <Button fx:id="emptyCart" layoutX="442.0" layoutY="561.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="238.0" style="-fx-background-color: FED700;" styleClass="borderStyle" stylesheets="@style.css" text="Empty cart" AnchorPane.rightAnchor="59.0">
             <font>
                 <Font size="23.0" />
             </font>

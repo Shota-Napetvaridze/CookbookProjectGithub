@@ -301,6 +301,9 @@
                            <HBox.margin>
                               <Insets right="3.0" top="12.0" />
                            </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
                         </Label>
                         <Button fx:id="logout" mnemonicParsing="false" prefHeight="43.0" prefWidth="100.0" style="-fx-background-color: FED700; -fx-border-color: #000000#000000;" text="Logout">
                            <effect>
