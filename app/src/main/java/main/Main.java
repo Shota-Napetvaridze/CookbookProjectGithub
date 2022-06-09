@@ -22,7 +22,6 @@ public class Main extends Application {
 
 
         public static void main(String[] args) throws IOException, InterruptedException{
-            //---------------------------------------------------------------
             DbContext dbContext = new DbContext(Variables.DATABASE_PORT, Variables.DATABASE_USER, Variables.DATABASE_PASS);
             dbContext.createDatabase();
         //  Launch the cookbook app
