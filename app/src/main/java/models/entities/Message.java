@@ -14,7 +14,6 @@ public class Message extends BaseEntity {
     private String text;
     private boolean isRead;
     private UUID recipeId;
-    // TODO: Date, so we can sort by date received
 
     // Import an existing Message
     public Message(UUID id, UUID senderId, UUID receiverId, String text, boolean isRead, UUID recipeId) {

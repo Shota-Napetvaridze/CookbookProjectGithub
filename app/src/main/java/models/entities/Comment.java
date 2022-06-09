@@ -7,7 +7,6 @@ public class Comment extends BaseEntity {
     private UUID user;
     private String text;
     private UUID recipeId;
-    // TODO: Date, so we can sort by date posted
 
 
     public Comment(UUID id, UUID user, UUID recipeId, String text) {
